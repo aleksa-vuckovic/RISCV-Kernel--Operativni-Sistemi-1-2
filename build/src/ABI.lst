@@ -1,0 +1,121 @@
+GAS LISTING /tmp/cc4lMdns.s 			page 1
+
+
+   1              		.file	"ABI.cpp"
+   2              		.option pic
+   3              		.option norelax
+   4              		.text
+   5              	.Ltext0:
+   6              		.align	2
+   7              		.globl	_Z7ABIcallmmmmmmmm
+   9              	_Z7ABIcallmmmmmmmm:
+  10              	.LFB0:
+  11              		.file 1 "src/ABI.cpp"
+   1:src/ABI.cpp   **** //
+   2:src/ABI.cpp   **** // Created by os on 5/3/22.
+   3:src/ABI.cpp   **** //
+   4:src/ABI.cpp   **** 
+   5:src/ABI.cpp   **** #include "../h/ABI.h"
+   6:src/ABI.cpp   **** 
+   7:src/ABI.cpp   **** uint64 ABIcall(uint64 code, uint64 a, uint64 b, uint64 c, uint64 d, uint64 e, uint64 f, uint64 g) {
+  12              		.loc 1 7 99
+  13              		.cfi_startproc
+  14              	.LVL0:
+  15 0000 130101FF 		addi	sp,sp,-16
+  16              		.cfi_def_cfa_offset 16
+  17 0004 23348100 		sd	s0,8(sp)
+  18              		.cfi_offset 8, -8
+  19 0008 13040101 		addi	s0,sp,16
+  20              		.cfi_def_cfa 8, 0
+   8:src/ABI.cpp   ****     __asm__ volatile("ecall");
+  21              		.loc 1 8 5
+  22              		.loc 1 8 30 is_stmt 0
+  23              	#APP
+  24              	# 8 "src/ABI.cpp" 1
+   9              	    uint64 res;
+  25              		ecall
+  26              	# 0 "" 2
+  27              		.loc 1 9 5 is_stmt 1
+  10:src/ABI.cpp   ****     __asm__ volatile("mv %0, a0" : "=r"(res));//povratna vrednost se nalazi u a0 nakon softverskog 
+  28              		.loc 1 10 5
+  29              		.loc 1 10 46 is_stmt 0
+  30              	# 10 "src/ABI.cpp" 1
+  11              	    return res;
+  31              		mv a0, a0
+  32              	# 0 "" 2
+  33              	.LVL1:
+  34              		.loc 1 11 5 is_stmt 1
+  12:src/ABI.cpp   **** }
+  35              		.loc 1 12 1 is_stmt 0
+  36              	#NO_APP
+  37 0014 03348100 		ld	s0,8(sp)
+  38              		.cfi_restore 8
+  39              		.cfi_def_cfa 2, 16
+  40 0018 13010101 		addi	sp,sp,16
+  41              		.cfi_def_cfa_offset 0
+  42 001c 67800000 		jr	ra
+  43              		.cfi_endproc
+  44              	.LFE0:
+  46              	.Letext0:
+  47              		.file 2 "src/../h/../lib/hw.h"
+GAS LISTING /tmp/cc4lMdns.s 			page 2
+
+
+GAS LISTING /tmp/cc4lMdns.s 			page 3
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 ABI.cpp
+     /tmp/cc4lMdns.s:9      .text:0000000000000000 _Z7ABIcallmmmmmmmm
+     /tmp/cc4lMdns.s:13     .text:0000000000000000 .L0 
+     /tmp/cc4lMdns.s:15     .text:0000000000000000 .L0 
+     /tmp/cc4lMdns.s:16     .text:0000000000000004 .L0 
+     /tmp/cc4lMdns.s:18     .text:0000000000000008 .L0 
+     /tmp/cc4lMdns.s:20     .text:000000000000000c .L0 
+     /tmp/cc4lMdns.s:22     .text:000000000000000c .L0 
+         src/ABI.cpp:8      .text:000000000000000c .L0 
+     /tmp/cc4lMdns.s:28     .text:0000000000000010 .L0 
+     /tmp/cc4lMdns.s:29     .text:0000000000000010 .L0 
+         src/ABI.cpp:10     .text:0000000000000010 .L0 
+     /tmp/cc4lMdns.s:35     .text:0000000000000014 .L0 
+     /tmp/cc4lMdns.s:37     .text:0000000000000014 .L0 
+     /tmp/cc4lMdns.s:38     .text:0000000000000018 .L0 
+     /tmp/cc4lMdns.s:39     .text:0000000000000018 .L0 
+     /tmp/cc4lMdns.s:41     .text:000000000000001c .L0 
+     /tmp/cc4lMdns.s:43     .text:0000000000000020 .L0 
+     /tmp/cc4lMdns.s:48     .text:0000000000000020 .L0 
+     /tmp/cc4lMdns.s:255    .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+     /tmp/cc4lMdns.s:527    .debug_str:0000000000000153 .LASF18
+     /tmp/cc4lMdns.s:511    .debug_str:00000000000000b8 .LASF19
+     /tmp/cc4lMdns.s:523    .debug_str:000000000000011f .LASF20
+     /tmp/cc4lMdns.s:5      .text:0000000000000000 .Ltext0
+     /tmp/cc4lMdns.s:46     .text:0000000000000020 .Letext0
+     /tmp/cc4lMdns.s:483    .debug_line:0000000000000000 .Ldebug_line0
+     /tmp/cc4lMdns.s:487    .debug_str:0000000000000008 .LASF0
+     /tmp/cc4lMdns.s:517    .debug_str:00000000000000ed .LASF1
+     /tmp/cc4lMdns.s:507    .debug_str:0000000000000094 .LASF2
+     /tmp/cc4lMdns.s:501    .debug_str:000000000000006e .LASF4
+     /tmp/cc4lMdns.s:497    .debug_str:0000000000000049 .LASF3
+     /tmp/cc4lMdns.s:493    .debug_str:0000000000000032 .LASF5
+     /tmp/cc4lMdns.s:499    .debug_str:000000000000005b .LASF6
+     /tmp/cc4lMdns.s:515    .debug_str:00000000000000da .LASF7
+     /tmp/cc4lMdns.s:525    .debug_str:0000000000000143 .LASF8
+     /tmp/cc4lMdns.s:489    .debug_str:0000000000000015 .LASF9
+     /tmp/cc4lMdns.s:491    .debug_str:0000000000000023 .LASF10
+     /tmp/cc4lMdns.s:521    .debug_str:0000000000000110 .LASF11
+     /tmp/cc4lMdns.s:495    .debug_str:0000000000000039 .LASF12
+     /tmp/cc4lMdns.s:519    .debug_str:0000000000000100 .LASF13
+     /tmp/cc4lMdns.s:505    .debug_str:0000000000000088 .LASF14
+     /tmp/cc4lMdns.s:513    .debug_str:00000000000000c4 .LASF15
+     /tmp/cc4lMdns.s:509    .debug_str:00000000000000a2 .LASF16
+     /tmp/cc4lMdns.s:485    .debug_str:0000000000000000 .LASF21
+     /tmp/cc4lMdns.s:503    .debug_str:0000000000000075 .LASF22
+     /tmp/cc4lMdns.s:10     .text:0000000000000000 .LFB0
+     /tmp/cc4lMdns.s:44     .text:0000000000000020 .LFE0
+     /tmp/cc4lMdns.s:529    .debug_str:0000000000000223 .LASF17
+     /tmp/cc4lMdns.s:456    .debug_loc:0000000000000000 .LLST0
+     /tmp/cc4lMdns.s:14     .text:0000000000000000 .LVL0
+     /tmp/cc4lMdns.s:33     .text:0000000000000014 .LVL1
+     /tmp/cc4lMdns.s:49     .debug_info:0000000000000000 .Ldebug_info0
+
+NO UNDEFINED SYMBOLS

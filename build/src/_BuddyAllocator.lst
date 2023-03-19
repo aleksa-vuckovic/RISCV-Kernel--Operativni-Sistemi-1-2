@@ -1,0 +1,3837 @@
+GAS LISTING /tmp/ccXUpGzJ.s 			page 1
+
+
+   1              		.file	"_BuddyAllocator.cpp"
+   2              		.option pic
+   3              		.option norelax
+   4              		.text
+   5              	.Ltext0:
+   6              		.align	2
+   7              		.globl	_ZN10_BuddyNode4nextEv
+   9              	_ZN10_BuddyNode4nextEv:
+  10              	.LFB26:
+  11              		.file 1 "src/_BuddyAllocator.cpp"
+   1:src/_BuddyAllocator.cpp **** //
+   2:src/_BuddyAllocator.cpp **** // Created by os on 11/19/22.
+   3:src/_BuddyAllocator.cpp **** //
+   4:src/_BuddyAllocator.cpp **** 
+   5:src/_BuddyAllocator.cpp **** #include "../h/_BuddyAllocator.h"
+   6:src/_BuddyAllocator.cpp **** #include "../h/_Console.h"
+   7:src/_BuddyAllocator.cpp **** 
+   8:src/_BuddyAllocator.cpp **** const unsigned _BuddyNode::DATA_LEN = sizeof(data_t) * 8;
+   9:src/_BuddyAllocator.cpp **** const data_t _BuddyNode::M_ACTIVE = 1 << (DATA_LEN - 1); //1000..0
+  10:src/_BuddyAllocator.cpp **** const data_t _BuddyNode::M_LEAF = 1 << (DATA_LEN - 2); //0100..0
+  11:src/_BuddyAllocator.cpp **** const data_t _BuddyNode::M_FREE = 1 << (DATA_LEN - 3); //0010..0
+  12:src/_BuddyAllocator.cpp **** const data_t _BuddyNode::NEXT = ~(M_ACTIVE | M_LEAF | M_FREE); //00011..1
+  13:src/_BuddyAllocator.cpp **** int _BuddyNode::next() {
+  12              		.loc 1 13 24
+  13              		.cfi_startproc
+  14              	.LVL0:
+  15 0000 130101FF 		addi	sp,sp,-16
+  16              		.cfi_def_cfa_offset 16
+  17 0004 23348100 		sd	s0,8(sp)
+  18              		.cfi_offset 8, -8
+  19 0008 13040101 		addi	s0,sp,16
+  20              		.cfi_def_cfa 8, 0
+  14:src/_BuddyAllocator.cpp ****     data_t ret = data & NEXT;
+  21              		.loc 1 14 5
+  22              		.loc 1 14 18 is_stmt 0
+  23 000c 03250500 		lw	a0,0(a0)
+  24              	.LVL1:
+  25              		.loc 1 14 12
+  26 0010 B7070020 		li	a5,536870912
+  27 0014 9387F7FF 		addi	a5,a5,-1
+  28 0018 3375F500 		and	a0,a0,a5
+  29              	.LVL2:
+  15:src/_BuddyAllocator.cpp ****     if (ret == NEXT) {
+  30              		.loc 1 15 5 is_stmt 1
+  31 001c 630AF500 		beq	a0,a5,.L3
+  16:src/_BuddyAllocator.cpp ****         return -1;
+  17:src/_BuddyAllocator.cpp ****     }
+  18:src/_BuddyAllocator.cpp ****     else return ret;
+  32              		.loc 1 18 10
+  33              		.loc 1 18 17 is_stmt 0
+  34 0020 1B050500 		sext.w	a0,a0
+  35              	.LVL3:
+  36              	.L2:
+  19:src/_BuddyAllocator.cpp **** }
+  37              		.loc 1 19 1
+  38 0024 03348100 		ld	s0,8(sp)
+  39              		.cfi_remember_state
+GAS LISTING /tmp/ccXUpGzJ.s 			page 2
+
+
+  40              		.cfi_restore 8
+  41              		.cfi_def_cfa 2, 16
+  42 0028 13010101 		addi	sp,sp,16
+  43              		.cfi_def_cfa_offset 0
+  44 002c 67800000 		jr	ra
+  45              	.LVL4:
+  46              	.L3:
+  47              		.cfi_restore_state
+  16:src/_BuddyAllocator.cpp ****         return -1;
+  48              		.loc 1 16 17
+  49 0030 1305F0FF 		li	a0,-1
+  50              	.LVL5:
+  51 0034 6FF01FFF 		j	.L2
+  52              		.cfi_endproc
+  53              	.LFE26:
+  55              		.align	2
+  56              		.globl	_ZN10_BuddyNode7setNextEi
+  58              	_ZN10_BuddyNode7setNextEi:
+  59              	.LFB27:
+  20:src/_BuddyAllocator.cpp **** void _BuddyNode::setNext(int next) {
+  60              		.loc 1 20 36 is_stmt 1
+  61              		.cfi_startproc
+  62              	.LVL6:
+  63 0038 130101FF 		addi	sp,sp,-16
+  64              		.cfi_def_cfa_offset 16
+  65 003c 23348100 		sd	s0,8(sp)
+  66              		.cfi_offset 8, -8
+  67 0040 13040101 		addi	s0,sp,16
+  68              		.cfi_def_cfa 8, 0
+  21:src/_BuddyAllocator.cpp ****     data_t tmp;
+  69              		.loc 1 21 5
+  22:src/_BuddyAllocator.cpp ****     if (next == -1) tmp = NEXT;
+  70              		.loc 1 22 5
+  71 0044 9307F0FF 		li	a5,-1
+  72 0048 638AF502 		beq	a1,a5,.L7
+  23:src/_BuddyAllocator.cpp ****     else tmp = (data_t)next & NEXT; //ovde treba paziti da svi indeksi mogu da stanu u tip data_t b
+  73              		.loc 1 23 10
+  74              		.loc 1 23 14 is_stmt 0
+  75 004c B7070020 		li	a5,536870912
+  76 0050 9387F7FF 		addi	a5,a5,-1
+  77 0054 B3F7F500 		and	a5,a1,a5
+  78              	.LVL7:
+  79              	.L6:
+  24:src/_BuddyAllocator.cpp ****     data &= ~NEXT;
+  80              		.loc 1 24 5 is_stmt 1
+  81              		.loc 1 24 10 is_stmt 0
+  82 0058 83250500 		lw	a1,0(a0)
+  83 005c 370700E0 		li	a4,-536870912
+  84 0060 B3F5E500 		and	a1,a1,a4
+  85 0064 9B850500 		sext.w	a1,a1
+  25:src/_BuddyAllocator.cpp ****     data |= tmp;
+  86              		.loc 1 25 5 is_stmt 1
+  87              		.loc 1 25 10 is_stmt 0
+  88 0068 B3E5F500 		or	a1,a1,a5
+  89 006c 2320B500 		sw	a1,0(a0)
+  26:src/_BuddyAllocator.cpp **** }
+  90              		.loc 1 26 1
+GAS LISTING /tmp/ccXUpGzJ.s 			page 3
+
+
+  91 0070 03348100 		ld	s0,8(sp)
+  92              		.cfi_remember_state
+  93              		.cfi_restore 8
+  94              		.cfi_def_cfa 2, 16
+  95 0074 13010101 		addi	sp,sp,16
+  96              		.cfi_def_cfa_offset 0
+  97 0078 67800000 		jr	ra
+  98              	.LVL8:
+  99              	.L7:
+ 100              		.cfi_restore_state
+  22:src/_BuddyAllocator.cpp ****     else tmp = (data_t)next & NEXT; //ovde treba paziti da svi indeksi mogu da stanu u tip data_t b
+ 101              		.loc 1 22 25
+ 102 007c B7050020 		li	a1,536870912
+ 103              	.LVL9:
+ 104 0080 9387F5FF 		addi	a5,a1,-1
+ 105 0084 6FF05FFD 		j	.L6
+ 106              		.cfi_endproc
+ 107              	.LFE27:
+ 109              		.align	2
+ 110              		.globl	_ZN10_BuddyNode10printStateEv
+ 112              	_ZN10_BuddyNode10printStateEv:
+ 113              	.LFB28:
+  27:src/_BuddyAllocator.cpp **** void _BuddyNode::printState() {
+ 114              		.loc 1 27 31 is_stmt 1
+ 115              		.cfi_startproc
+ 116              	.LVL10:
+ 117 0088 130101FF 		addi	sp,sp,-16
+ 118              		.cfi_def_cfa_offset 16
+ 119 008c 23341100 		sd	ra,8(sp)
+ 120 0090 23308100 		sd	s0,0(sp)
+ 121              		.cfi_offset 1, -8
+ 122              		.cfi_offset 8, -16
+ 123 0094 13040101 		addi	s0,sp,16
+ 124              		.cfi_def_cfa 8, 0
+  28:src/_BuddyAllocator.cpp ****     if (isSplit())  _Console::putc('+');
+ 125              		.loc 1 28 5
+ 126              	.LVL11:
+ 127              	.LBB188:
+ 128              	.LBB189:
+ 129              		.file 2 "src/../h/_BuddyAllocator.h"
+   1:src/../h/_BuddyAllocator.h **** //
+   2:src/../h/_BuddyAllocator.h **** // Created by os on 11/19/22.
+   3:src/../h/_BuddyAllocator.h **** //
+   4:src/../h/_BuddyAllocator.h **** 
+   5:src/../h/_BuddyAllocator.h **** #ifndef PROJECT_BASE__BUDDYALLOCATOR_H
+   6:src/../h/_BuddyAllocator.h **** #define PROJECT_BASE__BUDDYALLOCATOR_H
+   7:src/../h/_BuddyAllocator.h **** #include "../lib/hw.h"
+   8:src/../h/_BuddyAllocator.h **** #include "_placementNew.h"
+   9:src/../h/_BuddyAllocator.h **** typedef unsigned data_t;
+  10:src/../h/_BuddyAllocator.h **** 
+  11:src/../h/_BuddyAllocator.h **** 
+  12:src/../h/_BuddyAllocator.h **** /*BUDDY ALOKACIJA
+  13:src/../h/_BuddyAllocator.h **** Za vođenje evidencije o alociranim segmentima koristi se binarno stablo, ali sa dodatkom ulančava
+  14:src/../h/_BuddyAllocator.h **** Stablo je predstavljeno u linearizovanom obliku, kao kompletno binarno stablo, pri čemu se u polju
+  15:src/../h/_BuddyAllocator.h **** Stablo je kompletno, pa ako čvor nije list onda mora imati oba potomka (ovo sledi iz prirode algor
+  16:src/../h/_BuddyAllocator.h **** Do potomaka i pretka se dolazi standardno, jednostavnim aritmetičkim operacijama (2i + 1, 2i + 2, 
+  17:src/../h/_BuddyAllocator.h **** 
+GAS LISTING /tmp/ccXUpGzJ.s 			page 4
+
+
+  18:src/../h/_BuddyAllocator.h **** */
+  19:src/../h/_BuddyAllocator.h **** 
+  20:src/../h/_BuddyAllocator.h **** 
+  21:src/../h/_BuddyAllocator.h **** class _BuddyNode {
+  22:src/../h/_BuddyAllocator.h ****     data_t data;
+  23:src/../h/_BuddyAllocator.h ****     //data se sastoji iz sledecih bitova:
+  24:src/../h/_BuddyAllocator.h ****     //15 - active -> oznacava da li je cvor deo trenutne konfiguracije stabla
+  25:src/../h/_BuddyAllocator.h ****     //14 - leaf -> oznacava da li je cvor list (nepodeljeni deo memorije)
+  26:src/../h/_BuddyAllocator.h ****     //13 - free -> oznacava da li je cvor slobodan (vazi samo ako je active = leaf = 1)
+  27:src/../h/_BuddyAllocator.h ****     //12..0 - next -> oznacava sledeci cvor u listi listova na istom nivou
+  28:src/../h/_BuddyAllocator.h ****     static const unsigned DATA_LEN;
+  29:src/../h/_BuddyAllocator.h ****     static const data_t M_ACTIVE;
+  30:src/../h/_BuddyAllocator.h ****     static const data_t M_LEAF;
+  31:src/../h/_BuddyAllocator.h ****     static const data_t M_FREE;
+  32:src/../h/_BuddyAllocator.h ****     static const data_t NEXT;
+  33:src/../h/_BuddyAllocator.h ****     bool isActive() { return data & M_ACTIVE; }
+  34:src/../h/_BuddyAllocator.h ****     bool isLeaf() { return data & M_LEAF; }
+  35:src/../h/_BuddyAllocator.h ****     bool isFree() { return data & M_FREE; }
+  36:src/../h/_BuddyAllocator.h ****     void setActive() { data |= M_ACTIVE; }
+  37:src/../h/_BuddyAllocator.h ****     void setLeaf() { data |= M_LEAF; }
+  38:src/../h/_BuddyAllocator.h ****     void setFree() { data |= M_FREE; }
+  39:src/../h/_BuddyAllocator.h ****     void clearActive() { data &= ~M_ACTIVE; }
+  40:src/../h/_BuddyAllocator.h ****     void clearLeaf() { data &= ~M_LEAF; }
+  41:src/../h/_BuddyAllocator.h ****     void clearFree() { data &= ~M_FREE; }
+  42:src/../h/_BuddyAllocator.h **** public:
+  43:src/../h/_BuddyAllocator.h ****     _BuddyNode() { setOut(); }
+  44:src/../h/_BuddyAllocator.h ****     int next();
+  45:src/../h/_BuddyAllocator.h ****     void setNext(int next);
+  46:src/../h/_BuddyAllocator.h ****     void setFresh() { setActive(); setLeaf(); setFree(); } //111
+  47:src/../h/_BuddyAllocator.h ****     bool isFresh() { return isActive() && isLeaf() && isFree(); }
+  48:src/../h/_BuddyAllocator.h ****     void setOut() { clearActive(); clearLeaf(); clearFree(); } //000
+  49:src/../h/_BuddyAllocator.h ****     bool isOut() { return !isActive() && !isLeaf() && !isFree(); }
+  50:src/../h/_BuddyAllocator.h ****     void setSplit() { setActive(); clearLeaf(); clearFree(); } //100
+  51:src/../h/_BuddyAllocator.h ****     bool isSplit() { return isActive() && !isLeaf() && !isFree(); }
+ 130              		.loc 2 51 22
+ 131              	.LBB190:
+ 132              	.LBB191:
+  33:src/../h/_BuddyAllocator.h ****     bool isLeaf() { return data & M_LEAF; }
+ 133              		.loc 2 33 23
+  33:src/../h/_BuddyAllocator.h ****     bool isLeaf() { return data & M_LEAF; }
+ 134              		.loc 2 33 30 is_stmt 0
+ 135 0098 83270500 		lw	a5,0(a0)
+ 136 009c 1B870700 		sext.w	a4,a5
+ 137              	.LVL12:
+ 138              	.LBE191:
+ 139              	.LBE190:
+ 140              		.loc 2 51 53
+ 141 00a0 63C40702 		bltz	a5,.L15
+ 142              	.L10:
+ 143              	.LVL13:
+ 144              	.LBE189:
+ 145              	.LBE188:
+  29:src/_BuddyAllocator.cpp ****     else if (isAllocated()) _Console::putc('#');
+ 146              		.loc 1 29 10 is_stmt 1
+ 147              	.LBB197:
+ 148              	.LBB198:
+  52:src/../h/_BuddyAllocator.h ****     void setAllocated() { setActive(); setLeaf(); clearFree(); } //110
+GAS LISTING /tmp/ccXUpGzJ.s 			page 5
+
+
+  53:src/../h/_BuddyAllocator.h ****     bool isAllocated() { return isActive() && isLeaf() && !isFree(); }
+ 149              		.loc 2 53 26
+ 150              	.LBE198:
+ 151              	.LBE197:
+  33:src/../h/_BuddyAllocator.h ****     bool isLeaf() { return data & M_LEAF; }
+ 152              		.loc 2 33 23
+ 153              	.LBB205:
+ 154              	.LBB203:
+ 155              		.loc 2 53 56 is_stmt 0
+ 156 00a4 634A0704 		bltz	a4,.L16
+ 157              	.L12:
+ 158              	.LVL14:
+ 159              	.LBE203:
+ 160              	.LBE205:
+  30:src/_BuddyAllocator.cpp ****     else if (isFresh()) _Console::putc('o');
+ 161              		.loc 1 30 10 is_stmt 1
+ 162              	.LBB206:
+ 163              	.LBB207:
+  47:src/../h/_BuddyAllocator.h ****     void setOut() { clearActive(); clearLeaf(); clearFree(); } //000
+ 164              		.loc 2 47 22
+ 165              	.LBE207:
+ 166              	.LBE206:
+  33:src/../h/_BuddyAllocator.h ****     bool isLeaf() { return data & M_LEAF; }
+ 167              		.loc 2 33 23
+ 168              	.LBB214:
+ 169              	.LBB212:
+  47:src/../h/_BuddyAllocator.h ****     void setOut() { clearActive(); clearLeaf(); clearFree(); } //000
+ 170              		.loc 2 47 52 is_stmt 0
+ 171 00a8 63400708 		bltz	a4,.L17
+ 172              	.L13:
+ 173              	.LVL15:
+ 174              	.LBE212:
+ 175              	.LBE214:
+  31:src/_BuddyAllocator.cpp ****     else _Console::putc(' ');
+ 176              		.loc 1 31 10 is_stmt 1
+ 177              		.loc 1 31 24 is_stmt 0
+ 178 00ac 13050002 		li	a0,32
+ 179              	.LVL16:
+ 180 00b0 97000000 		call	_ZN8_Console4putcEc@plt
+ 180      E7800000 
+ 181              	.LVL17:
+ 182              	.L9:
+  32:src/_BuddyAllocator.cpp **** }
+ 183              		.loc 1 32 1
+ 184 00b8 83308100 		ld	ra,8(sp)
+ 185              		.cfi_remember_state
+ 186              		.cfi_restore 1
+ 187 00bc 03340100 		ld	s0,0(sp)
+ 188              		.cfi_restore 8
+ 189              		.cfi_def_cfa 2, 16
+ 190 00c0 13010101 		addi	sp,sp,16
+ 191              		.cfi_def_cfa_offset 0
+ 192 00c4 67800000 		jr	ra
+ 193              	.LVL18:
+ 194              	.L15:
+ 195              		.cfi_restore_state
+ 196              	.LBB215:
+GAS LISTING /tmp/ccXUpGzJ.s 			page 6
+
+
+ 197              	.LBB196:
+ 198              	.LBB192:
+ 199              	.LBB193:
+  34:src/../h/_BuddyAllocator.h ****     bool isFree() { return data & M_FREE; }
+ 200              		.loc 2 34 21 is_stmt 1
+  34:src/../h/_BuddyAllocator.h ****     bool isFree() { return data & M_FREE; }
+ 201              		.loc 2 34 33 is_stmt 0
+ 202 00c8 B7060040 		li	a3,1073741824
+ 203 00cc B3F6D700 		and	a3,a5,a3
+ 204 00d0 9B860600 		sext.w	a3,a3
+ 205              	.LVL19:
+ 206              	.LBE193:
+ 207              	.LBE192:
+  51:src/../h/_BuddyAllocator.h ****     void setAllocated() { setActive(); setLeaf(); clearFree(); } //110
+ 208              		.loc 2 51 40
+ 209 00d4 E39806FC 		bnez	a3,.L10
+ 210              	.LVL20:
+ 211              	.LBB194:
+ 212              	.LBB195:
+  35:src/../h/_BuddyAllocator.h ****     void setActive() { data |= M_ACTIVE; }
+ 213              		.loc 2 35 21 is_stmt 1
+  35:src/../h/_BuddyAllocator.h ****     void setActive() { data |= M_ACTIVE; }
+ 214              		.loc 2 35 33 is_stmt 0
+ 215 00d8 B7060020 		li	a3,536870912
+ 216 00dc B3F6D700 		and	a3,a5,a3
+ 217 00e0 9B860600 		sext.w	a3,a3
+ 218              	.LVL21:
+ 219              	.LBE195:
+ 220              	.LBE194:
+  51:src/../h/_BuddyAllocator.h ****     void setAllocated() { setActive(); setLeaf(); clearFree(); } //110
+ 221              		.loc 2 51 53
+ 222 00e4 E39006FC 		bnez	a3,.L10
+ 223              	.LVL22:
+ 224              	.LBE196:
+ 225              	.LBE215:
+  28:src/_BuddyAllocator.cpp ****     else if (isAllocated()) _Console::putc('#');
+ 226              		.loc 1 28 21 is_stmt 1
+  28:src/_BuddyAllocator.cpp ****     else if (isAllocated()) _Console::putc('#');
+ 227              		.loc 1 28 35 is_stmt 0
+ 228 00e8 1305B002 		li	a0,43
+ 229              	.LVL23:
+ 230 00ec 97000000 		call	_ZN8_Console4putcEc@plt
+ 230      E7800000 
+ 231              	.LVL24:
+ 232 00f4 6FF05FFC 		j	.L9
+ 233              	.LVL25:
+ 234              	.L16:
+ 235              	.LBB216:
+ 236              	.LBB204:
+ 237              	.LBB199:
+ 238              	.LBB200:
+  34:src/../h/_BuddyAllocator.h ****     bool isFree() { return data & M_FREE; }
+ 239              		.loc 2 34 21 is_stmt 1
+  34:src/../h/_BuddyAllocator.h ****     bool isFree() { return data & M_FREE; }
+ 240              		.loc 2 34 33 is_stmt 0
+ 241 00f8 B7060040 		li	a3,1073741824
+ 242 00fc B3F6D700 		and	a3,a5,a3
+GAS LISTING /tmp/ccXUpGzJ.s 			page 7
+
+
+ 243 0100 9B860600 		sext.w	a3,a3
+ 244              	.LVL26:
+ 245              	.LBE200:
+ 246              	.LBE199:
+ 247              		.loc 2 53 44
+ 248 0104 E38206FA 		beqz	a3,.L12
+ 249              	.LVL27:
+ 250              	.LBB201:
+ 251              	.LBB202:
+  35:src/../h/_BuddyAllocator.h ****     void setActive() { data |= M_ACTIVE; }
+ 252              		.loc 2 35 21 is_stmt 1
+  35:src/../h/_BuddyAllocator.h ****     void setActive() { data |= M_ACTIVE; }
+ 253              		.loc 2 35 33 is_stmt 0
+ 254 0108 B7060020 		li	a3,536870912
+ 255 010c B3F6D700 		and	a3,a5,a3
+ 256 0110 9B860600 		sext.w	a3,a3
+ 257              	.LVL28:
+ 258              	.LBE202:
+ 259              	.LBE201:
+ 260              		.loc 2 53 56
+ 261 0114 E39A06F8 		bnez	a3,.L12
+ 262              	.LVL29:
+ 263              	.LBE204:
+ 264              	.LBE216:
+  29:src/_BuddyAllocator.cpp ****     else if (isFresh()) _Console::putc('o');
+ 265              		.loc 1 29 29 is_stmt 1
+  29:src/_BuddyAllocator.cpp ****     else if (isFresh()) _Console::putc('o');
+ 266              		.loc 1 29 43 is_stmt 0
+ 267 0118 13053002 		li	a0,35
+ 268              	.LVL30:
+ 269 011c 97000000 		call	_ZN8_Console4putcEc@plt
+ 269      E7800000 
+ 270              	.LVL31:
+ 271 0124 6FF05FF9 		j	.L9
+ 272              	.LVL32:
+ 273              	.L17:
+ 274              	.LBB217:
+ 275              	.LBB213:
+ 276              	.LBB208:
+ 277              	.LBB209:
+  34:src/../h/_BuddyAllocator.h ****     bool isFree() { return data & M_FREE; }
+ 278              		.loc 2 34 21 is_stmt 1
+  34:src/../h/_BuddyAllocator.h ****     bool isFree() { return data & M_FREE; }
+ 279              		.loc 2 34 33 is_stmt 0
+ 280 0128 37070040 		li	a4,1073741824
+ 281 012c 33F7E700 		and	a4,a5,a4
+ 282 0130 1B070700 		sext.w	a4,a4
+ 283              	.LVL33:
+ 284              	.LBE209:
+ 285              	.LBE208:
+  47:src/../h/_BuddyAllocator.h ****     void setOut() { clearActive(); clearLeaf(); clearFree(); } //000
+ 286              		.loc 2 47 40
+ 287 0134 E30C07F6 		beqz	a4,.L13
+ 288              	.LVL34:
+ 289              	.LBB210:
+ 290              	.LBB211:
+  35:src/../h/_BuddyAllocator.h ****     void setActive() { data |= M_ACTIVE; }
+GAS LISTING /tmp/ccXUpGzJ.s 			page 8
+
+
+ 291              		.loc 2 35 21 is_stmt 1
+  35:src/../h/_BuddyAllocator.h ****     void setActive() { data |= M_ACTIVE; }
+ 292              		.loc 2 35 33 is_stmt 0
+ 293 0138 37070020 		li	a4,536870912
+ 294 013c B3F7E700 		and	a5,a5,a4
+ 295 0140 9B870700 		sext.w	a5,a5
+ 296              	.LVL35:
+ 297              	.LBE211:
+ 298              	.LBE210:
+  47:src/../h/_BuddyAllocator.h ****     void setOut() { clearActive(); clearLeaf(); clearFree(); } //000
+ 299              		.loc 2 47 52
+ 300 0144 E38407F6 		beqz	a5,.L13
+ 301              	.LVL36:
+ 302              	.LBE213:
+ 303              	.LBE217:
+  30:src/_BuddyAllocator.cpp ****     else _Console::putc(' ');
+ 304              		.loc 1 30 25 is_stmt 1
+  30:src/_BuddyAllocator.cpp ****     else _Console::putc(' ');
+ 305              		.loc 1 30 39 is_stmt 0
+ 306 0148 1305F006 		li	a0,111
+ 307              	.LVL37:
+ 308 014c 97000000 		call	_ZN8_Console4putcEc@plt
+ 308      E7800000 
+ 309              	.LVL38:
+ 310 0154 6FF05FF6 		j	.L9
+ 311              		.cfi_endproc
+ 312              	.LFE28:
+ 314              		.align	2
+ 315              		.globl	_ZN10_BuddyTree9calcLevelEm
+ 317              	_ZN10_BuddyTree9calcLevelEm:
+ 318              	.LFB29:
+  33:src/_BuddyAllocator.cpp **** 
+  34:src/_BuddyAllocator.cpp **** int _BuddyTree::calcLevel(size_t size) {
+ 319              		.loc 1 34 40 is_stmt 1
+ 320              		.cfi_startproc
+ 321              	.LVL39:
+ 322 0158 130101FF 		addi	sp,sp,-16
+ 323              		.cfi_def_cfa_offset 16
+ 324 015c 23348100 		sd	s0,8(sp)
+ 325              		.cfi_offset 8, -8
+ 326 0160 13040101 		addi	s0,sp,16
+ 327              		.cfi_def_cfa 8, 0
+  35:src/_BuddyAllocator.cpp ****     //racuna stepen bloka koji treba alocirati kako bi se dobilo size memorije
+  36:src/_BuddyAllocator.cpp ****     int t = (size + blockSize - 1) / blockSize; //broj osnovnih blokova koji pokriva datu velicinu
+ 328              		.loc 1 36 5
+ 329              		.loc 1 36 21 is_stmt 0
+ 330 0164 83378502 		ld	a5,40(a0)
+ 331              		.loc 1 36 19
+ 332 0168 3387B700 		add	a4,a5,a1
+ 333              		.loc 1 36 31
+ 334 016c 1307F7FF 		addi	a4,a4,-1
+ 335              		.loc 1 36 36
+ 336 0170 3357F702 		divu	a4,a4,a5
+ 337              		.loc 1 36 9
+ 338 0174 1B070700 		sext.w	a4,a4
+ 339              	.LVL40:
+  37:src/_BuddyAllocator.cpp ****     int pow = 0;
+GAS LISTING /tmp/ccXUpGzJ.s 			page 9
+
+
+ 340              		.loc 1 37 5 is_stmt 1
+  38:src/_BuddyAllocator.cpp ****     int num = 1;
+ 341              		.loc 1 38 5
+ 342              		.loc 1 38 9 is_stmt 0
+ 343 0178 93071000 		li	a5,1
+  37:src/_BuddyAllocator.cpp ****     int pow = 0;
+ 344              		.loc 1 37 9
+ 345 017c 13050000 		li	a0,0
+ 346              	.LVL41:
+ 347              	.L20:
+  39:src/_BuddyAllocator.cpp ****     while (num < t) num <<= 1, pow++;
+ 348              		.loc 1 39 5 is_stmt 1 discriminator 2
+ 349              		.loc 1 39 16 discriminator 2
+ 350 0180 63D8E700 		bge	a5,a4,.L19
+ 351              		.loc 1 39 21 discriminator 1
+ 352              		.loc 1 39 25 is_stmt 0 discriminator 1
+ 353 0184 9B971700 		slliw	a5,a5,1
+ 354              	.LVL42:
+ 355              		.loc 1 39 30 discriminator 1
+ 356 0188 1B051500 		addiw	a0,a0,1
+ 357              	.LVL43:
+ 358              		.loc 1 39 5 discriminator 1
+ 359 018c 6FF05FFF 		j	.L20
+ 360              	.LVL44:
+ 361              	.L19:
+  40:src/_BuddyAllocator.cpp ****     return pow;
+ 362              		.loc 1 40 5 is_stmt 1
+  41:src/_BuddyAllocator.cpp **** }
+ 363              		.loc 1 41 1 is_stmt 0
+ 364 0190 03348100 		ld	s0,8(sp)
+ 365              		.cfi_restore 8
+ 366              		.cfi_def_cfa 2, 16
+ 367 0194 13010101 		addi	sp,sp,16
+ 368              		.cfi_def_cfa_offset 0
+ 369 0198 67800000 		jr	ra
+ 370              		.cfi_endproc
+ 371              	.LFE29:
+ 373              		.align	2
+ 374              		.globl	_ZN10_BuddyTree9calcLevelEi
+ 376              	_ZN10_BuddyTree9calcLevelEi:
+ 377              	.LFB30:
+  42:src/_BuddyAllocator.cpp **** int _BuddyTree::calcLevel(int n) {
+ 378              		.loc 1 42 34 is_stmt 1
+ 379              		.cfi_startproc
+ 380              	.LVL45:
+ 381 019c 130101FF 		addi	sp,sp,-16
+ 382              		.cfi_def_cfa_offset 16
+ 383 01a0 23348100 		sd	s0,8(sp)
+ 384              		.cfi_offset 8, -8
+ 385 01a4 13040101 		addi	s0,sp,16
+ 386              		.cfi_def_cfa 8, 0
+  43:src/_BuddyAllocator.cpp ****     //racuna stepen bloka na osnovu polozaja u linearizovanom stablu
+  44:src/_BuddyAllocator.cpp ****     int d = 0;
+ 387              		.loc 1 44 5
+ 388              	.LVL46:
+  45:src/_BuddyAllocator.cpp ****     int tmp = (n + 1) >> 1;
+ 389              		.loc 1 45 5
+GAS LISTING /tmp/ccXUpGzJ.s 			page 10
+
+
+ 390              		.loc 1 45 18 is_stmt 0
+ 391 01a8 9B851500 		addiw	a1,a1,1
+ 392              	.LVL47:
+ 393              		.loc 1 45 9
+ 394 01ac 9BD51540 		sraiw	a1,a1,1
+ 395              	.LVL48:
+  44:src/_BuddyAllocator.cpp ****     int tmp = (n + 1) >> 1;
+ 396              		.loc 1 44 9
+ 397 01b0 93070000 		li	a5,0
+ 398              	.LVL49:
+ 399              	.L24:
+  46:src/_BuddyAllocator.cpp ****     while (tmp) d++, tmp >>= 1;
+ 400              		.loc 1 46 5 is_stmt 1 discriminator 2
+ 401              		.loc 1 46 12 discriminator 2
+ 402 01b4 63880500 		beqz	a1,.L23
+ 403              		.loc 1 46 17 discriminator 1
+ 404              		.loc 1 46 20 is_stmt 0 discriminator 1
+ 405 01b8 9B871700 		addiw	a5,a5,1
+ 406              	.LVL50:
+ 407              		.loc 1 46 26 discriminator 1
+ 408 01bc 9BD51540 		sraiw	a1,a1,1
+ 409              	.LVL51:
+ 410              		.loc 1 46 5 discriminator 1
+ 411 01c0 6FF05FFF 		j	.L24
+ 412              	.LVL52:
+ 413              	.L23:
+  47:src/_BuddyAllocator.cpp ****     return pow - d;
+ 414              		.loc 1 47 5 is_stmt 1
+ 415              		.loc 1 47 12 is_stmt 0
+ 416 01c4 03254502 		lw	a0,36(a0)
+ 417              	.LVL53:
+  48:src/_BuddyAllocator.cpp **** }
+ 418              		.loc 1 48 1
+ 419 01c8 3B05F540 		subw	a0,a0,a5
+ 420 01cc 03348100 		ld	s0,8(sp)
+ 421              		.cfi_restore 8
+ 422              		.cfi_def_cfa 2, 16
+ 423 01d0 13010101 		addi	sp,sp,16
+ 424              		.cfi_def_cfa_offset 0
+ 425 01d4 67800000 		jr	ra
+ 426              		.cfi_endproc
+ 427              	.LFE30:
+ 429              		.align	2
+ 430              		.globl	_ZN10_BuddyTree5splitEi
+ 432              	_ZN10_BuddyTree5splitEi:
+ 433              	.LFB31:
+  49:src/_BuddyAllocator.cpp **** void _BuddyTree::split(int level) {
+ 434              		.loc 1 49 35 is_stmt 1
+ 435              		.cfi_startproc
+ 436              	.LVL54:
+  50:src/_BuddyAllocator.cpp ****     //uzima prvi slobodan cvor sa nivoa level, deli ga na dva, azurira stanje u stablu, kao i u lis
+  51:src/_BuddyAllocator.cpp ****     if (level == 0 || lists[level] == -1) return; //greska
+ 437              		.loc 1 51 5
+ 438 01d8 638A0512 		beqz	a1,.L29
+  49:src/_BuddyAllocator.cpp **** void _BuddyTree::split(int level) {
+ 439              		.loc 1 49 35 is_stmt 0 discriminator 2
+ 440 01dc 130101FC 		addi	sp,sp,-64
+GAS LISTING /tmp/ccXUpGzJ.s 			page 11
+
+
+ 441              		.cfi_def_cfa_offset 64
+ 442 01e0 233C1102 		sd	ra,56(sp)
+ 443 01e4 23388102 		sd	s0,48(sp)
+ 444 01e8 23349102 		sd	s1,40(sp)
+ 445 01ec 23302103 		sd	s2,32(sp)
+ 446 01f0 233C3101 		sd	s3,24(sp)
+ 447 01f4 23384101 		sd	s4,16(sp)
+ 448 01f8 23345101 		sd	s5,8(sp)
+ 449              		.cfi_offset 1, -8
+ 450              		.cfi_offset 8, -16
+ 451              		.cfi_offset 9, -24
+ 452              		.cfi_offset 18, -32
+ 453              		.cfi_offset 19, -40
+ 454              		.cfi_offset 20, -48
+ 455              		.cfi_offset 21, -56
+ 456 01fc 13040104 		addi	s0,sp,64
+ 457              		.cfi_def_cfa 8, 0
+ 458 0200 13090500 		mv	s2,a0
+ 459              		.loc 1 51 23 discriminator 2
+ 460 0204 83378500 		ld	a5,8(a0)
+ 461              		.loc 1 51 34 discriminator 2
+ 462 0208 93942500 		slli	s1,a1,2
+ 463 020c B3879700 		add	a5,a5,s1
+ 464 0210 83A90700 		lw	s3,0(a5)
+ 465              		.loc 1 51 20 discriminator 2
+ 466 0214 9307F0FF 		li	a5,-1
+ 467 0218 6388F90C 		beq	s3,a5,.L26
+  52:src/_BuddyAllocator.cpp ****     int node = lists[level];
+ 468              		.loc 1 52 5 is_stmt 1
+ 469              	.LVL55:
+  53:src/_BuddyAllocator.cpp ****     arr[node].setSplit();
+ 470              		.loc 1 53 5
+ 471 021c 03370500 		ld	a4,0(a0)
+ 472              		.loc 1 53 13 is_stmt 0
+ 473 0220 13962900 		slli	a2,s3,2
+ 474              		.loc 1 53 23
+ 475 0224 3307C700 		add	a4,a4,a2
+ 476              	.LVL56:
+  50:src/../h/_BuddyAllocator.h ****     bool isSplit() { return isActive() && !isLeaf() && !isFree(); }
+ 477              		.loc 2 50 23 is_stmt 1
+ 478              	.LBB218:
+ 479              	.LBB219:
+ 480              	.LBB220:
+  36:src/../h/_BuddyAllocator.h ****     void setLeaf() { data |= M_LEAF; }
+ 481              		.loc 2 36 24
+  36:src/../h/_BuddyAllocator.h ****     void setLeaf() { data |= M_LEAF; }
+ 482              		.loc 2 36 29 is_stmt 0
+ 483 0228 83270700 		lw	a5,0(a4)
+ 484              	.LVL57:
+ 485              	.LBE220:
+ 486              	.LBE219:
+ 487              	.LBE218:
+  50:src/../h/_BuddyAllocator.h ****     bool isSplit() { return isActive() && !isLeaf() && !isFree(); }
+ 488              		.loc 2 50 36 is_stmt 1
+  40:src/../h/_BuddyAllocator.h ****     void clearFree() { data &= ~M_FREE; }
+ 489              		.loc 2 40 24
+  50:src/../h/_BuddyAllocator.h ****     bool isSplit() { return isActive() && !isLeaf() && !isFree(); }
+GAS LISTING /tmp/ccXUpGzJ.s 			page 12
+
+
+ 490              		.loc 2 50 49
+ 491              	.LBB223:
+ 492              	.LBB221:
+ 493              	.LBB222:
+  41:src/../h/_BuddyAllocator.h **** public:
+ 494              		.loc 2 41 24
+  41:src/../h/_BuddyAllocator.h **** public:
+ 495              		.loc 2 41 29 is_stmt 0
+ 496 022c B70600A0 		li	a3,-1610612736
+ 497 0230 9386F6FF 		addi	a3,a3,-1
+ 498 0234 B3F7D700 		and	a5,a5,a3
+ 499 0238 B7060080 		li	a3,-2147483648
+ 500 023c B3E7D700 		or	a5,a5,a3
+ 501 0240 2320F700 		sw	a5,0(a4)
+ 502              	.LVL58:
+ 503              	.LBE222:
+ 504              	.LBE221:
+ 505              	.LBE223:
+  54:src/_BuddyAllocator.cpp ****     lists[level] = arr[node].next(); //izbacuje se iz liste
+ 506              		.loc 1 54 5 is_stmt 1
+ 507              		.loc 1 54 20 is_stmt 0
+ 508 0244 03350500 		ld	a0,0(a0)
+ 509              	.LVL59:
+ 510              		.loc 1 54 5
+ 511 0248 033A8900 		ld	s4,8(s2)
+ 512              		.loc 1 54 16
+ 513 024c 330A9A00 		add	s4,s4,s1
+ 514              		.loc 1 54 34
+ 515 0250 3305C500 		add	a0,a0,a2
+ 516 0254 97000000 		call	_ZN10_BuddyNode4nextEv
+ 516      E7800000 
+ 517              	.LVL60:
+ 518              		.loc 1 54 18
+ 519 025c 2320AA00 		sw	a0,0(s4)
+  55:src/_BuddyAllocator.cpp ****     int l = left(node), r = right(node);
+ 520              		.loc 1 55 5 is_stmt 1
+ 521              	.LVL61:
+ 522              	.LBB224:
+ 523              	.LBB225:
+  54:src/../h/_BuddyAllocator.h **** 
+  55:src/../h/_BuddyAllocator.h ****     void printState();
+  56:src/../h/_BuddyAllocator.h **** };
+  57:src/../h/_BuddyAllocator.h **** 
+  58:src/../h/_BuddyAllocator.h **** class _BuddyTree {
+  59:src/../h/_BuddyAllocator.h ****     _BuddyNode* arr;
+  60:src/../h/_BuddyAllocator.h ****     int* lists;
+  61:src/../h/_BuddyAllocator.h ****     void* start, *end; //pocetak i kraj prostora za alociranje
+  62:src/../h/_BuddyAllocator.h ****     int blockNum; //ukupan broj blokova velicine blockSize od kojih se sastoji prostor za alociranj
+  63:src/../h/_BuddyAllocator.h ****     int pow; //broj nivoa u stablu - 1 | redundantno ali koristno
+  64:src/../h/_BuddyAllocator.h ****     size_t blockSize;
+  65:src/../h/_BuddyAllocator.h **** 
+  66:src/../h/_BuddyAllocator.h ****     static size_t extraMemoryNeeded(int blockNum, int pow) {
+  67:src/../h/_BuddyAllocator.h ****         //racuna koliko memorije zauzimaju dodatne strukture za datu velicinu i broj blokova (linea
+  68:src/../h/_BuddyAllocator.h ****         return (2 * blockNum - 1) * (sizeof(_BuddyNode)) + (pow + 1) * sizeof(int);
+  69:src/../h/_BuddyAllocator.h ****     }
+  70:src/../h/_BuddyAllocator.h ****     int calcLevel(size_t size); //racuna stepen bloka koji treba alocirati kako bi se dobilo size m
+  71:src/../h/_BuddyAllocator.h ****     int calcLevel(int n); //racuna stepen bloka na osnovu polozaja u linearizovanom stablu
+GAS LISTING /tmp/ccXUpGzJ.s 			page 13
+
+
+  72:src/../h/_BuddyAllocator.h ****     int left(int node) { return (2 * node + 1); }
+ 524              		.loc 2 72 26
+ 525              		.loc 2 72 36 is_stmt 0
+ 526 0260 1B9A1900 		slliw	s4,s3,1
+ 527              		.loc 2 72 46
+ 528 0264 1B0A1A00 		addiw	s4,s4,1
+ 529 0268 9B0A0A00 		sext.w	s5,s4
+ 530              	.LVL62:
+ 531              	.LBE225:
+ 532              	.LBE224:
+ 533              	.LBB226:
+ 534              	.LBB227:
+  73:src/../h/_BuddyAllocator.h ****     int right(int node) { return (2 * node + 2); }
+ 535              		.loc 2 73 27 is_stmt 1
+ 536              		.loc 2 73 44 is_stmt 0
+ 537 026c 9B891900 		addiw	s3,s3,1
+ 538              	.LVL63:
+ 539              		.loc 2 73 47
+ 540 0270 9B991900 		slliw	s3,s3,1
+ 541              	.LVL64:
+ 542              	.LBE227:
+ 543              	.LBE226:
+  56:src/_BuddyAllocator.cpp ****     arr[l].setFresh(); arr[r].setFresh(); //dodati su u stablo kao slobodni listovi
+ 544              		.loc 1 56 5 is_stmt 1
+ 545 0274 83370900 		ld	a5,0(s2)
+ 546              		.loc 1 56 10 is_stmt 0
+ 547 0278 939A2A00 		slli	s5,s5,2
+ 548              		.loc 1 56 20
+ 549 027c B3875701 		add	a5,a5,s5
+ 550              	.LVL65:
+  46:src/../h/_BuddyAllocator.h ****     bool isFresh() { return isActive() && isLeaf() && isFree(); }
+ 551              		.loc 2 46 23 is_stmt 1
+ 552              	.LBB228:
+ 553              	.LBB229:
+ 554              	.LBB230:
+  36:src/../h/_BuddyAllocator.h ****     void setLeaf() { data |= M_LEAF; }
+ 555              		.loc 2 36 24
+  36:src/../h/_BuddyAllocator.h ****     void setLeaf() { data |= M_LEAF; }
+ 556              		.loc 2 36 29 is_stmt 0
+ 557 0280 83A60700 		lw	a3,0(a5)
+ 558              	.LVL66:
+ 559              	.LBE230:
+ 560              	.LBE229:
+ 561              	.LBE228:
+  46:src/../h/_BuddyAllocator.h ****     bool isFresh() { return isActive() && isLeaf() && isFree(); }
+ 562              		.loc 2 46 36 is_stmt 1
+  37:src/../h/_BuddyAllocator.h ****     void setFree() { data |= M_FREE; }
+ 563              		.loc 2 37 22
+  46:src/../h/_BuddyAllocator.h ****     bool isFresh() { return isActive() && isLeaf() && isFree(); }
+ 564              		.loc 2 46 47
+ 565              	.LBB233:
+ 566              	.LBB231:
+ 567              	.LBB232:
+  38:src/../h/_BuddyAllocator.h ****     void clearActive() { data &= ~M_ACTIVE; }
+ 568              		.loc 2 38 22
+  38:src/../h/_BuddyAllocator.h ****     void clearActive() { data &= ~M_ACTIVE; }
+ 569              		.loc 2 38 27 is_stmt 0
+GAS LISTING /tmp/ccXUpGzJ.s 			page 14
+
+
+ 570 0284 370600E0 		li	a2,-536870912
+ 571 0288 B3E6C600 		or	a3,a3,a2
+ 572 028c 23A0D700 		sw	a3,0(a5)
+ 573              	.LVL67:
+ 574              	.LBE232:
+ 575              	.LBE231:
+ 576              	.LBE233:
+ 577              		.loc 1 56 24 is_stmt 1
+ 578 0290 83370900 		ld	a5,0(s2)
+ 579              		.loc 1 56 29 is_stmt 0
+ 580 0294 93962900 		slli	a3,s3,2
+ 581              		.loc 1 56 39
+ 582 0298 B387D700 		add	a5,a5,a3
+ 583              	.LVL68:
+  46:src/../h/_BuddyAllocator.h ****     bool isFresh() { return isActive() && isLeaf() && isFree(); }
+ 584              		.loc 2 46 23 is_stmt 1
+ 585              	.LBB234:
+ 586              	.LBB235:
+ 587              	.LBB236:
+  36:src/../h/_BuddyAllocator.h ****     void setLeaf() { data |= M_LEAF; }
+ 588              		.loc 2 36 24
+  36:src/../h/_BuddyAllocator.h ****     void setLeaf() { data |= M_LEAF; }
+ 589              		.loc 2 36 29 is_stmt 0
+ 590 029c 03A70700 		lw	a4,0(a5)
+ 591              	.LVL69:
+ 592              	.LBE236:
+ 593              	.LBE235:
+ 594              	.LBE234:
+  46:src/../h/_BuddyAllocator.h ****     bool isFresh() { return isActive() && isLeaf() && isFree(); }
+ 595              		.loc 2 46 36 is_stmt 1
+  37:src/../h/_BuddyAllocator.h ****     void setFree() { data |= M_FREE; }
+ 596              		.loc 2 37 22
+  46:src/../h/_BuddyAllocator.h ****     bool isFresh() { return isActive() && isLeaf() && isFree(); }
+ 597              		.loc 2 46 47
+ 598              	.LBB239:
+ 599              	.LBB237:
+ 600              	.LBB238:
+  38:src/../h/_BuddyAllocator.h ****     void clearActive() { data &= ~M_ACTIVE; }
+ 601              		.loc 2 38 22
+  38:src/../h/_BuddyAllocator.h ****     void clearActive() { data &= ~M_ACTIVE; }
+ 602              		.loc 2 38 27 is_stmt 0
+ 603 02a0 3367C700 		or	a4,a4,a2
+ 604 02a4 23A0E700 		sw	a4,0(a5)
+ 605              	.LVL70:
+ 606              	.LBE238:
+ 607              	.LBE237:
+ 608              	.LBE239:
+  57:src/_BuddyAllocator.cpp ****     arr[r].setNext(lists[level - 1]);
+ 609              		.loc 1 57 5 is_stmt 1
+ 610 02a8 03350900 		ld	a0,0(s2)
+ 611              		.loc 1 57 20 is_stmt 0
+ 612 02ac 83378900 		ld	a5,8(s2)
+ 613              		.loc 1 57 35
+ 614 02b0 9384C4FF 		addi	s1,s1,-4
+ 615 02b4 B3879700 		add	a5,a5,s1
+ 616              		.loc 1 57 19
+ 617 02b8 83A50700 		lw	a1,0(a5)
+GAS LISTING /tmp/ccXUpGzJ.s 			page 15
+
+
+ 618 02bc 3305D500 		add	a0,a0,a3
+ 619 02c0 97000000 		call	_ZN10_BuddyNode7setNextEi
+ 619      E7800000 
+ 620              	.LVL71:
+  58:src/_BuddyAllocator.cpp ****     arr[l].setNext(r);
+ 621              		.loc 1 58 5 is_stmt 1
+ 622 02c8 03350900 		ld	a0,0(s2)
+ 623              		.loc 1 58 19 is_stmt 0
+ 624 02cc 93850900 		mv	a1,s3
+ 625 02d0 33055501 		add	a0,a0,s5
+ 626 02d4 97000000 		call	_ZN10_BuddyNode7setNextEi
+ 626      E7800000 
+ 627              	.LVL72:
+  59:src/_BuddyAllocator.cpp ****     lists[level - 1] = l; //dodati su u listu
+ 628              		.loc 1 59 5 is_stmt 1
+ 629 02dc 83358900 		ld	a1,8(s2)
+ 630              		.loc 1 59 20 is_stmt 0
+ 631 02e0 B3849500 		add	s1,a1,s1
+ 632              		.loc 1 59 22
+ 633 02e4 23A04401 		sw	s4,0(s1)
+ 634              	.LVL73:
+ 635              	.L26:
+  60:src/_BuddyAllocator.cpp **** }
+ 636              		.loc 1 60 1
+ 637 02e8 83308103 		ld	ra,56(sp)
+ 638              		.cfi_restore 1
+ 639 02ec 03340103 		ld	s0,48(sp)
+ 640              		.cfi_restore 8
+ 641              		.cfi_def_cfa 2, 64
+ 642 02f0 83348102 		ld	s1,40(sp)
+ 643              		.cfi_restore 9
+ 644 02f4 03390102 		ld	s2,32(sp)
+ 645              		.cfi_restore 18
+ 646              	.LVL74:
+ 647 02f8 83398101 		ld	s3,24(sp)
+ 648              		.cfi_restore 19
+ 649 02fc 033A0101 		ld	s4,16(sp)
+ 650              		.cfi_restore 20
+ 651 0300 833A8100 		ld	s5,8(sp)
+ 652              		.cfi_restore 21
+ 653 0304 13010104 		addi	sp,sp,64
+ 654              		.cfi_def_cfa_offset 0
+ 655 0308 67800000 		jr	ra
+ 656              	.LVL75:
+ 657              	.L29:
+ 658 030c 67800000 		ret
+ 659              		.cfi_endproc
+ 660              	.LFE31:
+ 662              		.align	2
+ 663              		.globl	_ZN10_BuddyTree11calcAddressEii
+ 665              	_ZN10_BuddyTree11calcAddressEii:
+ 666              	.LFB32:
+  61:src/_BuddyAllocator.cpp **** void* _BuddyTree::calcAddress(int node, int level) {
+ 667              		.loc 1 61 52 is_stmt 1
+ 668              		.cfi_startproc
+ 669              	.LVL76:
+ 670 0310 130101FF 		addi	sp,sp,-16
+GAS LISTING /tmp/ccXUpGzJ.s 			page 16
+
+
+ 671              		.cfi_def_cfa_offset 16
+ 672 0314 23348100 		sd	s0,8(sp)
+ 673              		.cfi_offset 8, -8
+ 674 0318 13040101 		addi	s0,sp,16
+ 675              		.cfi_def_cfa 8, 0
+  62:src/_BuddyAllocator.cpp ****     //racuna adresu bloka koji je predstavljen cvorom node u linearizovanom stablu
+  63:src/_BuddyAllocator.cpp ****     int p = pow - level;
+ 676              		.loc 1 63 5
+ 677              		.loc 1 63 13 is_stmt 0
+ 678 031c 83274502 		lw	a5,36(a0)
+ 679              		.loc 1 63 9
+ 680 0320 3B87C740 		subw	a4,a5,a2
+ 681              	.LVL77:
+  64:src/_BuddyAllocator.cpp ****     //racunam 2^p - 1 sto je broj cvorova na prethodnim nivoima, kao i indeks prvog cvor na tom niv
+  65:src/_BuddyAllocator.cpp ****     int low = (1 << p) - 1;
+ 682              		.loc 1 65 5 is_stmt 1
+ 683              		.loc 1 65 18 is_stmt 0
+ 684 0324 93071000 		li	a5,1
+ 685              	.LVL78:
+ 686 0328 BB97E700 		sllw	a5,a5,a4
+ 687              		.loc 1 65 9
+ 688 032c 9B87F7FF 		addiw	a5,a5,-1
+ 689              	.LVL79:
+  66:src/_BuddyAllocator.cpp ****     //racunam velicinu bloka na nivou level kao blockSize * 2^level
+  67:src/_BuddyAllocator.cpp ****     size_t size = blockSize << level;
+ 690              		.loc 1 67 5 is_stmt 1
+ 691              		.loc 1 67 19 is_stmt 0
+ 692 0330 03378502 		ld	a4,40(a0)
+ 693              		.loc 1 67 12
+ 694 0334 3316C700 		sll	a2,a4,a2
+ 695              	.LVL80:
+  68:src/_BuddyAllocator.cpp ****     int ord = node - low;
+ 696              		.loc 1 68 5 is_stmt 1
+ 697              		.loc 1 68 9 is_stmt 0
+ 698 0338 BB85F540 		subw	a1,a1,a5
+ 699              	.LVL81:
+  69:src/_BuddyAllocator.cpp ****     return ((char*)start + ord * size);
+ 700              		.loc 1 69 5 is_stmt 1
+ 701              		.loc 1 69 20 is_stmt 0
+ 702 033c 03350501 		ld	a0,16(a0)
+ 703              	.LVL82:
+ 704              		.loc 1 69 32
+ 705 0340 B385C502 		mul	a1,a1,a2
+  70:src/_BuddyAllocator.cpp **** }
+ 706              		.loc 1 70 1
+ 707 0344 3305B500 		add	a0,a0,a1
+ 708 0348 03348100 		ld	s0,8(sp)
+ 709              		.cfi_restore 8
+ 710              		.cfi_def_cfa 2, 16
+ 711 034c 13010101 		addi	sp,sp,16
+ 712              		.cfi_def_cfa_offset 0
+ 713 0350 67800000 		jr	ra
+ 714              		.cfi_endproc
+ 715              	.LFE32:
+ 717              		.align	2
+ 718              		.globl	_ZN10_BuddyTree8findNodeEPv
+ 720              	_ZN10_BuddyTree8findNodeEPv:
+GAS LISTING /tmp/ccXUpGzJ.s 			page 17
+
+
+ 721              	.LFB33:
+  71:src/_BuddyAllocator.cpp **** int _BuddyTree::findNode(void* ptr) {
+ 722              		.loc 1 71 37 is_stmt 1
+ 723              		.cfi_startproc
+ 724              	.LVL83:
+ 725 0354 130101FF 		addi	sp,sp,-16
+ 726              		.cfi_def_cfa_offset 16
+ 727 0358 23348100 		sd	s0,8(sp)
+ 728              		.cfi_offset 8, -8
+ 729 035c 13040101 		addi	s0,sp,16
+ 730              		.cfi_def_cfa 8, 0
+ 731 0360 13070500 		mv	a4,a0
+  72:src/_BuddyAllocator.cpp ****     size_t span = (char*)ptr - (char*)start;
+ 732              		.loc 1 72 5
+ 733              		.loc 1 72 39 is_stmt 0
+ 734 0364 83370501 		ld	a5,16(a0)
+ 735              		.loc 1 72 30
+ 736 0368 B385F540 		sub	a1,a1,a5
+ 737              	.LVL84:
+  73:src/_BuddyAllocator.cpp ****     int ord = span / blockSize;
+ 738              		.loc 1 73 5 is_stmt 1
+ 739              		.loc 1 73 22 is_stmt 0
+ 740 036c 83378502 		ld	a5,40(a0)
+ 741              		.loc 1 73 20
+ 742 0370 33D5F502 		divu	a0,a1,a5
+ 743              	.LVL85:
+ 744              		.loc 1 73 9
+ 745 0374 1B050500 		sext.w	a0,a0
+ 746              	.LVL86:
+  74:src/_BuddyAllocator.cpp ****     if (ord * blockSize != span) return -1; //ako adresa nije poravnata na ceo broj blokova
+ 747              		.loc 1 74 5 is_stmt 1
+ 748              		.loc 1 74 13 is_stmt 0
+ 749 0378 B387A702 		mul	a5,a5,a0
+ 750              		.loc 1 74 5
+ 751 037c 6394B706 		bne	a5,a1,.L37
+  75:src/_BuddyAllocator.cpp ****     //Pronalazimo cvor koji odgovara datoj adresu u najnizem nivou
+  76:src/_BuddyAllocator.cpp ****     int node = (1 << pow) - 1 + ord;
+ 752              		.loc 1 76 5 is_stmt 1
+ 753              		.loc 1 76 22 is_stmt 0
+ 754 0380 83264702 		lw	a3,36(a4)
+ 755              		.loc 1 76 19
+ 756 0384 93071000 		li	a5,1
+ 757 0388 BB97D700 		sllw	a5,a5,a3
+ 758              		.loc 1 76 27
+ 759 038c 9B87F7FF 		addiw	a5,a5,-1
+ 760              		.loc 1 76 9
+ 761 0390 3B85A700 		addw	a0,a5,a0
+ 762              	.LVL87:
+ 763              	.L36:
+  77:src/_BuddyAllocator.cpp ****     while (1) {
+ 764              		.loc 1 77 5 is_stmt 1
+  78:src/_BuddyAllocator.cpp ****         if (!arr[node].isOut()) return node;
+ 765              		.loc 1 78 9
+ 766              		.loc 1 78 14 is_stmt 0
+ 767 0394 83370700 		ld	a5,0(a4)
+ 768              		.loc 1 78 22
+ 769 0398 93162500 		slli	a3,a0,2
+GAS LISTING /tmp/ccXUpGzJ.s 			page 18
+
+
+ 770              		.loc 1 78 29
+ 771 039c B387D700 		add	a5,a5,a3
+ 772              	.LVL88:
+ 773              	.LBB240:
+ 774              	.LBB241:
+  49:src/../h/_BuddyAllocator.h ****     void setSplit() { setActive(); clearLeaf(); clearFree(); } //100
+ 775              		.loc 2 49 20 is_stmt 1
+ 776              	.LBB242:
+ 777              	.LBB243:
+  33:src/../h/_BuddyAllocator.h ****     bool isLeaf() { return data & M_LEAF; }
+ 778              		.loc 2 33 23
+  33:src/../h/_BuddyAllocator.h ****     bool isLeaf() { return data & M_LEAF; }
+ 779              		.loc 2 33 30 is_stmt 0
+ 780 03a0 83A70700 		lw	a5,0(a5)
+ 781              	.LVL89:
+ 782              	.LBE243:
+ 783              	.LBE242:
+  49:src/../h/_BuddyAllocator.h ****     void setSplit() { setActive(); clearLeaf(); clearFree(); } //100
+ 784              		.loc 2 49 52
+ 785 03a4 63C20704 		bltz	a5,.L35
+ 786              	.LVL90:
+ 787              	.LBB244:
+ 788              	.LBB245:
+  34:src/../h/_BuddyAllocator.h ****     bool isFree() { return data & M_FREE; }
+ 789              		.loc 2 34 21 is_stmt 1
+  34:src/../h/_BuddyAllocator.h ****     bool isFree() { return data & M_FREE; }
+ 790              		.loc 2 34 33 is_stmt 0
+ 791 03a8 B7060040 		li	a3,1073741824
+ 792              	.LVL91:
+ 793 03ac B3F6D700 		and	a3,a5,a3
+ 794 03b0 9B860600 		sext.w	a3,a3
+ 795              	.LVL92:
+ 796              	.LBE245:
+ 797              	.LBE244:
+  49:src/../h/_BuddyAllocator.h ****     void setSplit() { setActive(); clearLeaf(); clearFree(); } //100
+ 798              		.loc 2 49 39
+ 799 03b4 639A0602 		bnez	a3,.L35
+ 800              	.LVL93:
+ 801              	.LBB246:
+ 802              	.LBB247:
+  35:src/../h/_BuddyAllocator.h ****     void setActive() { data |= M_ACTIVE; }
+ 803              		.loc 2 35 21 is_stmt 1
+  35:src/../h/_BuddyAllocator.h ****     void setActive() { data |= M_ACTIVE; }
+ 804              		.loc 2 35 33 is_stmt 0
+ 805 03b8 B7060020 		li	a3,536870912
+ 806 03bc B3F7D700 		and	a5,a5,a3
+ 807 03c0 9B870700 		sext.w	a5,a5
+ 808              	.LVL94:
+ 809              	.LBE247:
+ 810              	.LBE246:
+  49:src/../h/_BuddyAllocator.h ****     void setSplit() { setActive(); clearLeaf(); clearFree(); } //100
+ 811              		.loc 2 49 52
+ 812 03c4 63920702 		bnez	a5,.L35
+ 813              	.LVL95:
+ 814              	.LBE241:
+ 815              	.LBE240:
+  79:src/_BuddyAllocator.cpp ****         if (!(node & 1)) return -1; //ako je desni potomak, onda dalji preci nemaju istu adresu, a 
+GAS LISTING /tmp/ccXUpGzJ.s 			page 19
+
+
+ 816              		.loc 1 79 9 is_stmt 1
+ 817              		.loc 1 79 20 is_stmt 0
+ 818 03c8 93771500 		andi	a5,a0,1
+ 819              		.loc 1 79 9
+ 820 03cc 63840702 		beqz	a5,.L38
+  80:src/_BuddyAllocator.cpp ****         node = parent(node);
+ 821              		.loc 1 80 9 is_stmt 1
+ 822              	.LVL96:
+ 823              	.LBB248:
+ 824              	.LBB249:
+  74:src/../h/_BuddyAllocator.h ****     int parent(int node) { return (node - 1) / 2; }
+ 825              		.loc 2 74 28
+ 826              		.loc 2 74 41 is_stmt 0
+ 827 03d0 9B07F5FF 		addiw	a5,a0,-1
+ 828              		.loc 2 74 48
+ 829 03d4 1BD5F701 		srliw	a0,a5,31
+ 830              	.LVL97:
+ 831 03d8 3B05F500 		addw	a0,a0,a5
+ 832 03dc 1B551540 		sraiw	a0,a0,1
+ 833              	.LVL98:
+ 834              	.LBE249:
+ 835              	.LBE248:
+  77:src/_BuddyAllocator.cpp ****         if (!arr[node].isOut()) return node;
+ 836              		.loc 1 77 5 is_stmt 1
+  78:src/_BuddyAllocator.cpp ****         if (!(node & 1)) return -1; //ako je desni potomak, onda dalji preci nemaju istu adresu, a 
+ 837              		.loc 1 78 9 is_stmt 0
+ 838 03e0 6FF05FFB 		j	.L36
+ 839              	.LVL99:
+ 840              	.L37:
+  74:src/_BuddyAllocator.cpp ****     //Pronalazimo cvor koji odgovara datoj adresu u najnizem nivou
+ 841              		.loc 1 74 42
+ 842 03e4 1305F0FF 		li	a0,-1
+ 843              	.LVL100:
+ 844              	.L35:
+  81:src/_BuddyAllocator.cpp ****     }
+  82:src/_BuddyAllocator.cpp ****     return -1;
+  83:src/_BuddyAllocator.cpp **** }
+ 845              		.loc 1 83 1
+ 846 03e8 03348100 		ld	s0,8(sp)
+ 847              		.cfi_remember_state
+ 848              		.cfi_restore 8
+ 849              		.cfi_def_cfa 2, 16
+ 850 03ec 13010101 		addi	sp,sp,16
+ 851              		.cfi_def_cfa_offset 0
+ 852 03f0 67800000 		jr	ra
+ 853              	.LVL101:
+ 854              	.L38:
+ 855              		.cfi_restore_state
+  79:src/_BuddyAllocator.cpp ****         node = parent(node);
+ 856              		.loc 1 79 34
+ 857 03f4 1305F0FF 		li	a0,-1
+ 858              	.LVL102:
+ 859 03f8 6FF01FFF 		j	.L35
+ 860              		.cfi_endproc
+ 861              	.LFE33:
+ 863              		.align	2
+ 864              		.globl	_ZN10_BuddyTreeC2EPvmm
+GAS LISTING /tmp/ccXUpGzJ.s 			page 20
+
+
+ 866              	_ZN10_BuddyTreeC2EPvmm:
+ 867              	.LFB35:
+  84:src/_BuddyAllocator.cpp **** //Potrebno je u datom prostoru alocirati niz od 2*blockNum buddyNode-ova, kao i log(blockNum) + 1 p
+  85:src/_BuddyAllocator.cpp **** _BuddyTree::_BuddyTree(void* heapEnd, size_t blockSize, uint64 alignMask) {
+ 868              		.loc 1 85 1 is_stmt 1
+ 869              		.cfi_startproc
+ 870              	.LVL103:
+ 871 03fc 130101FE 		addi	sp,sp,-32
+ 872              		.cfi_def_cfa_offset 32
+ 873 0400 233C1100 		sd	ra,24(sp)
+ 874 0404 23388100 		sd	s0,16(sp)
+ 875 0408 23349100 		sd	s1,8(sp)
+ 876 040c 23302101 		sd	s2,0(sp)
+ 877              		.cfi_offset 1, -8
+ 878              		.cfi_offset 8, -16
+ 879              		.cfi_offset 9, -24
+ 880              		.cfi_offset 18, -32
+ 881 0410 13040102 		addi	s0,sp,32
+ 882              		.cfi_def_cfa 8, 0
+ 883 0414 93040500 		mv	s1,a0
+ 884              	.LBB250:
+  86:src/_BuddyAllocator.cpp ****     /*
+  87:src/_BuddyAllocator.cpp ****      * Prostor od this do HEAP_END je podeljene na sledeci nacin:
+  88:src/_BuddyAllocator.cpp ****      * this - struktura _BuddyTree
+  89:src/_BuddyAllocator.cpp ****      * nakon toga sledi niz cvorova (2 * blockNum - 1 cvorova)
+  90:src/_BuddyAllocator.cpp ****      * nakon toga sledi niz od (pow + 1) pokazivaca (tj. integera koji predstavljaju indekse u stab
+  91:src/_BuddyAllocator.cpp ****      * nakon toga se preskace do sledeceg pocetka nove stranica kako bi blokovi bili pravnati (na o
+  92:src/_BuddyAllocator.cpp ****      * odatle (start) pa sve do end je memorija za alokaciju
+  93:src/_BuddyAllocator.cpp ****      * nealociran deo (od end do heapEnd) moze se koristiti za druge stvari (van buddyTree-a)
+  94:src/_BuddyAllocator.cpp ****      */
+  95:src/_BuddyAllocator.cpp ****     this->blockSize = blockSize;
+ 885              		.loc 1 95 5
+ 886              		.loc 1 95 21 is_stmt 0
+ 887 0418 2334C502 		sd	a2,40(a0)
+  96:src/_BuddyAllocator.cpp ****     //racunanje maksimalnog broj blokova
+  97:src/_BuddyAllocator.cpp ****     blockNum = 1, pow = 0;
+ 888              		.loc 1 97 5 is_stmt 1
+ 889              		.loc 1 97 14 is_stmt 0
+ 890 041c 93071000 		li	a5,1
+ 891 0420 2320F502 		sw	a5,32(a0)
+ 892              		.loc 1 97 23
+ 893 0424 23220502 		sw	zero,36(a0)
+ 894              	.LVL104:
+ 895              	.L42:
+  98:src/_BuddyAllocator.cpp ****     while (true) {
+ 896              		.loc 1 98 5 is_stmt 1
+ 897              	.LBB251:
+  99:src/_BuddyAllocator.cpp ****         size_t extra = extraMemoryNeeded(blockNum, pow);
+ 898              		.loc 1 99 9
+ 899              		.loc 1 99 41 is_stmt 0
+ 900 0428 03A50402 		lw	a0,32(s1)
+ 901 042c 03AE4402 		lw	t3,36(s1)
+ 902              	.LVL105:
+ 903              	.LBB252:
+ 904              	.LBB253:
+  68:src/../h/_BuddyAllocator.h ****     }
+ 905              		.loc 2 68 9 is_stmt 1
+GAS LISTING /tmp/ccXUpGzJ.s 			page 21
+
+
+  68:src/../h/_BuddyAllocator.h ****     }
+ 906              		.loc 2 68 19 is_stmt 0
+ 907 0430 9B181500 		slliw	a7,a0,1
+  68:src/../h/_BuddyAllocator.h ****     }
+ 908              		.loc 2 68 30
+ 909 0434 9B87F8FF 		addiw	a5,a7,-1
+  68:src/../h/_BuddyAllocator.h ****     }
+ 910              		.loc 2 68 65
+ 911 0438 1B081E00 		addiw	a6,t3,1
+ 912 043c 1B070800 		sext.w	a4,a6
+  68:src/../h/_BuddyAllocator.h ****     }
+ 913              		.loc 2 68 58
+ 914 0440 B387E700 		add	a5,a5,a4
+  68:src/../h/_BuddyAllocator.h ****     }
+ 915              		.loc 2 68 82
+ 916 0444 93972700 		slli	a5,a5,2
+ 917              	.LVL106:
+ 918              	.LBE253:
+ 919              	.LBE252:
+ 100:src/_BuddyAllocator.cpp ****         uint64 heapStart = (uint64)((char*)(this + 1) + extra);
+ 920              		.loc 1 100 9 is_stmt 1
+ 921              		.loc 1 100 55 is_stmt 0
+ 922 0448 93870703 		addi	a5,a5,48
+ 923              	.LVL107:
+ 924 044c B387F400 		add	a5,s1,a5
+ 925              	.LVL108:
+ 101:src/_BuddyAllocator.cpp ****         heapStart = (heapStart + alignMask) & ~alignMask;
+ 926              		.loc 1 101 9 is_stmt 1
+ 927              		.loc 1 101 32 is_stmt 0
+ 928 0450 B387D700 		add	a5,a5,a3
+ 929              	.LVL109:
+ 930              		.loc 1 101 47
+ 931 0454 13C3F6FF 		not	t1,a3
+ 932              		.loc 1 101 19
+ 933 0458 B3F76700 		and	a5,a5,t1
+ 934              	.LVL110:
+ 102:src/_BuddyAllocator.cpp ****         if (heapStart + (uint64)blockNum * blockSize > (uint64)heapEnd) break;
+ 935              		.loc 1 102 9 is_stmt 1
+ 936              		.loc 1 102 42 is_stmt 0
+ 937 045c 3307C502 		mul	a4,a0,a2
+ 938              	.LVL111:
+ 939              		.loc 1 102 23
+ 940 0460 B307F700 		add	a5,a4,a5
+ 941              	.LVL112:
+ 942              		.loc 1 102 9
+ 943 0464 63E8F500 		bgtu	a5,a1,.L41
+ 103:src/_BuddyAllocator.cpp ****         blockNum *= 2; pow++;
+ 944              		.loc 1 103 9 is_stmt 1
+ 945              		.loc 1 103 18 is_stmt 0
+ 946 0468 23A01403 		sw	a7,32(s1)
+ 947              		.loc 1 103 24 is_stmt 1
+ 948              		.loc 1 103 27 is_stmt 0
+ 949 046c 23A20403 		sw	a6,36(s1)
+ 950              	.LBE251:
+  98:src/_BuddyAllocator.cpp ****         size_t extra = extraMemoryNeeded(blockNum, pow);
+ 951              		.loc 1 98 5 is_stmt 1
+ 104:src/_BuddyAllocator.cpp ****     }
+GAS LISTING /tmp/ccXUpGzJ.s 			page 22
+
+
+ 952              		.loc 1 104 5 is_stmt 0
+ 953 0470 6FF09FFB 		j	.L42
+ 954              	.L41:
+ 105:src/_BuddyAllocator.cpp ****     blockNum /= 2, pow--;
+ 955              		.loc 1 105 5 is_stmt 1
+ 956              		.loc 1 105 14 is_stmt 0
+ 957 0474 9B57F501 		srliw	a5,a0,31
+ 958 0478 3B85A700 		addw	a0,a5,a0
+ 959 047c 1B551540 		sraiw	a0,a0,1
+ 960 0480 9B050500 		sext.w	a1,a0
+ 961              	.LVL113:
+ 962 0484 23A0A402 		sw	a0,32(s1)
+ 963              		.loc 1 105 18
+ 964 0488 1B0EFEFF 		addiw	t3,t3,-1
+ 965 048c 1B070E00 		sext.w	a4,t3
+ 966 0490 23A2C403 		sw	t3,36(s1)
+ 106:src/_BuddyAllocator.cpp ****     arr = (_BuddyNode*)(this + 1);
+ 967              		.loc 1 106 5 is_stmt 1
+ 968              		.loc 1 106 11 is_stmt 0
+ 969 0494 93870403 		addi	a5,s1,48
+ 970              		.loc 1 106 9
+ 971 0498 23B0F400 		sd	a5,0(s1)
+ 107:src/_BuddyAllocator.cpp ****     lists = (int*)(arr + 2 * blockNum - 1);
+ 972              		.loc 1 107 5 is_stmt 1
+ 973              		.loc 1 107 28 is_stmt 0
+ 974 049c 1B151500 		slliw	a0,a0,1
+ 975              		.loc 1 107 24
+ 976 04a0 13152500 		slli	a0,a0,2
+ 977              		.loc 1 107 39
+ 978 04a4 1305C5FF 		addi	a0,a0,-4
+ 979 04a8 3385A700 		add	a0,a5,a0
+ 980              		.loc 1 107 11
+ 981 04ac 23B4A400 		sd	a0,8(s1)
+ 108:src/_BuddyAllocator.cpp ****     start = (void*)(((uint64)(lists + pow + 1) + alignMask) & ~alignMask);
+ 982              		.loc 1 108 5 is_stmt 1
+ 983              		.loc 1 108 43 is_stmt 0
+ 984 04b0 93071700 		addi	a5,a4,1
+ 985 04b4 93972700 		slli	a5,a5,2
+ 986 04b8 3305F500 		add	a0,a0,a5
+ 987              		.loc 1 108 48
+ 988 04bc B306D500 		add	a3,a0,a3
+ 989              	.LVL114:
+ 990              		.loc 1 108 61
+ 991 04c0 3373D300 		and	t1,t1,a3
+ 992              	.LVL115:
+ 993              		.loc 1 108 11
+ 994 04c4 23B86400 		sd	t1,16(s1)
+ 109:src/_BuddyAllocator.cpp ****     end = (char*)start + blockNum * blockSize;
+ 995              		.loc 1 109 5 is_stmt 1
+ 996              		.loc 1 109 35 is_stmt 0
+ 997 04c8 3386C502 		mul	a2,a1,a2
+ 998              	.LVL116:
+ 999              		.loc 1 109 24
+ 1000 04cc 3303C300 		add	t1,t1,a2
+ 1001              		.loc 1 109 9
+ 1002 04d0 23BC6400 		sd	t1,24(s1)
+ 110:src/_BuddyAllocator.cpp ****     //inizijalizacija stabla i lista
+GAS LISTING /tmp/ccXUpGzJ.s 			page 23
+
+
+ 111:src/_BuddyAllocator.cpp ****     for (int i = 0; i < 2 * blockNum - 1; i++) new (arr + i) _BuddyNode();
+ 1003              		.loc 1 111 5 is_stmt 1
+ 1004              	.LVL117:
+ 1005              	.LBB254:
+ 1006              		.loc 1 111 14 is_stmt 0
+ 1007 04d4 13090000 		li	s2,0
+ 1008 04d8 6F008000 		j	.L45
+ 1009              	.LVL118:
+ 1010              	.L44:
+ 1011              		.loc 1 111 5 is_stmt 1 discriminator 6
+ 1012 04dc 1B091900 		addiw	s2,s2,1
+ 1013              	.LVL119:
+ 1014              	.L45:
+ 1015              		.loc 1 111 23 discriminator 7
+ 1016              		.loc 1 111 29 is_stmt 0 discriminator 7
+ 1017 04e0 83A70402 		lw	a5,32(s1)
+ 1018              		.loc 1 111 27 discriminator 7
+ 1019 04e4 9B971700 		slliw	a5,a5,1
+ 1020              		.loc 1 111 38 discriminator 7
+ 1021 04e8 9B87F7FF 		addiw	a5,a5,-1
+ 1022              		.loc 1 111 23 discriminator 7
+ 1023 04ec 635CF902 		ble	a5,s2,.L43
+ 1024              		.loc 1 111 48 is_stmt 1 discriminator 2
+ 1025              		.loc 1 111 53 is_stmt 0 discriminator 2
+ 1026 04f0 83B50400 		ld	a1,0(s1)
+ 1027              		.loc 1 111 57 discriminator 2
+ 1028 04f4 93172900 		slli	a5,s2,2
+ 1029              		.loc 1 111 73 discriminator 2
+ 1030 04f8 B385F500 		add	a1,a1,a5
+ 1031 04fc 13054000 		li	a0,4
+ 1032 0500 97000000 		call	_ZnwmPv@plt
+ 1032      E7800000 
+ 1033              	.LVL120:
+ 1034 0508 E30A05FC 		beqz	a0,.L44
+ 1035              	.LVL121:
+ 1036              	.LBE254:
+ 1037              	.LBE250:
+  43:src/../h/_BuddyAllocator.h ****     int next();
+ 1038              		.loc 2 43 20 is_stmt 1
+  48:src/../h/_BuddyAllocator.h ****     bool isOut() { return !isActive() && !isLeaf() && !isFree(); }
+ 1039              		.loc 2 48 21
+ 1040              	.LBB272:
+ 1041              	.LBB263:
+ 1042              	.LBB255:
+ 1043              	.LBB256:
+ 1044              	.LBB257:
+ 1045              	.LBB258:
+  39:src/../h/_BuddyAllocator.h ****     void clearLeaf() { data &= ~M_LEAF; }
+ 1046              		.loc 2 39 26
+  39:src/../h/_BuddyAllocator.h ****     void clearLeaf() { data &= ~M_LEAF; }
+ 1047              		.loc 2 39 31 is_stmt 0
+ 1048 050c 83270500 		lw	a5,0(a0)
+ 1049              	.LVL122:
+ 1050              	.LBE258:
+ 1051              	.LBE257:
+ 1052              	.LBE256:
+ 1053              	.LBE255:
+GAS LISTING /tmp/ccXUpGzJ.s 			page 24
+
+
+ 1054              	.LBE263:
+ 1055              	.LBE272:
+  48:src/../h/_BuddyAllocator.h ****     bool isOut() { return !isActive() && !isLeaf() && !isFree(); }
+ 1056              		.loc 2 48 36 is_stmt 1
+  40:src/../h/_BuddyAllocator.h ****     void clearFree() { data &= ~M_FREE; }
+ 1057              		.loc 2 40 24
+  48:src/../h/_BuddyAllocator.h ****     bool isOut() { return !isActive() && !isLeaf() && !isFree(); }
+ 1058              		.loc 2 48 49
+ 1059              	.LBB273:
+ 1060              	.LBB264:
+ 1061              	.LBB262:
+ 1062              	.LBB261:
+ 1063              	.LBB259:
+ 1064              	.LBB260:
+  41:src/../h/_BuddyAllocator.h **** public:
+ 1065              		.loc 2 41 24
+  41:src/../h/_BuddyAllocator.h **** public:
+ 1066              		.loc 2 41 29 is_stmt 0
+ 1067 0510 37070020 		li	a4,536870912
+ 1068 0514 1307F7FF 		addi	a4,a4,-1
+ 1069 0518 B3F7E700 		and	a5,a5,a4
+ 1070 051c 2320F500 		sw	a5,0(a0)
+ 1071              	.LVL123:
+ 1072              	.LBE260:
+ 1073              	.LBE259:
+ 1074              	.LBE261:
+ 1075              	.LBE262:
+ 1076 0520 6FF0DFFB 		j	.L44
+ 1077              	.L43:
+ 1078              	.LBE264:
+ 112:src/_BuddyAllocator.cpp ****     arr[0].setFresh(); arr[0].setNext(-1);
+ 1079              		.loc 1 112 5 is_stmt 1
+ 1080 0524 03B70400 		ld	a4,0(s1)
+ 1081              	.LVL124:
+ 1082              	.LBE273:
+  46:src/../h/_BuddyAllocator.h ****     bool isFresh() { return isActive() && isLeaf() && isFree(); }
+ 1083              		.loc 2 46 23
+ 1084              	.LBB274:
+ 1085              	.LBB265:
+ 1086              	.LBB266:
+ 1087              	.LBB267:
+  36:src/../h/_BuddyAllocator.h ****     void setLeaf() { data |= M_LEAF; }
+ 1088              		.loc 2 36 24
+  36:src/../h/_BuddyAllocator.h ****     void setLeaf() { data |= M_LEAF; }
+ 1089              		.loc 2 36 29 is_stmt 0
+ 1090 0528 83270700 		lw	a5,0(a4)
+ 1091              	.LVL125:
+ 1092              	.LBE267:
+ 1093              	.LBE266:
+ 1094              	.LBE265:
+ 1095              	.LBE274:
+  46:src/../h/_BuddyAllocator.h ****     bool isFresh() { return isActive() && isLeaf() && isFree(); }
+ 1096              		.loc 2 46 36 is_stmt 1
+  37:src/../h/_BuddyAllocator.h ****     void setFree() { data |= M_FREE; }
+ 1097              		.loc 2 37 22
+  46:src/../h/_BuddyAllocator.h ****     bool isFresh() { return isActive() && isLeaf() && isFree(); }
+ 1098              		.loc 2 46 47
+GAS LISTING /tmp/ccXUpGzJ.s 			page 25
+
+
+ 1099              	.LBB275:
+ 1100              	.LBB270:
+ 1101              	.LBB268:
+ 1102              	.LBB269:
+  38:src/../h/_BuddyAllocator.h ****     void clearActive() { data &= ~M_ACTIVE; }
+ 1103              		.loc 2 38 22
+  38:src/../h/_BuddyAllocator.h ****     void clearActive() { data &= ~M_ACTIVE; }
+ 1104              		.loc 2 38 27 is_stmt 0
+ 1105 052c B70600E0 		li	a3,-536870912
+ 1106 0530 B3E7D700 		or	a5,a5,a3
+ 1107 0534 2320F700 		sw	a5,0(a4)
+ 1108              	.LVL126:
+ 1109              	.LBE269:
+ 1110              	.LBE268:
+ 1111              	.LBE270:
+ 1112              		.loc 1 112 24 is_stmt 1
+ 1113              		.loc 1 112 38 is_stmt 0
+ 1114 0538 9305F0FF 		li	a1,-1
+ 1115 053c 03B50400 		ld	a0,0(s1)
+ 1116 0540 97000000 		call	_ZN10_BuddyNode7setNextEi
+ 1116      E7800000 
+ 1117              	.LVL127:
+ 113:src/_BuddyAllocator.cpp ****     for (int i = 0; i < pow; i++) lists[i] = -1;
+ 1118              		.loc 1 113 5 is_stmt 1
+ 1119              	.LBB271:
+ 1120              		.loc 1 113 14 is_stmt 0
+ 1121 0548 93070000 		li	a5,0
+ 1122              	.LVL128:
+ 1123              	.L47:
+ 1124              		.loc 1 113 23 is_stmt 1 discriminator 3
+ 1125              		.loc 1 113 25 is_stmt 0 discriminator 3
+ 1126 054c 03A74402 		lw	a4,36(s1)
+ 1127              		.loc 1 113 23 discriminator 3
+ 1128 0550 63D0E702 		ble	a4,a5,.L46
+ 1129              		.loc 1 113 35 is_stmt 1 discriminator 2
+ 1130 0554 03B78400 		ld	a4,8(s1)
+ 1131              		.loc 1 113 42 is_stmt 0 discriminator 2
+ 1132 0558 93962700 		slli	a3,a5,2
+ 1133 055c 3307D700 		add	a4,a4,a3
+ 1134              		.loc 1 113 44 discriminator 2
+ 1135 0560 9306F0FF 		li	a3,-1
+ 1136 0564 2320D700 		sw	a3,0(a4)
+ 1137              		.loc 1 113 5 is_stmt 1 discriminator 2
+ 1138 0568 9B871700 		addiw	a5,a5,1
+ 1139              	.LVL129:
+ 1140 056c 6FF01FFE 		j	.L47
+ 1141              	.LVL130:
+ 1142              	.L46:
+ 1143              	.LBE271:
+ 114:src/_BuddyAllocator.cpp ****     lists[pow] = 0;
+ 1144              		.loc 1 114 5
+ 1145 0570 83B78400 		ld	a5,8(s1)
+ 1146              	.LVL131:
+ 1147              		.loc 1 114 14 is_stmt 0
+ 1148 0574 13172700 		slli	a4,a4,2
+ 1149 0578 3387E700 		add	a4,a5,a4
+ 1150              		.loc 1 114 16
+GAS LISTING /tmp/ccXUpGzJ.s 			page 26
+
+
+ 1151 057c 23200700 		sw	zero,0(a4)
+ 1152              	.LBE275:
+ 115:src/_BuddyAllocator.cpp **** }
+ 1153              		.loc 1 115 1
+ 1154 0580 83308101 		ld	ra,24(sp)
+ 1155              		.cfi_restore 1
+ 1156 0584 03340101 		ld	s0,16(sp)
+ 1157              		.cfi_restore 8
+ 1158              		.cfi_def_cfa 2, 32
+ 1159 0588 83348100 		ld	s1,8(sp)
+ 1160              		.cfi_restore 9
+ 1161              	.LVL132:
+ 1162 058c 03390100 		ld	s2,0(sp)
+ 1163              		.cfi_restore 18
+ 1164              	.LVL133:
+ 1165 0590 13010102 		addi	sp,sp,32
+ 1166              		.cfi_def_cfa_offset 0
+ 1167 0594 67800000 		jr	ra
+ 1168              		.cfi_endproc
+ 1169              	.LFE35:
+ 1171              		.globl	_ZN10_BuddyTreeC1EPvmm
+ 1172              		.set	_ZN10_BuddyTreeC1EPvmm,_ZN10_BuddyTreeC2EPvmm
+ 1173              		.align	2
+ 1174              		.globl	_ZN10_BuddyTree10allocBlockEi
+ 1176              	_ZN10_BuddyTree10allocBlockEi:
+ 1177              	.LFB38:
+ 116:src/_BuddyAllocator.cpp **** void* _BuddyTree::alloc(size_t size) {
+ 117:src/_BuddyAllocator.cpp ****     //alocira blok na osnovu zadate velicine
+ 118:src/_BuddyAllocator.cpp ****     int level = calcLevel(size);
+ 119:src/_BuddyAllocator.cpp ****     return allocBlock(level);
+ 120:src/_BuddyAllocator.cpp **** }
+ 121:src/_BuddyAllocator.cpp **** void* _BuddyTree::allocBlock(int level) {
+ 1178              		.loc 1 121 41 is_stmt 1
+ 1179              		.cfi_startproc
+ 1180              	.LVL134:
+ 1181 0598 130101FC 		addi	sp,sp,-64
+ 1182              		.cfi_def_cfa_offset 64
+ 1183 059c 233C1102 		sd	ra,56(sp)
+ 1184 05a0 23388102 		sd	s0,48(sp)
+ 1185 05a4 23349102 		sd	s1,40(sp)
+ 1186 05a8 23302103 		sd	s2,32(sp)
+ 1187 05ac 233C3101 		sd	s3,24(sp)
+ 1188 05b0 23384101 		sd	s4,16(sp)
+ 1189 05b4 23345101 		sd	s5,8(sp)
+ 1190              		.cfi_offset 1, -8
+ 1191              		.cfi_offset 8, -16
+ 1192              		.cfi_offset 9, -24
+ 1193              		.cfi_offset 18, -32
+ 1194              		.cfi_offset 19, -40
+ 1195              		.cfi_offset 20, -48
+ 1196              		.cfi_offset 21, -56
+ 1197 05b8 13040104 		addi	s0,sp,64
+ 1198              		.cfi_def_cfa 8, 0
+ 1199 05bc 13090500 		mv	s2,a0
+ 1200 05c0 93890500 		mv	s3,a1
+ 122:src/_BuddyAllocator.cpp ****     //alocira blok stepena level
+ 123:src/_BuddyAllocator.cpp ****     int curlvl = level;
+GAS LISTING /tmp/ccXUpGzJ.s 			page 27
+
+
+ 1201              		.loc 1 123 5
+ 1202              	.LVL135:
+ 1203              		.loc 1 123 9 is_stmt 0
+ 1204 05c4 93840500 		mv	s1,a1
+ 1205              	.LVL136:
+ 1206              	.L51:
+ 124:src/_BuddyAllocator.cpp ****     while (curlvl <= pow && lists[curlvl] == -1) {
+ 1207              		.loc 1 124 5 is_stmt 1
+ 1208              		.loc 1 124 26
+ 1209              		.loc 1 124 22 is_stmt 0
+ 1210 05c8 03274902 		lw	a4,36(s2)
+ 1211              		.loc 1 124 26
+ 1212 05cc 63429702 		blt	a4,s1,.L50
+ 1213              		.loc 1 124 29 discriminator 1
+ 1214 05d0 83378900 		ld	a5,8(s2)
+ 1215              		.loc 1 124 41 discriminator 1
+ 1216 05d4 93962400 		slli	a3,s1,2
+ 1217 05d8 B387D700 		add	a5,a5,a3
+ 1218 05dc 83A60700 		lw	a3,0(a5)
+ 1219              		.loc 1 124 26 discriminator 1
+ 1220 05e0 9307F0FF 		li	a5,-1
+ 1221 05e4 6396F600 		bne	a3,a5,.L50
+ 125:src/_BuddyAllocator.cpp ****         curlvl++;
+ 1222              		.loc 1 125 9 is_stmt 1
+ 1223              		.loc 1 125 15 is_stmt 0
+ 1224 05e8 9B841400 		addiw	s1,s1,1
+ 1225              	.LVL137:
+ 124:src/_BuddyAllocator.cpp ****     while (curlvl <= pow && lists[curlvl] == -1) {
+ 1226              		.loc 1 124 5
+ 1227 05ec 6FF0DFFD 		j	.L51
+ 1228              	.LVL138:
+ 1229              	.L50:
+ 126:src/_BuddyAllocator.cpp ****     }
+ 127:src/_BuddyAllocator.cpp ****     if (curlvl > pow) return nullptr;
+ 1230              		.loc 1 127 5 is_stmt 1
+ 1231 05f0 634C970A 		blt	a4,s1,.L55
+ 1232              	.LVL139:
+ 1233              	.L54:
+ 128:src/_BuddyAllocator.cpp **** 
+ 129:src/_BuddyAllocator.cpp ****     while (curlvl > level) {
+ 1234              		.loc 1 129 5
+ 1235              		.loc 1 129 19
+ 1236 05f4 63DE9900 		ble	s1,s3,.L53
+ 130:src/_BuddyAllocator.cpp ****         split(curlvl);
+ 1237              		.loc 1 130 9
+ 1238              		.loc 1 130 14 is_stmt 0
+ 1239 05f8 93850400 		mv	a1,s1
+ 1240 05fc 13050900 		mv	a0,s2
+ 1241 0600 97000000 		call	_ZN10_BuddyTree5splitEi
+ 1241      E7800000 
+ 1242              	.LVL140:
+ 131:src/_BuddyAllocator.cpp ****         curlvl--;
+ 1243              		.loc 1 131 9 is_stmt 1
+ 1244              		.loc 1 131 15 is_stmt 0
+ 1245 0608 9B84F4FF 		addiw	s1,s1,-1
+ 1246              	.LVL141:
+ 129:src/_BuddyAllocator.cpp ****         split(curlvl);
+GAS LISTING /tmp/ccXUpGzJ.s 			page 28
+
+
+ 1247              		.loc 1 129 5
+ 1248 060c 6FF09FFE 		j	.L54
+ 1249              	.LVL142:
+ 1250              	.L53:
+ 132:src/_BuddyAllocator.cpp ****     }
+ 133:src/_BuddyAllocator.cpp **** 
+ 134:src/_BuddyAllocator.cpp ****     int ret = lists[level];
+ 1251              		.loc 1 134 5 is_stmt 1
+ 1252              		.loc 1 134 15 is_stmt 0
+ 1253 0610 83348900 		ld	s1,8(s2)
+ 1254              	.LVL143:
+ 1255              		.loc 1 134 26
+ 1256 0614 93972900 		slli	a5,s3,2
+ 1257 0618 B384F400 		add	s1,s1,a5
+ 1258              		.loc 1 134 9
+ 1259 061c 03AA0400 		lw	s4,0(s1)
+ 1260              	.LVL144:
+ 135:src/_BuddyAllocator.cpp ****     lists[level] = arr[ret].next();
+ 1261              		.loc 1 135 5 is_stmt 1
+ 1262              		.loc 1 135 20 is_stmt 0
+ 1263 0620 03350900 		ld	a0,0(s2)
+ 1264              		.loc 1 135 27
+ 1265 0624 931A2A00 		slli	s5,s4,2
+ 1266              		.loc 1 135 33
+ 1267 0628 33055501 		add	a0,a0,s5
+ 1268 062c 97000000 		call	_ZN10_BuddyNode4nextEv
+ 1268      E7800000 
+ 1269              	.LVL145:
+ 1270              		.loc 1 135 18
+ 1271 0634 23A0A400 		sw	a0,0(s1)
+ 136:src/_BuddyAllocator.cpp ****     arr[ret].setNext(-1);
+ 1272              		.loc 1 136 5 is_stmt 1
+ 1273 0638 03350900 		ld	a0,0(s2)
+ 1274              		.loc 1 136 21 is_stmt 0
+ 1275 063c 9305F0FF 		li	a1,-1
+ 1276 0640 33055501 		add	a0,a0,s5
+ 1277 0644 97000000 		call	_ZN10_BuddyNode7setNextEi
+ 1277      E7800000 
+ 1278              	.LVL146:
+ 137:src/_BuddyAllocator.cpp ****     arr[ret].setAllocated();
+ 1279              		.loc 1 137 5 is_stmt 1
+ 1280 064c 03370900 		ld	a4,0(s2)
+ 1281              		.loc 1 137 26 is_stmt 0
+ 1282 0650 33075701 		add	a4,a4,s5
+ 1283              	.LVL147:
+  52:src/../h/_BuddyAllocator.h ****     bool isAllocated() { return isActive() && isLeaf() && !isFree(); }
+ 1284              		.loc 2 52 27 is_stmt 1
+ 1285              	.LBB276:
+ 1286              	.LBB277:
+ 1287              	.LBB278:
+  36:src/../h/_BuddyAllocator.h ****     void setLeaf() { data |= M_LEAF; }
+ 1288              		.loc 2 36 24
+  36:src/../h/_BuddyAllocator.h ****     void setLeaf() { data |= M_LEAF; }
+ 1289              		.loc 2 36 29 is_stmt 0
+ 1290 0654 83270700 		lw	a5,0(a4)
+ 1291              	.LVL148:
+ 1292              	.LBE278:
+GAS LISTING /tmp/ccXUpGzJ.s 			page 29
+
+
+ 1293              	.LBE277:
+ 1294              	.LBE276:
+  52:src/../h/_BuddyAllocator.h ****     bool isAllocated() { return isActive() && isLeaf() && !isFree(); }
+ 1295              		.loc 2 52 40 is_stmt 1
+  37:src/../h/_BuddyAllocator.h ****     void setFree() { data |= M_FREE; }
+ 1296              		.loc 2 37 22
+  52:src/../h/_BuddyAllocator.h ****     bool isAllocated() { return isActive() && isLeaf() && !isFree(); }
+ 1297              		.loc 2 52 51
+ 1298              	.LBB281:
+ 1299              	.LBB279:
+ 1300              	.LBB280:
+  41:src/../h/_BuddyAllocator.h **** public:
+ 1301              		.loc 2 41 24
+  41:src/../h/_BuddyAllocator.h **** public:
+ 1302              		.loc 2 41 29 is_stmt 0
+ 1303 0658 B70600E0 		li	a3,-536870912
+ 1304 065c 9386F6FF 		addi	a3,a3,-1
+ 1305 0660 B3F7D700 		and	a5,a5,a3
+ 1306 0664 B70600C0 		li	a3,-1073741824
+ 1307 0668 B3E7D700 		or	a5,a5,a3
+ 1308 066c 2320F700 		sw	a5,0(a4)
+ 1309              	.LVL149:
+ 1310              	.LBE280:
+ 1311              	.LBE279:
+ 1312              	.LBE281:
+ 138:src/_BuddyAllocator.cpp ****     return calcAddress(ret, level);
+ 1313              		.loc 1 138 5 is_stmt 1
+ 1314              		.loc 1 138 23 is_stmt 0
+ 1315 0670 13860900 		mv	a2,s3
+ 1316 0674 93050A00 		mv	a1,s4
+ 1317 0678 13050900 		mv	a0,s2
+ 1318 067c 97000000 		call	_ZN10_BuddyTree11calcAddressEii
+ 1318      E7800000 
+ 1319              	.LVL150:
+ 1320              	.L49:
+ 139:src/_BuddyAllocator.cpp **** }
+ 1321              		.loc 1 139 1
+ 1322 0684 83308103 		ld	ra,56(sp)
+ 1323              		.cfi_remember_state
+ 1324              		.cfi_restore 1
+ 1325 0688 03340103 		ld	s0,48(sp)
+ 1326              		.cfi_restore 8
+ 1327              		.cfi_def_cfa 2, 64
+ 1328 068c 83348102 		ld	s1,40(sp)
+ 1329              		.cfi_restore 9
+ 1330 0690 03390102 		ld	s2,32(sp)
+ 1331              		.cfi_restore 18
+ 1332              	.LVL151:
+ 1333 0694 83398101 		ld	s3,24(sp)
+ 1334              		.cfi_restore 19
+ 1335 0698 033A0101 		ld	s4,16(sp)
+ 1336              		.cfi_restore 20
+ 1337 069c 833A8100 		ld	s5,8(sp)
+ 1338              		.cfi_restore 21
+ 1339 06a0 13010104 		addi	sp,sp,64
+ 1340              		.cfi_def_cfa_offset 0
+ 1341 06a4 67800000 		jr	ra
+GAS LISTING /tmp/ccXUpGzJ.s 			page 30
+
+
+ 1342              	.LVL152:
+ 1343              	.L55:
+ 1344              		.cfi_restore_state
+ 127:src/_BuddyAllocator.cpp **** 
+ 1345              		.loc 1 127 30
+ 1346 06a8 13050000 		li	a0,0
+ 1347              	.LVL153:
+ 1348 06ac 6FF09FFD 		j	.L49
+ 1349              		.cfi_endproc
+ 1350              	.LFE38:
+ 1352              		.align	2
+ 1353              		.globl	_ZN10_BuddyTree5allocEm
+ 1355              	_ZN10_BuddyTree5allocEm:
+ 1356              	.LFB37:
+ 116:src/_BuddyAllocator.cpp ****     //alocira blok na osnovu zadate velicine
+ 1357              		.loc 1 116 38 is_stmt 1
+ 1358              		.cfi_startproc
+ 1359              	.LVL154:
+ 1360 06b0 130101FE 		addi	sp,sp,-32
+ 1361              		.cfi_def_cfa_offset 32
+ 1362 06b4 233C1100 		sd	ra,24(sp)
+ 1363 06b8 23388100 		sd	s0,16(sp)
+ 1364 06bc 23349100 		sd	s1,8(sp)
+ 1365              		.cfi_offset 1, -8
+ 1366              		.cfi_offset 8, -16
+ 1367              		.cfi_offset 9, -24
+ 1368 06c0 13040102 		addi	s0,sp,32
+ 1369              		.cfi_def_cfa 8, 0
+ 1370 06c4 93040500 		mv	s1,a0
+ 118:src/_BuddyAllocator.cpp ****     return allocBlock(level);
+ 1371              		.loc 1 118 5
+ 118:src/_BuddyAllocator.cpp ****     return allocBlock(level);
+ 1372              		.loc 1 118 26 is_stmt 0
+ 1373 06c8 97000000 		call	_ZN10_BuddyTree9calcLevelEm
+ 1373      E7800000 
+ 1374              	.LVL155:
+ 1375 06d0 93050500 		mv	a1,a0
+ 1376              	.LVL156:
+ 119:src/_BuddyAllocator.cpp **** }
+ 1377              		.loc 1 119 5 is_stmt 1
+ 119:src/_BuddyAllocator.cpp **** }
+ 1378              		.loc 1 119 22 is_stmt 0
+ 1379 06d4 13850400 		mv	a0,s1
+ 1380 06d8 97000000 		call	_ZN10_BuddyTree10allocBlockEi
+ 1380      E7800000 
+ 1381              	.LVL157:
+ 120:src/_BuddyAllocator.cpp **** void* _BuddyTree::allocBlock(int level) {
+ 1382              		.loc 1 120 1
+ 1383 06e0 83308101 		ld	ra,24(sp)
+ 1384              		.cfi_restore 1
+ 1385 06e4 03340101 		ld	s0,16(sp)
+ 1386              		.cfi_restore 8
+ 1387              		.cfi_def_cfa 2, 32
+ 1388 06e8 83348100 		ld	s1,8(sp)
+ 1389              		.cfi_restore 9
+ 1390              	.LVL158:
+ 1391 06ec 13010102 		addi	sp,sp,32
+GAS LISTING /tmp/ccXUpGzJ.s 			page 31
+
+
+ 1392              		.cfi_def_cfa_offset 0
+ 1393 06f0 67800000 		jr	ra
+ 1394              		.cfi_endproc
+ 1395              	.LFE37:
+ 1397              		.align	2
+ 1398              		.globl	_ZN10_BuddyTree7deallocEPv
+ 1400              	_ZN10_BuddyTree7deallocEPv:
+ 1401              	.LFB39:
+ 140:src/_BuddyAllocator.cpp **** void _BuddyTree::dealloc(void* ptr) {
+ 1402              		.loc 1 140 37 is_stmt 1
+ 1403              		.cfi_startproc
+ 1404              	.LVL159:
+ 1405 06f4 130101FD 		addi	sp,sp,-48
+ 1406              		.cfi_def_cfa_offset 48
+ 1407 06f8 23341102 		sd	ra,40(sp)
+ 1408 06fc 23308102 		sd	s0,32(sp)
+ 1409 0700 233C9100 		sd	s1,24(sp)
+ 1410 0704 23382101 		sd	s2,16(sp)
+ 1411 0708 23343101 		sd	s3,8(sp)
+ 1412 070c 23304101 		sd	s4,0(sp)
+ 1413              		.cfi_offset 1, -8
+ 1414              		.cfi_offset 8, -16
+ 1415              		.cfi_offset 9, -24
+ 1416              		.cfi_offset 18, -32
+ 1417              		.cfi_offset 19, -40
+ 1418              		.cfi_offset 20, -48
+ 1419 0710 13040103 		addi	s0,sp,48
+ 1420              		.cfi_def_cfa 8, 0
+ 1421 0714 13090500 		mv	s2,a0
+ 141:src/_BuddyAllocator.cpp ****     int node = findNode(ptr);
+ 1422              		.loc 1 141 5
+ 1423              		.loc 1 141 24 is_stmt 0
+ 1424 0718 97000000 		call	_ZN10_BuddyTree8findNodeEPv
+ 1424      E7800000 
+ 1425              	.LVL160:
+ 1426 0720 93040500 		mv	s1,a0
+ 1427              	.LVL161:
+ 142:src/_BuddyAllocator.cpp ****     if (node == -1) return; //greska, losa adresa
+ 1428              		.loc 1 142 5 is_stmt 1
+ 1429 0724 9307F0FF 		li	a5,-1
+ 1430 0728 6300F508 		beq	a0,a5,.L59
+ 1431              	.LVL162:
+ 1432              	.L64:
+ 143:src/_BuddyAllocator.cpp ****     while (node && arr[sibling(node)].isFresh()) { //spajaju se i deaktiviraju svi cvorovi kod koji
+ 1433              		.loc 1 143 5
+ 1434              		.loc 1 143 17
+ 1435 072c 63820402 		beqz	s1,.L61
+ 1436              		.loc 1 143 20 is_stmt 0 discriminator 1
+ 1437 0730 03360900 		ld	a2,0(s2)
+ 1438              	.LVL163:
+ 1439              	.LBB282:
+ 1440              	.LBB283:
+  75:src/../h/_BuddyAllocator.h ****     int sibling(int node) { return (node & 1) ? node + 1 : node - 1; }
+ 1441              		.loc 2 75 29 is_stmt 1 discriminator 1
+ 1442              		.loc 2 75 42 is_stmt 0 discriminator 1
+ 1443 0734 93F71400 		andi	a5,s1,1
+ 1444              		.loc 2 75 47 discriminator 1
+GAS LISTING /tmp/ccXUpGzJ.s 			page 32
+
+
+ 1445 0738 63880708 		beqz	a5,.L62
+ 1446              		.loc 2 75 47
+ 1447 073c 9B871400 		addiw	a5,s1,1
+ 1448              	.L63:
+ 1449              	.LVL164:
+ 1450              	.LBE283:
+ 1451              	.LBE282:
+ 1452              		.loc 1 143 37
+ 1453 0740 93972700 		slli	a5,a5,2
+ 1454              		.loc 1 143 46
+ 1455 0744 3307F600 		add	a4,a2,a5
+ 1456              	.LVL165:
+ 1457              	.LBB285:
+ 1458              	.LBB286:
+  47:src/../h/_BuddyAllocator.h ****     void setOut() { clearActive(); clearLeaf(); clearFree(); } //000
+ 1459              		.loc 2 47 22 is_stmt 1
+ 1460              	.LBB287:
+ 1461              	.LBB288:
+  33:src/../h/_BuddyAllocator.h ****     bool isLeaf() { return data & M_LEAF; }
+ 1462              		.loc 2 33 23
+  33:src/../h/_BuddyAllocator.h ****     bool isLeaf() { return data & M_LEAF; }
+ 1463              		.loc 2 33 30 is_stmt 0
+ 1464 0748 03270700 		lw	a4,0(a4)
+ 1465              	.LVL166:
+ 1466              	.LBE288:
+ 1467              	.LBE287:
+  47:src/../h/_BuddyAllocator.h ****     void setOut() { clearActive(); clearLeaf(); clearFree(); } //000
+ 1468              		.loc 2 47 52
+ 1469 074c 63420708 		bltz	a4,.L66
+ 1470              	.LVL167:
+ 1471              	.L61:
+ 1472              	.LBE286:
+ 1473              	.LBE285:
+ 144:src/_BuddyAllocator.cpp ****         arr[node].setOut();
+ 145:src/_BuddyAllocator.cpp ****         arr[sibling(node)].setOut();
+ 146:src/_BuddyAllocator.cpp ****         node = parent(node);
+ 147:src/_BuddyAllocator.cpp ****     }
+ 148:src/_BuddyAllocator.cpp ****     arr[node].setFresh();
+ 1474              		.loc 1 148 5 is_stmt 1 discriminator 4
+ 1475 0750 83370900 		ld	a5,0(s2)
+ 1476              		.loc 1 148 13 is_stmt 0 discriminator 4
+ 1477 0754 139A2400 		slli	s4,s1,2
+ 1478              		.loc 1 148 23 discriminator 4
+ 1479 0758 B3874701 		add	a5,a5,s4
+ 1480              	.LVL168:
+  46:src/../h/_BuddyAllocator.h ****     bool isFresh() { return isActive() && isLeaf() && isFree(); }
+ 1481              		.loc 2 46 23 is_stmt 1 discriminator 4
+ 1482              	.LBB294:
+ 1483              	.LBB295:
+ 1484              	.LBB296:
+  36:src/../h/_BuddyAllocator.h ****     void setLeaf() { data |= M_LEAF; }
+ 1485              		.loc 2 36 24 discriminator 4
+  36:src/../h/_BuddyAllocator.h ****     void setLeaf() { data |= M_LEAF; }
+ 1486              		.loc 2 36 29 is_stmt 0 discriminator 4
+ 1487 075c 03A70700 		lw	a4,0(a5)
+ 1488              	.LVL169:
+ 1489              	.LBE296:
+GAS LISTING /tmp/ccXUpGzJ.s 			page 33
+
+
+ 1490              	.LBE295:
+ 1491              	.LBE294:
+  46:src/../h/_BuddyAllocator.h ****     bool isFresh() { return isActive() && isLeaf() && isFree(); }
+ 1492              		.loc 2 46 36 is_stmt 1 discriminator 4
+  37:src/../h/_BuddyAllocator.h ****     void setFree() { data |= M_FREE; }
+ 1493              		.loc 2 37 22 discriminator 4
+  46:src/../h/_BuddyAllocator.h ****     bool isFresh() { return isActive() && isLeaf() && isFree(); }
+ 1494              		.loc 2 46 47 discriminator 4
+ 1495              	.LBB299:
+ 1496              	.LBB297:
+ 1497              	.LBB298:
+  38:src/../h/_BuddyAllocator.h ****     void clearActive() { data &= ~M_ACTIVE; }
+ 1498              		.loc 2 38 22 discriminator 4
+  38:src/../h/_BuddyAllocator.h ****     void clearActive() { data &= ~M_ACTIVE; }
+ 1499              		.loc 2 38 27 is_stmt 0 discriminator 4
+ 1500 0760 B70600E0 		li	a3,-536870912
+ 1501 0764 3367D700 		or	a4,a4,a3
+ 1502 0768 23A0E700 		sw	a4,0(a5)
+ 1503              	.LVL170:
+ 1504              	.LBE298:
+ 1505              	.LBE297:
+ 1506              	.LBE299:
+ 149:src/_BuddyAllocator.cpp ****     int lvl = calcLevel(node);
+ 1507              		.loc 1 149 5 is_stmt 1 discriminator 4
+ 1508              		.loc 1 149 24 is_stmt 0 discriminator 4
+ 1509 076c 93850400 		mv	a1,s1
+ 1510 0770 13050900 		mv	a0,s2
+ 1511 0774 97000000 		call	_ZN10_BuddyTree9calcLevelEi
+ 1511      E7800000 
+ 1512              	.LVL171:
+ 150:src/_BuddyAllocator.cpp ****     arr[node].setNext(lists[lvl]);
+ 1513              		.loc 1 150 5 is_stmt 1 discriminator 4
+ 1514 077c 03370900 		ld	a4,0(s2)
+ 1515              		.loc 1 150 23 is_stmt 0 discriminator 4
+ 1516 0780 83378900 		ld	a5,8(s2)
+ 1517              		.loc 1 150 32 discriminator 4
+ 1518 0784 93192500 		slli	s3,a0,2
+ 1519 0788 B3873701 		add	a5,a5,s3
+ 1520              		.loc 1 150 22 discriminator 4
+ 1521 078c 83A50700 		lw	a1,0(a5)
+ 1522 0790 33054701 		add	a0,a4,s4
+ 1523              	.LVL172:
+ 1524 0794 97000000 		call	_ZN10_BuddyNode7setNextEi
+ 1524      E7800000 
+ 1525              	.LVL173:
+ 151:src/_BuddyAllocator.cpp ****     lists[lvl] = node;
+ 1526              		.loc 1 151 5 is_stmt 1 discriminator 4
+ 1527 079c 03358900 		ld	a0,8(s2)
+ 1528              		.loc 1 151 14 is_stmt 0 discriminator 4
+ 1529 07a0 B3093501 		add	s3,a0,s3
+ 1530              		.loc 1 151 16 discriminator 4
+ 1531 07a4 23A09900 		sw	s1,0(s3)
+ 1532              	.LVL174:
+ 1533              	.L59:
+ 152:src/_BuddyAllocator.cpp **** }
+ 1534              		.loc 1 152 1
+ 1535 07a8 83308102 		ld	ra,40(sp)
+GAS LISTING /tmp/ccXUpGzJ.s 			page 34
+
+
+ 1536              		.cfi_remember_state
+ 1537              		.cfi_restore 1
+ 1538 07ac 03340102 		ld	s0,32(sp)
+ 1539              		.cfi_restore 8
+ 1540              		.cfi_def_cfa 2, 48
+ 1541 07b0 83348101 		ld	s1,24(sp)
+ 1542              		.cfi_restore 9
+ 1543 07b4 03390101 		ld	s2,16(sp)
+ 1544              		.cfi_restore 18
+ 1545              	.LVL175:
+ 1546 07b8 83398100 		ld	s3,8(sp)
+ 1547              		.cfi_restore 19
+ 1548 07bc 033A0100 		ld	s4,0(sp)
+ 1549              		.cfi_restore 20
+ 1550 07c0 13010103 		addi	sp,sp,48
+ 1551              		.cfi_def_cfa_offset 0
+ 1552 07c4 67800000 		jr	ra
+ 1553              	.LVL176:
+ 1554              	.L62:
+ 1555              		.cfi_restore_state
+ 1556              	.LBB300:
+ 1557              	.LBB284:
+ 1558              		.loc 2 75 47
+ 1559 07c8 9B87F4FF 		addiw	a5,s1,-1
+ 1560 07cc 6FF05FF7 		j	.L63
+ 1561              	.LVL177:
+ 1562              	.L66:
+ 1563              	.LBE284:
+ 1564              	.LBE300:
+ 1565              	.LBB301:
+ 1566              	.LBB293:
+ 1567              	.LBB289:
+ 1568              	.LBB290:
+  34:src/../h/_BuddyAllocator.h ****     bool isFree() { return data & M_FREE; }
+ 1569              		.loc 2 34 21 is_stmt 1
+  34:src/../h/_BuddyAllocator.h ****     bool isFree() { return data & M_FREE; }
+ 1570              		.loc 2 34 33 is_stmt 0
+ 1571 07d0 B7060040 		li	a3,1073741824
+ 1572 07d4 B376D700 		and	a3,a4,a3
+ 1573 07d8 9B860600 		sext.w	a3,a3
+ 1574              	.LVL178:
+ 1575              	.LBE290:
+ 1576              	.LBE289:
+  47:src/../h/_BuddyAllocator.h ****     void setOut() { clearActive(); clearLeaf(); clearFree(); } //000
+ 1577              		.loc 2 47 40
+ 1578 07dc E38A06F6 		beqz	a3,.L61
+ 1579              	.LVL179:
+ 1580              	.LBB291:
+ 1581              	.LBB292:
+  35:src/../h/_BuddyAllocator.h ****     void setActive() { data |= M_ACTIVE; }
+ 1582              		.loc 2 35 21 is_stmt 1
+  35:src/../h/_BuddyAllocator.h ****     void setActive() { data |= M_ACTIVE; }
+ 1583              		.loc 2 35 33 is_stmt 0
+ 1584 07e0 B7060020 		li	a3,536870912
+ 1585 07e4 3377D700 		and	a4,a4,a3
+ 1586 07e8 1B070700 		sext.w	a4,a4
+ 1587              	.LVL180:
+GAS LISTING /tmp/ccXUpGzJ.s 			page 35
+
+
+ 1588              	.LBE292:
+ 1589              	.LBE291:
+  47:src/../h/_BuddyAllocator.h ****     void setOut() { clearActive(); clearLeaf(); clearFree(); } //000
+ 1590              		.loc 2 47 52
+ 1591 07ec E30207F6 		beqz	a4,.L61
+ 1592              	.LVL181:
+ 1593              	.LBE293:
+ 1594              	.LBE301:
+ 144:src/_BuddyAllocator.cpp ****         arr[sibling(node)].setOut();
+ 1595              		.loc 1 144 9 is_stmt 1
+ 144:src/_BuddyAllocator.cpp ****         arr[sibling(node)].setOut();
+ 1596              		.loc 1 144 17 is_stmt 0
+ 1597 07f0 13972400 		slli	a4,s1,2
+ 144:src/_BuddyAllocator.cpp ****         arr[sibling(node)].setOut();
+ 1598              		.loc 1 144 25
+ 1599 07f4 3306E600 		add	a2,a2,a4
+ 1600              	.LVL182:
+  48:src/../h/_BuddyAllocator.h ****     bool isOut() { return !isActive() && !isLeaf() && !isFree(); }
+ 1601              		.loc 2 48 21 is_stmt 1
+ 1602              	.LBB302:
+ 1603              	.LBB303:
+ 1604              	.LBB304:
+  39:src/../h/_BuddyAllocator.h ****     void clearLeaf() { data &= ~M_LEAF; }
+ 1605              		.loc 2 39 26
+  39:src/../h/_BuddyAllocator.h ****     void clearLeaf() { data &= ~M_LEAF; }
+ 1606              		.loc 2 39 31 is_stmt 0
+ 1607 07f8 03270600 		lw	a4,0(a2)
+ 1608              	.LVL183:
+ 1609              	.LBE304:
+ 1610              	.LBE303:
+ 1611              	.LBE302:
+  48:src/../h/_BuddyAllocator.h ****     bool isOut() { return !isActive() && !isLeaf() && !isFree(); }
+ 1612              		.loc 2 48 36 is_stmt 1
+  40:src/../h/_BuddyAllocator.h ****     void clearFree() { data &= ~M_FREE; }
+ 1613              		.loc 2 40 24
+  48:src/../h/_BuddyAllocator.h ****     bool isOut() { return !isActive() && !isLeaf() && !isFree(); }
+ 1614              		.loc 2 48 49
+ 1615              	.LBB307:
+ 1616              	.LBB305:
+ 1617              	.LBB306:
+  41:src/../h/_BuddyAllocator.h **** public:
+ 1618              		.loc 2 41 24
+  41:src/../h/_BuddyAllocator.h **** public:
+ 1619              		.loc 2 41 29 is_stmt 0
+ 1620 07fc B7060020 		li	a3,536870912
+ 1621 0800 9386F6FF 		addi	a3,a3,-1
+ 1622 0804 3377D700 		and	a4,a4,a3
+ 1623 0808 2320E600 		sw	a4,0(a2)
+ 1624              	.LVL184:
+ 1625              	.LBE306:
+ 1626              	.LBE305:
+ 1627              	.LBE307:
+ 145:src/_BuddyAllocator.cpp ****         node = parent(node);
+ 1628              		.loc 1 145 9 is_stmt 1
+ 1629 080c 03370900 		ld	a4,0(s2)
+ 1630              	.LVL185:
+ 1631              		.loc 2 75 29
+GAS LISTING /tmp/ccXUpGzJ.s 			page 36
+
+
+ 145:src/_BuddyAllocator.cpp ****         node = parent(node);
+ 1632              		.loc 1 145 34 is_stmt 0
+ 1633 0810 B307F700 		add	a5,a4,a5
+ 1634              	.LVL186:
+  48:src/../h/_BuddyAllocator.h ****     bool isOut() { return !isActive() && !isLeaf() && !isFree(); }
+ 1635              		.loc 2 48 21 is_stmt 1
+ 1636              	.LBB308:
+ 1637              	.LBB309:
+ 1638              	.LBB310:
+  39:src/../h/_BuddyAllocator.h ****     void clearLeaf() { data &= ~M_LEAF; }
+ 1639              		.loc 2 39 26
+  39:src/../h/_BuddyAllocator.h ****     void clearLeaf() { data &= ~M_LEAF; }
+ 1640              		.loc 2 39 31 is_stmt 0
+ 1641 0814 03A70700 		lw	a4,0(a5)
+ 1642              	.LVL187:
+ 1643              	.LBE310:
+ 1644              	.LBE309:
+ 1645              	.LBE308:
+  48:src/../h/_BuddyAllocator.h ****     bool isOut() { return !isActive() && !isLeaf() && !isFree(); }
+ 1646              		.loc 2 48 36 is_stmt 1
+  40:src/../h/_BuddyAllocator.h ****     void clearFree() { data &= ~M_FREE; }
+ 1647              		.loc 2 40 24
+  48:src/../h/_BuddyAllocator.h ****     bool isOut() { return !isActive() && !isLeaf() && !isFree(); }
+ 1648              		.loc 2 48 49
+ 1649              	.LBB313:
+ 1650              	.LBB311:
+ 1651              	.LBB312:
+  41:src/../h/_BuddyAllocator.h **** public:
+ 1652              		.loc 2 41 24
+  41:src/../h/_BuddyAllocator.h **** public:
+ 1653              		.loc 2 41 29 is_stmt 0
+ 1654 0818 B376D700 		and	a3,a4,a3
+ 1655 081c 23A0D700 		sw	a3,0(a5)
+ 1656              	.LVL188:
+ 1657              	.LBE312:
+ 1658              	.LBE311:
+ 1659              	.LBE313:
+ 146:src/_BuddyAllocator.cpp ****     }
+ 1660              		.loc 1 146 9 is_stmt 1
+ 1661              	.LBB314:
+ 1662              	.LBB315:
+  74:src/../h/_BuddyAllocator.h ****     int sibling(int node) { return (node & 1) ? node + 1 : node - 1; }
+ 1663              		.loc 2 74 28
+  74:src/../h/_BuddyAllocator.h ****     int sibling(int node) { return (node & 1) ? node + 1 : node - 1; }
+ 1664              		.loc 2 74 41 is_stmt 0
+ 1665 0820 1B85F4FF 		addiw	a0,s1,-1
+  74:src/../h/_BuddyAllocator.h ****     int sibling(int node) { return (node & 1) ? node + 1 : node - 1; }
+ 1666              		.loc 2 74 48
+ 1667 0824 9B54F501 		srliw	s1,a0,31
+ 1668              	.LVL189:
+ 1669 0828 BB84A400 		addw	s1,s1,a0
+ 1670 082c 9BD41440 		sraiw	s1,s1,1
+ 1671              	.LVL190:
+ 1672              	.LBE315:
+ 1673              	.LBE314:
+ 143:src/_BuddyAllocator.cpp ****         arr[node].setOut();
+ 1674              		.loc 1 143 5
+GAS LISTING /tmp/ccXUpGzJ.s 			page 37
+
+
+ 1675 0830 6FF0DFEF 		j	.L64
+ 1676              		.cfi_endproc
+ 1677              	.LFE39:
+ 1679              		.section	.rodata.str1.8,"aMS",@progbits,1
+ 1680              		.align	3
+ 1681              	.LC0:
+ 1682 0000 207C2000 		.string	" | "
+ 1683              		.text
+ 1684              		.align	2
+ 1685              		.globl	_ZN10_BuddyTree5printEv
+ 1687              	_ZN10_BuddyTree5printEv:
+ 1688              	.LFB40:
+ 153:src/_BuddyAllocator.cpp **** void _BuddyTree::print() {
+ 1689              		.loc 1 153 26 is_stmt 1
+ 1690              		.cfi_startproc
+ 1691              	.LVL191:
+ 1692 0834 130101FC 		addi	sp,sp,-64
+ 1693              		.cfi_def_cfa_offset 64
+ 1694 0838 233C1102 		sd	ra,56(sp)
+ 1695 083c 23388102 		sd	s0,48(sp)
+ 1696 0840 23349102 		sd	s1,40(sp)
+ 1697 0844 23302103 		sd	s2,32(sp)
+ 1698 0848 233C3101 		sd	s3,24(sp)
+ 1699 084c 23384101 		sd	s4,16(sp)
+ 1700 0850 23345101 		sd	s5,8(sp)
+ 1701 0854 23306101 		sd	s6,0(sp)
+ 1702              		.cfi_offset 1, -8
+ 1703              		.cfi_offset 8, -16
+ 1704              		.cfi_offset 9, -24
+ 1705              		.cfi_offset 18, -32
+ 1706              		.cfi_offset 19, -40
+ 1707              		.cfi_offset 20, -48
+ 1708              		.cfi_offset 21, -56
+ 1709              		.cfi_offset 22, -64
+ 1710 0858 13040104 		addi	s0,sp,64
+ 1711              		.cfi_def_cfa 8, 0
+ 1712 085c 930A0500 		mv	s5,a0
+ 154:src/_BuddyAllocator.cpp ****     int t = 0;
+ 1713              		.loc 1 154 5
+ 1714              	.LVL192:
+ 155:src/_BuddyAllocator.cpp ****     int m = 1;
+ 1715              		.loc 1 155 5
+ 156:src/_BuddyAllocator.cpp ****     for (int i = 0; i <= pow; i++) {
+ 1716              		.loc 1 156 5
+ 1717              	.LBB316:
+ 1718              		.loc 1 156 14 is_stmt 0
+ 1719 0860 130B0000 		li	s6,0
+ 1720              	.LBE316:
+ 155:src/_BuddyAllocator.cpp ****     int m = 1;
+ 1721              		.loc 1 155 9
+ 1722 0864 130A1000 		li	s4,1
+ 154:src/_BuddyAllocator.cpp ****     int t = 0;
+ 1723              		.loc 1 154 9
+ 1724 0868 93090000 		li	s3,0
+ 1725 086c 6F004006 		j	.L72
+ 1726              	.LVL193:
+ 1727              	.L74:
+GAS LISTING /tmp/ccXUpGzJ.s 			page 38
+
+
+ 1728              	.LBB321:
+ 1729              	.LBB317:
+ 1730              	.LBB318:
+ 157:src/_BuddyAllocator.cpp ****         for (int j = t; j < t + m; j++) {
+ 158:src/_BuddyAllocator.cpp ****             arr[j].printState();
+ 159:src/_BuddyAllocator.cpp ****             if (j != t + m - 1) _Console::printString(" | ");
+ 1731              		.loc 1 159 33 is_stmt 1 discriminator 1
+ 1732              		.loc 1 159 54 is_stmt 0 discriminator 1
+ 1733 0870 17050000 		lla	a0,.LC0
+ 1733      13050500 
+ 1734 0878 97000000 		call	_ZN8_Console11printStringEPKc@plt
+ 1734      E7800000 
+ 1735              	.LVL194:
+ 1736              	.L70:
+ 157:src/_BuddyAllocator.cpp ****         for (int j = t; j < t + m; j++) {
+ 1737              		.loc 1 157 9 is_stmt 1 discriminator 2
+ 1738 0880 9B841400 		addiw	s1,s1,1
+ 1739              	.LVL195:
+ 1740              	.L71:
+ 157:src/_BuddyAllocator.cpp ****         for (int j = t; j < t + m; j++) {
+ 1741              		.loc 1 157 27 discriminator 1
+ 157:src/_BuddyAllocator.cpp ****         for (int j = t; j < t + m; j++) {
+ 1742              		.loc 1 157 31 is_stmt 0 discriminator 1
+ 1743 0884 3B894901 		addw	s2,s3,s4
+ 1744 0888 9B070900 		sext.w	a5,s2
+ 157:src/_BuddyAllocator.cpp ****         for (int j = t; j < t + m; j++) {
+ 1745              		.loc 1 157 27 discriminator 1
+ 1746 088c 63D2F402 		ble	a5,s1,.L69
+ 158:src/_BuddyAllocator.cpp ****             if (j != t + m - 1) _Console::printString(" | ");
+ 1747              		.loc 1 158 13 is_stmt 1
+ 1748 0890 03B50A00 		ld	a0,0(s5)
+ 158:src/_BuddyAllocator.cpp ****             if (j != t + m - 1) _Console::printString(" | ");
+ 1749              		.loc 1 158 18 is_stmt 0
+ 1750 0894 93972400 		slli	a5,s1,2
+ 158:src/_BuddyAllocator.cpp ****             if (j != t + m - 1) _Console::printString(" | ");
+ 1751              		.loc 1 158 30
+ 1752 0898 3305F500 		add	a0,a0,a5
+ 1753 089c 97000000 		call	_ZN10_BuddyNode10printStateEv
+ 1753      E7800000 
+ 1754              	.LVL196:
+ 1755              		.loc 1 159 13 is_stmt 1
+ 1756              		.loc 1 159 28 is_stmt 0
+ 1757 08a4 1B09F9FF 		addiw	s2,s2,-1
+ 1758              		.loc 1 159 13
+ 1759 08a8 E30C99FC 		beq	s2,s1,.L70
+ 1760 08ac 6FF05FFC 		j	.L74
+ 1761              	.L69:
+ 1762              	.LBE318:
+ 160:src/_BuddyAllocator.cpp ****         }
+ 161:src/_BuddyAllocator.cpp ****         _Console::putc('\n');
+ 1763              		.loc 1 161 9 is_stmt 1 discriminator 2
+ 1764              		.loc 1 161 23 is_stmt 0 discriminator 2
+ 1765 08b0 1305A000 		li	a0,10
+ 1766 08b4 97000000 		call	_ZN8_Console4putcEc@plt
+ 1766      E7800000 
+ 1767              	.LVL197:
+ 162:src/_BuddyAllocator.cpp ****         t = (t + 1) * 2 - 1;
+GAS LISTING /tmp/ccXUpGzJ.s 			page 39
+
+
+ 1768              		.loc 1 162 9 is_stmt 1 discriminator 2
+ 1769              		.loc 1 162 16 is_stmt 0 discriminator 2
+ 1770 08bc 9B891900 		addiw	s3,s3,1
+ 1771              	.LVL198:
+ 1772              		.loc 1 162 21 discriminator 2
+ 1773 08c0 9B991900 		slliw	s3,s3,1
+ 1774              	.LVL199:
+ 1775              		.loc 1 162 11 discriminator 2
+ 1776 08c4 9B89F9FF 		addiw	s3,s3,-1
+ 163:src/_BuddyAllocator.cpp ****         m *= 2;
+ 1777              		.loc 1 163 9 is_stmt 1 discriminator 2
+ 1778              		.loc 1 163 11 is_stmt 0 discriminator 2
+ 1779 08c8 1B1A1A00 		slliw	s4,s4,1
+ 1780              	.LVL200:
+ 1781              	.LBE317:
+ 156:src/_BuddyAllocator.cpp ****         for (int j = t; j < t + m; j++) {
+ 1782              		.loc 1 156 5 is_stmt 1 discriminator 2
+ 1783 08cc 1B0B1B00 		addiw	s6,s6,1
+ 1784              	.LVL201:
+ 1785              	.L72:
+ 156:src/_BuddyAllocator.cpp ****         for (int j = t; j < t + m; j++) {
+ 1786              		.loc 1 156 23 discriminator 1
+ 156:src/_BuddyAllocator.cpp ****         for (int j = t; j < t + m; j++) {
+ 1787              		.loc 1 156 26 is_stmt 0 discriminator 1
+ 1788 08d0 83A74A02 		lw	a5,36(s5)
+ 156:src/_BuddyAllocator.cpp ****         for (int j = t; j < t + m; j++) {
+ 1789              		.loc 1 156 23 discriminator 1
+ 1790 08d4 63C66701 		blt	a5,s6,.L67
+ 1791              	.LBB320:
+ 1792              	.LBB319:
+ 157:src/_BuddyAllocator.cpp ****             arr[j].printState();
+ 1793              		.loc 1 157 18
+ 1794 08d8 93840900 		mv	s1,s3
+ 1795 08dc 6FF09FFA 		j	.L71
+ 1796              	.L67:
+ 1797              	.LBE319:
+ 1798              	.LBE320:
+ 1799              	.LBE321:
+ 164:src/_BuddyAllocator.cpp ****     }
+ 165:src/_BuddyAllocator.cpp **** }
+ 1800              		.loc 1 165 1
+ 1801 08e0 83308103 		ld	ra,56(sp)
+ 1802              		.cfi_restore 1
+ 1803 08e4 03340103 		ld	s0,48(sp)
+ 1804              		.cfi_restore 8
+ 1805              		.cfi_def_cfa 2, 64
+ 1806 08e8 83348102 		ld	s1,40(sp)
+ 1807              		.cfi_restore 9
+ 1808 08ec 03390102 		ld	s2,32(sp)
+ 1809              		.cfi_restore 18
+ 1810 08f0 83398101 		ld	s3,24(sp)
+ 1811              		.cfi_restore 19
+ 1812              	.LVL202:
+ 1813 08f4 033A0101 		ld	s4,16(sp)
+ 1814              		.cfi_restore 20
+ 1815              	.LVL203:
+ 1816 08f8 833A8100 		ld	s5,8(sp)
+GAS LISTING /tmp/ccXUpGzJ.s 			page 40
+
+
+ 1817              		.cfi_restore 21
+ 1818              	.LVL204:
+ 1819 08fc 033B0100 		ld	s6,0(sp)
+ 1820              		.cfi_restore 22
+ 1821              	.LVL205:
+ 1822 0900 13010104 		addi	sp,sp,64
+ 1823              		.cfi_def_cfa_offset 0
+ 1824 0904 67800000 		jr	ra
+ 1825              		.cfi_endproc
+ 1826              	.LFE40:
+ 1828              		.globl	_ZN10_BuddyNode4NEXTE
+ 1829              		.globl	_ZN10_BuddyNode6M_FREEE
+ 1830              		.globl	_ZN10_BuddyNode6M_LEAFE
+ 1831              		.globl	_ZN10_BuddyNode8M_ACTIVEE
+ 1832              		.globl	_ZN10_BuddyNode8DATA_LENE
+ 1833              		.section	.rodata
+ 1834              		.align	2
+ 1837              	_ZN10_BuddyNode4NEXTE:
+ 1838 0000 FFFFFF1F 		.word	536870911
+ 1841              	_ZN10_BuddyNode6M_FREEE:
+ 1842 0004 00000020 		.word	536870912
+ 1845              	_ZN10_BuddyNode6M_LEAFE:
+ 1846 0008 00000040 		.word	1073741824
+ 1849              	_ZN10_BuddyNode8M_ACTIVEE:
+ 1850 000c 00000080 		.word	-2147483648
+ 1853              	_ZN10_BuddyNode8DATA_LENE:
+ 1854 0010 20000000 		.word	32
+ 1855              		.text
+ 1856              	.Letext0:
+ 1857              		.file 3 "src/../h/../lib/hw.h"
+ 1858              		.file 4 "src/../h/_placementNew.h"
+ 1859              		.file 5 "src/../h/types.h"
+ 1860              		.file 6 "src/../h/_slab.h"
+ 1861              		.file 7 "src/../h/_Buffer.h"
+ 1862              		.file 8 "src/../h/_Console.h"
+GAS LISTING /tmp/ccXUpGzJ.s 			page 41
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 _BuddyAllocator.cpp
+     /tmp/ccXUpGzJ.s:9      .text:0000000000000000 _ZN10_BuddyNode4nextEv
+     /tmp/ccXUpGzJ.s:13     .text:0000000000000000 .L0 
+     /tmp/ccXUpGzJ.s:15     .text:0000000000000000 .L0 
+     /tmp/ccXUpGzJ.s:16     .text:0000000000000004 .L0 
+     /tmp/ccXUpGzJ.s:18     .text:0000000000000008 .L0 
+     /tmp/ccXUpGzJ.s:20     .text:000000000000000c .L0 
+     /tmp/ccXUpGzJ.s:22     .text:000000000000000c .L0 
+     /tmp/ccXUpGzJ.s:23     .text:000000000000000c .L0 
+     /tmp/ccXUpGzJ.s:26     .text:0000000000000010 .L0 
+     /tmp/ccXUpGzJ.s:31     .text:000000000000001c .L0 
+     /tmp/ccXUpGzJ.s:33     .text:0000000000000020 .L0 
+     /tmp/ccXUpGzJ.s:34     .text:0000000000000020 .L0 
+     /tmp/ccXUpGzJ.s:38     .text:0000000000000024 .L0 
+     /tmp/ccXUpGzJ.s:39     .text:0000000000000028 .L0 
+     /tmp/ccXUpGzJ.s:40     .text:0000000000000028 .L0 
+     /tmp/ccXUpGzJ.s:41     .text:0000000000000028 .L0 
+     /tmp/ccXUpGzJ.s:43     .text:000000000000002c .L0 
+     /tmp/ccXUpGzJ.s:47     .text:0000000000000030 .L0 
+     /tmp/ccXUpGzJ.s:49     .text:0000000000000030 .L0 
+     /tmp/ccXUpGzJ.s:52     .text:0000000000000038 .L0 
+     /tmp/ccXUpGzJ.s:58     .text:0000000000000038 _ZN10_BuddyNode7setNextEi
+     /tmp/ccXUpGzJ.s:61     .text:0000000000000038 .L0 
+     /tmp/ccXUpGzJ.s:63     .text:0000000000000038 .L0 
+     /tmp/ccXUpGzJ.s:64     .text:000000000000003c .L0 
+     /tmp/ccXUpGzJ.s:66     .text:0000000000000040 .L0 
+     /tmp/ccXUpGzJ.s:68     .text:0000000000000044 .L0 
+     /tmp/ccXUpGzJ.s:70     .text:0000000000000044 .L0 
+     /tmp/ccXUpGzJ.s:71     .text:0000000000000044 .L0 
+     /tmp/ccXUpGzJ.s:74     .text:000000000000004c .L0 
+     /tmp/ccXUpGzJ.s:75     .text:000000000000004c .L0 
+     /tmp/ccXUpGzJ.s:81     .text:0000000000000058 .L0 
+     /tmp/ccXUpGzJ.s:82     .text:0000000000000058 .L0 
+     /tmp/ccXUpGzJ.s:87     .text:0000000000000068 .L0 
+     /tmp/ccXUpGzJ.s:88     .text:0000000000000068 .L0 
+     /tmp/ccXUpGzJ.s:91     .text:0000000000000070 .L0 
+     /tmp/ccXUpGzJ.s:92     .text:0000000000000074 .L0 
+     /tmp/ccXUpGzJ.s:93     .text:0000000000000074 .L0 
+     /tmp/ccXUpGzJ.s:94     .text:0000000000000074 .L0 
+     /tmp/ccXUpGzJ.s:96     .text:0000000000000078 .L0 
+     /tmp/ccXUpGzJ.s:100    .text:000000000000007c .L0 
+     /tmp/ccXUpGzJ.s:102    .text:000000000000007c .L0 
+     /tmp/ccXUpGzJ.s:106    .text:0000000000000088 .L0 
+     /tmp/ccXUpGzJ.s:112    .text:0000000000000088 _ZN10_BuddyNode10printStateEv
+     /tmp/ccXUpGzJ.s:115    .text:0000000000000088 .L0 
+     /tmp/ccXUpGzJ.s:117    .text:0000000000000088 .L0 
+     /tmp/ccXUpGzJ.s:118    .text:000000000000008c .L0 
+     /tmp/ccXUpGzJ.s:121    .text:0000000000000094 .L0 
+     /tmp/ccXUpGzJ.s:122    .text:0000000000000094 .L0 
+     /tmp/ccXUpGzJ.s:124    .text:0000000000000098 .L0 
+     /tmp/ccXUpGzJ.s:130    .text:0000000000000098 .L0 
+     /tmp/ccXUpGzJ.s:133    .text:0000000000000098 .L0 
+     /tmp/ccXUpGzJ.s:134    .text:0000000000000098 .L0 
+     /tmp/ccXUpGzJ.s:135    .text:0000000000000098 .L0 
+     /tmp/ccXUpGzJ.s:141    .text:00000000000000a0 .L0 
+     /tmp/ccXUpGzJ.s:149    .text:00000000000000a4 .L0 
+GAS LISTING /tmp/ccXUpGzJ.s 			page 42
+
+
+     /tmp/ccXUpGzJ.s:152    .text:00000000000000a4 .L0 
+     /tmp/ccXUpGzJ.s:155    .text:00000000000000a4 .L0 
+     /tmp/ccXUpGzJ.s:156    .text:00000000000000a4 .L0 
+     /tmp/ccXUpGzJ.s:164    .text:00000000000000a8 .L0 
+     /tmp/ccXUpGzJ.s:167    .text:00000000000000a8 .L0 
+     /tmp/ccXUpGzJ.s:170    .text:00000000000000a8 .L0 
+     /tmp/ccXUpGzJ.s:171    .text:00000000000000a8 .L0 
+     /tmp/ccXUpGzJ.s:177    .text:00000000000000ac .L0 
+     /tmp/ccXUpGzJ.s:178    .text:00000000000000ac .L0 
+     /tmp/ccXUpGzJ.s:184    .text:00000000000000b8 .L0 
+     /tmp/ccXUpGzJ.s:185    .text:00000000000000bc .L0 
+     /tmp/ccXUpGzJ.s:186    .text:00000000000000bc .L0 
+     /tmp/ccXUpGzJ.s:188    .text:00000000000000c0 .L0 
+     /tmp/ccXUpGzJ.s:189    .text:00000000000000c0 .L0 
+     /tmp/ccXUpGzJ.s:191    .text:00000000000000c4 .L0 
+     /tmp/ccXUpGzJ.s:195    .text:00000000000000c8 .L0 
+     /tmp/ccXUpGzJ.s:201    .text:00000000000000c8 .L0 
+     /tmp/ccXUpGzJ.s:202    .text:00000000000000c8 .L0 
+     /tmp/ccXUpGzJ.s:209    .text:00000000000000d4 .L0 
+     /tmp/ccXUpGzJ.s:214    .text:00000000000000d8 .L0 
+     /tmp/ccXUpGzJ.s:215    .text:00000000000000d8 .L0 
+     /tmp/ccXUpGzJ.s:222    .text:00000000000000e4 .L0 
+     /tmp/ccXUpGzJ.s:227    .text:00000000000000e8 .L0 
+     /tmp/ccXUpGzJ.s:228    .text:00000000000000e8 .L0 
+     /tmp/ccXUpGzJ.s:240    .text:00000000000000f8 .L0 
+     /tmp/ccXUpGzJ.s:241    .text:00000000000000f8 .L0 
+     /tmp/ccXUpGzJ.s:248    .text:0000000000000104 .L0 
+     /tmp/ccXUpGzJ.s:253    .text:0000000000000108 .L0 
+     /tmp/ccXUpGzJ.s:254    .text:0000000000000108 .L0 
+     /tmp/ccXUpGzJ.s:261    .text:0000000000000114 .L0 
+     /tmp/ccXUpGzJ.s:266    .text:0000000000000118 .L0 
+     /tmp/ccXUpGzJ.s:267    .text:0000000000000118 .L0 
+     /tmp/ccXUpGzJ.s:279    .text:0000000000000128 .L0 
+     /tmp/ccXUpGzJ.s:280    .text:0000000000000128 .L0 
+     /tmp/ccXUpGzJ.s:287    .text:0000000000000134 .L0 
+     /tmp/ccXUpGzJ.s:292    .text:0000000000000138 .L0 
+     /tmp/ccXUpGzJ.s:293    .text:0000000000000138 .L0 
+     /tmp/ccXUpGzJ.s:300    .text:0000000000000144 .L0 
+     /tmp/ccXUpGzJ.s:305    .text:0000000000000148 .L0 
+     /tmp/ccXUpGzJ.s:306    .text:0000000000000148 .L0 
+     /tmp/ccXUpGzJ.s:311    .text:0000000000000158 .L0 
+     /tmp/ccXUpGzJ.s:317    .text:0000000000000158 _ZN10_BuddyTree9calcLevelEm
+     /tmp/ccXUpGzJ.s:320    .text:0000000000000158 .L0 
+     /tmp/ccXUpGzJ.s:322    .text:0000000000000158 .L0 
+     /tmp/ccXUpGzJ.s:323    .text:000000000000015c .L0 
+     /tmp/ccXUpGzJ.s:325    .text:0000000000000160 .L0 
+     /tmp/ccXUpGzJ.s:327    .text:0000000000000164 .L0 
+     /tmp/ccXUpGzJ.s:329    .text:0000000000000164 .L0 
+     /tmp/ccXUpGzJ.s:330    .text:0000000000000164 .L0 
+     /tmp/ccXUpGzJ.s:332    .text:0000000000000168 .L0 
+     /tmp/ccXUpGzJ.s:334    .text:000000000000016c .L0 
+     /tmp/ccXUpGzJ.s:336    .text:0000000000000170 .L0 
+     /tmp/ccXUpGzJ.s:338    .text:0000000000000174 .L0 
+     /tmp/ccXUpGzJ.s:341    .text:0000000000000178 .L0 
+     /tmp/ccXUpGzJ.s:342    .text:0000000000000178 .L0 
+     /tmp/ccXUpGzJ.s:343    .text:0000000000000178 .L0 
+     /tmp/ccXUpGzJ.s:345    .text:000000000000017c .L0 
+GAS LISTING /tmp/ccXUpGzJ.s 			page 43
+
+
+     /tmp/ccXUpGzJ.s:349    .text:0000000000000180 .L0 
+     /tmp/ccXUpGzJ.s:350    .text:0000000000000180 .L0 
+     /tmp/ccXUpGzJ.s:352    .text:0000000000000184 .L0 
+     /tmp/ccXUpGzJ.s:353    .text:0000000000000184 .L0 
+     /tmp/ccXUpGzJ.s:356    .text:0000000000000188 .L0 
+     /tmp/ccXUpGzJ.s:359    .text:000000000000018c .L0 
+     /tmp/ccXUpGzJ.s:363    .text:0000000000000190 .L0 
+     /tmp/ccXUpGzJ.s:364    .text:0000000000000190 .L0 
+     /tmp/ccXUpGzJ.s:365    .text:0000000000000194 .L0 
+     /tmp/ccXUpGzJ.s:366    .text:0000000000000194 .L0 
+     /tmp/ccXUpGzJ.s:368    .text:0000000000000198 .L0 
+     /tmp/ccXUpGzJ.s:370    .text:000000000000019c .L0 
+     /tmp/ccXUpGzJ.s:376    .text:000000000000019c _ZN10_BuddyTree9calcLevelEi
+     /tmp/ccXUpGzJ.s:379    .text:000000000000019c .L0 
+     /tmp/ccXUpGzJ.s:381    .text:000000000000019c .L0 
+     /tmp/ccXUpGzJ.s:382    .text:00000000000001a0 .L0 
+     /tmp/ccXUpGzJ.s:384    .text:00000000000001a4 .L0 
+     /tmp/ccXUpGzJ.s:386    .text:00000000000001a8 .L0 
+     /tmp/ccXUpGzJ.s:389    .text:00000000000001a8 .L0 
+     /tmp/ccXUpGzJ.s:390    .text:00000000000001a8 .L0 
+     /tmp/ccXUpGzJ.s:391    .text:00000000000001a8 .L0 
+     /tmp/ccXUpGzJ.s:394    .text:00000000000001ac .L0 
+     /tmp/ccXUpGzJ.s:397    .text:00000000000001b0 .L0 
+     /tmp/ccXUpGzJ.s:401    .text:00000000000001b4 .L0 
+     /tmp/ccXUpGzJ.s:402    .text:00000000000001b4 .L0 
+     /tmp/ccXUpGzJ.s:404    .text:00000000000001b8 .L0 
+     /tmp/ccXUpGzJ.s:405    .text:00000000000001b8 .L0 
+     /tmp/ccXUpGzJ.s:408    .text:00000000000001bc .L0 
+     /tmp/ccXUpGzJ.s:411    .text:00000000000001c0 .L0 
+     /tmp/ccXUpGzJ.s:415    .text:00000000000001c4 .L0 
+     /tmp/ccXUpGzJ.s:416    .text:00000000000001c4 .L0 
+     /tmp/ccXUpGzJ.s:419    .text:00000000000001c8 .L0 
+     /tmp/ccXUpGzJ.s:421    .text:00000000000001d0 .L0 
+     /tmp/ccXUpGzJ.s:422    .text:00000000000001d0 .L0 
+     /tmp/ccXUpGzJ.s:424    .text:00000000000001d4 .L0 
+     /tmp/ccXUpGzJ.s:426    .text:00000000000001d8 .L0 
+     /tmp/ccXUpGzJ.s:432    .text:00000000000001d8 _ZN10_BuddyTree5splitEi
+     /tmp/ccXUpGzJ.s:435    .text:00000000000001d8 .L0 
+     /tmp/ccXUpGzJ.s:437    .text:00000000000001d8 .L0 
+     /tmp/ccXUpGzJ.s:438    .text:00000000000001d8 .L0 
+     /tmp/ccXUpGzJ.s:440    .text:00000000000001dc .L0 
+     /tmp/ccXUpGzJ.s:441    .text:00000000000001e0 .L0 
+     /tmp/ccXUpGzJ.s:449    .text:00000000000001fc .L0 
+     /tmp/ccXUpGzJ.s:450    .text:00000000000001fc .L0 
+     /tmp/ccXUpGzJ.s:451    .text:00000000000001fc .L0 
+     /tmp/ccXUpGzJ.s:452    .text:00000000000001fc .L0 
+     /tmp/ccXUpGzJ.s:453    .text:00000000000001fc .L0 
+     /tmp/ccXUpGzJ.s:454    .text:00000000000001fc .L0 
+     /tmp/ccXUpGzJ.s:455    .text:00000000000001fc .L0 
+     /tmp/ccXUpGzJ.s:457    .text:0000000000000200 .L0 
+     /tmp/ccXUpGzJ.s:460    .text:0000000000000204 .L0 
+     /tmp/ccXUpGzJ.s:462    .text:0000000000000208 .L0 
+     /tmp/ccXUpGzJ.s:466    .text:0000000000000214 .L0 
+     /tmp/ccXUpGzJ.s:470    .text:000000000000021c .L0 
+     /tmp/ccXUpGzJ.s:471    .text:000000000000021c .L0 
+     /tmp/ccXUpGzJ.s:473    .text:0000000000000220 .L0 
+     /tmp/ccXUpGzJ.s:475    .text:0000000000000224 .L0 
+GAS LISTING /tmp/ccXUpGzJ.s 			page 44
+
+
+     /tmp/ccXUpGzJ.s:481    .text:0000000000000228 .L0 
+     /tmp/ccXUpGzJ.s:482    .text:0000000000000228 .L0 
+     /tmp/ccXUpGzJ.s:483    .text:0000000000000228 .L0 
+     /tmp/ccXUpGzJ.s:489    .text:000000000000022c .L0 
+     /tmp/ccXUpGzJ.s:490    .text:000000000000022c .L0 
+     /tmp/ccXUpGzJ.s:494    .text:000000000000022c .L0 
+     /tmp/ccXUpGzJ.s:495    .text:000000000000022c .L0 
+     /tmp/ccXUpGzJ.s:496    .text:000000000000022c .L0 
+     /tmp/ccXUpGzJ.s:507    .text:0000000000000244 .L0 
+     /tmp/ccXUpGzJ.s:508    .text:0000000000000244 .L0 
+     /tmp/ccXUpGzJ.s:511    .text:0000000000000248 .L0 
+     /tmp/ccXUpGzJ.s:513    .text:000000000000024c .L0 
+     /tmp/ccXUpGzJ.s:515    .text:0000000000000250 .L0 
+     /tmp/ccXUpGzJ.s:519    .text:000000000000025c .L0 
+     /tmp/ccXUpGzJ.s:524    .text:0000000000000260 .L0 
+     /tmp/ccXUpGzJ.s:525    .text:0000000000000260 .L0 
+     /tmp/ccXUpGzJ.s:526    .text:0000000000000260 .L0 
+     /tmp/ccXUpGzJ.s:528    .text:0000000000000264 .L0 
+     /tmp/ccXUpGzJ.s:536    .text:000000000000026c .L0 
+     /tmp/ccXUpGzJ.s:537    .text:000000000000026c .L0 
+     /tmp/ccXUpGzJ.s:540    .text:0000000000000270 .L0 
+     /tmp/ccXUpGzJ.s:545    .text:0000000000000274 .L0 
+     /tmp/ccXUpGzJ.s:547    .text:0000000000000278 .L0 
+     /tmp/ccXUpGzJ.s:549    .text:000000000000027c .L0 
+     /tmp/ccXUpGzJ.s:555    .text:0000000000000280 .L0 
+     /tmp/ccXUpGzJ.s:556    .text:0000000000000280 .L0 
+     /tmp/ccXUpGzJ.s:557    .text:0000000000000280 .L0 
+     /tmp/ccXUpGzJ.s:563    .text:0000000000000284 .L0 
+     /tmp/ccXUpGzJ.s:564    .text:0000000000000284 .L0 
+     /tmp/ccXUpGzJ.s:568    .text:0000000000000284 .L0 
+     /tmp/ccXUpGzJ.s:569    .text:0000000000000284 .L0 
+     /tmp/ccXUpGzJ.s:570    .text:0000000000000284 .L0 
+     /tmp/ccXUpGzJ.s:578    .text:0000000000000290 .L0 
+     /tmp/ccXUpGzJ.s:580    .text:0000000000000294 .L0 
+     /tmp/ccXUpGzJ.s:582    .text:0000000000000298 .L0 
+     /tmp/ccXUpGzJ.s:588    .text:000000000000029c .L0 
+     /tmp/ccXUpGzJ.s:589    .text:000000000000029c .L0 
+     /tmp/ccXUpGzJ.s:590    .text:000000000000029c .L0 
+     /tmp/ccXUpGzJ.s:596    .text:00000000000002a0 .L0 
+     /tmp/ccXUpGzJ.s:597    .text:00000000000002a0 .L0 
+     /tmp/ccXUpGzJ.s:601    .text:00000000000002a0 .L0 
+     /tmp/ccXUpGzJ.s:602    .text:00000000000002a0 .L0 
+     /tmp/ccXUpGzJ.s:603    .text:00000000000002a0 .L0 
+     /tmp/ccXUpGzJ.s:610    .text:00000000000002a8 .L0 
+     /tmp/ccXUpGzJ.s:612    .text:00000000000002ac .L0 
+     /tmp/ccXUpGzJ.s:614    .text:00000000000002b0 .L0 
+     /tmp/ccXUpGzJ.s:617    .text:00000000000002b8 .L0 
+     /tmp/ccXUpGzJ.s:622    .text:00000000000002c8 .L0 
+     /tmp/ccXUpGzJ.s:624    .text:00000000000002cc .L0 
+     /tmp/ccXUpGzJ.s:629    .text:00000000000002dc .L0 
+     /tmp/ccXUpGzJ.s:631    .text:00000000000002e0 .L0 
+     /tmp/ccXUpGzJ.s:633    .text:00000000000002e4 .L0 
+     /tmp/ccXUpGzJ.s:637    .text:00000000000002e8 .L0 
+     /tmp/ccXUpGzJ.s:638    .text:00000000000002ec .L0 
+     /tmp/ccXUpGzJ.s:640    .text:00000000000002f0 .L0 
+     /tmp/ccXUpGzJ.s:641    .text:00000000000002f0 .L0 
+     /tmp/ccXUpGzJ.s:643    .text:00000000000002f4 .L0 
+GAS LISTING /tmp/ccXUpGzJ.s 			page 45
+
+
+     /tmp/ccXUpGzJ.s:645    .text:00000000000002f8 .L0 
+     /tmp/ccXUpGzJ.s:648    .text:00000000000002fc .L0 
+     /tmp/ccXUpGzJ.s:650    .text:0000000000000300 .L0 
+     /tmp/ccXUpGzJ.s:652    .text:0000000000000304 .L0 
+     /tmp/ccXUpGzJ.s:654    .text:0000000000000308 .L0 
+     /tmp/ccXUpGzJ.s:659    .text:0000000000000310 .L0 
+     /tmp/ccXUpGzJ.s:665    .text:0000000000000310 _ZN10_BuddyTree11calcAddressEii
+     /tmp/ccXUpGzJ.s:668    .text:0000000000000310 .L0 
+     /tmp/ccXUpGzJ.s:670    .text:0000000000000310 .L0 
+     /tmp/ccXUpGzJ.s:671    .text:0000000000000314 .L0 
+     /tmp/ccXUpGzJ.s:673    .text:0000000000000318 .L0 
+     /tmp/ccXUpGzJ.s:675    .text:000000000000031c .L0 
+     /tmp/ccXUpGzJ.s:677    .text:000000000000031c .L0 
+     /tmp/ccXUpGzJ.s:678    .text:000000000000031c .L0 
+     /tmp/ccXUpGzJ.s:680    .text:0000000000000320 .L0 
+     /tmp/ccXUpGzJ.s:683    .text:0000000000000324 .L0 
+     /tmp/ccXUpGzJ.s:684    .text:0000000000000324 .L0 
+     /tmp/ccXUpGzJ.s:688    .text:000000000000032c .L0 
+     /tmp/ccXUpGzJ.s:691    .text:0000000000000330 .L0 
+     /tmp/ccXUpGzJ.s:692    .text:0000000000000330 .L0 
+     /tmp/ccXUpGzJ.s:694    .text:0000000000000334 .L0 
+     /tmp/ccXUpGzJ.s:697    .text:0000000000000338 .L0 
+     /tmp/ccXUpGzJ.s:698    .text:0000000000000338 .L0 
+     /tmp/ccXUpGzJ.s:701    .text:000000000000033c .L0 
+     /tmp/ccXUpGzJ.s:702    .text:000000000000033c .L0 
+     /tmp/ccXUpGzJ.s:705    .text:0000000000000340 .L0 
+     /tmp/ccXUpGzJ.s:707    .text:0000000000000344 .L0 
+     /tmp/ccXUpGzJ.s:709    .text:000000000000034c .L0 
+     /tmp/ccXUpGzJ.s:710    .text:000000000000034c .L0 
+     /tmp/ccXUpGzJ.s:712    .text:0000000000000350 .L0 
+     /tmp/ccXUpGzJ.s:714    .text:0000000000000354 .L0 
+     /tmp/ccXUpGzJ.s:720    .text:0000000000000354 _ZN10_BuddyTree8findNodeEPv
+     /tmp/ccXUpGzJ.s:723    .text:0000000000000354 .L0 
+     /tmp/ccXUpGzJ.s:725    .text:0000000000000354 .L0 
+     /tmp/ccXUpGzJ.s:726    .text:0000000000000358 .L0 
+     /tmp/ccXUpGzJ.s:728    .text:000000000000035c .L0 
+     /tmp/ccXUpGzJ.s:730    .text:0000000000000360 .L0 
+     /tmp/ccXUpGzJ.s:733    .text:0000000000000364 .L0 
+     /tmp/ccXUpGzJ.s:734    .text:0000000000000364 .L0 
+     /tmp/ccXUpGzJ.s:736    .text:0000000000000368 .L0 
+     /tmp/ccXUpGzJ.s:739    .text:000000000000036c .L0 
+     /tmp/ccXUpGzJ.s:740    .text:000000000000036c .L0 
+     /tmp/ccXUpGzJ.s:742    .text:0000000000000370 .L0 
+     /tmp/ccXUpGzJ.s:745    .text:0000000000000374 .L0 
+     /tmp/ccXUpGzJ.s:748    .text:0000000000000378 .L0 
+     /tmp/ccXUpGzJ.s:749    .text:0000000000000378 .L0 
+     /tmp/ccXUpGzJ.s:751    .text:000000000000037c .L0 
+     /tmp/ccXUpGzJ.s:753    .text:0000000000000380 .L0 
+     /tmp/ccXUpGzJ.s:754    .text:0000000000000380 .L0 
+     /tmp/ccXUpGzJ.s:756    .text:0000000000000384 .L0 
+     /tmp/ccXUpGzJ.s:759    .text:000000000000038c .L0 
+     /tmp/ccXUpGzJ.s:761    .text:0000000000000390 .L0 
+     /tmp/ccXUpGzJ.s:765    .text:0000000000000394 .L0 
+     /tmp/ccXUpGzJ.s:766    .text:0000000000000394 .L0 
+     /tmp/ccXUpGzJ.s:767    .text:0000000000000394 .L0 
+     /tmp/ccXUpGzJ.s:769    .text:0000000000000398 .L0 
+     /tmp/ccXUpGzJ.s:771    .text:000000000000039c .L0 
+GAS LISTING /tmp/ccXUpGzJ.s 			page 46
+
+
+     /tmp/ccXUpGzJ.s:778    .text:00000000000003a0 .L0 
+     /tmp/ccXUpGzJ.s:779    .text:00000000000003a0 .L0 
+     /tmp/ccXUpGzJ.s:780    .text:00000000000003a0 .L0 
+     /tmp/ccXUpGzJ.s:785    .text:00000000000003a4 .L0 
+     /tmp/ccXUpGzJ.s:790    .text:00000000000003a8 .L0 
+     /tmp/ccXUpGzJ.s:791    .text:00000000000003a8 .L0 
+     /tmp/ccXUpGzJ.s:799    .text:00000000000003b4 .L0 
+     /tmp/ccXUpGzJ.s:804    .text:00000000000003b8 .L0 
+     /tmp/ccXUpGzJ.s:805    .text:00000000000003b8 .L0 
+     /tmp/ccXUpGzJ.s:812    .text:00000000000003c4 .L0 
+     /tmp/ccXUpGzJ.s:817    .text:00000000000003c8 .L0 
+     /tmp/ccXUpGzJ.s:818    .text:00000000000003c8 .L0 
+     /tmp/ccXUpGzJ.s:820    .text:00000000000003cc .L0 
+     /tmp/ccXUpGzJ.s:825    .text:00000000000003d0 .L0 
+     /tmp/ccXUpGzJ.s:826    .text:00000000000003d0 .L0 
+     /tmp/ccXUpGzJ.s:827    .text:00000000000003d0 .L0 
+     /tmp/ccXUpGzJ.s:829    .text:00000000000003d4 .L0 
+     /tmp/ccXUpGzJ.s:837    .text:00000000000003e0 .L0 
+     /tmp/ccXUpGzJ.s:838    .text:00000000000003e0 .L0 
+     /tmp/ccXUpGzJ.s:842    .text:00000000000003e4 .L0 
+     /tmp/ccXUpGzJ.s:846    .text:00000000000003e8 .L0 
+     /tmp/ccXUpGzJ.s:847    .text:00000000000003ec .L0 
+     /tmp/ccXUpGzJ.s:848    .text:00000000000003ec .L0 
+     /tmp/ccXUpGzJ.s:849    .text:00000000000003ec .L0 
+     /tmp/ccXUpGzJ.s:851    .text:00000000000003f0 .L0 
+     /tmp/ccXUpGzJ.s:855    .text:00000000000003f4 .L0 
+     /tmp/ccXUpGzJ.s:857    .text:00000000000003f4 .L0 
+     /tmp/ccXUpGzJ.s:860    .text:00000000000003fc .L0 
+     /tmp/ccXUpGzJ.s:866    .text:00000000000003fc _ZN10_BuddyTreeC2EPvmm
+     /tmp/ccXUpGzJ.s:869    .text:00000000000003fc .L0 
+     /tmp/ccXUpGzJ.s:871    .text:00000000000003fc .L0 
+     /tmp/ccXUpGzJ.s:872    .text:0000000000000400 .L0 
+     /tmp/ccXUpGzJ.s:877    .text:0000000000000410 .L0 
+     /tmp/ccXUpGzJ.s:878    .text:0000000000000410 .L0 
+     /tmp/ccXUpGzJ.s:879    .text:0000000000000410 .L0 
+     /tmp/ccXUpGzJ.s:880    .text:0000000000000410 .L0 
+     /tmp/ccXUpGzJ.s:882    .text:0000000000000414 .L0 
+     /tmp/ccXUpGzJ.s:886    .text:0000000000000418 .L0 
+     /tmp/ccXUpGzJ.s:887    .text:0000000000000418 .L0 
+     /tmp/ccXUpGzJ.s:889    .text:000000000000041c .L0 
+     /tmp/ccXUpGzJ.s:890    .text:000000000000041c .L0 
+     /tmp/ccXUpGzJ.s:893    .text:0000000000000424 .L0 
+     /tmp/ccXUpGzJ.s:898    .text:0000000000000428 .L0 
+     /tmp/ccXUpGzJ.s:899    .text:0000000000000428 .L0 
+     /tmp/ccXUpGzJ.s:900    .text:0000000000000428 .L0 
+     /tmp/ccXUpGzJ.s:906    .text:0000000000000430 .L0 
+     /tmp/ccXUpGzJ.s:907    .text:0000000000000430 .L0 
+     /tmp/ccXUpGzJ.s:909    .text:0000000000000434 .L0 
+     /tmp/ccXUpGzJ.s:911    .text:0000000000000438 .L0 
+     /tmp/ccXUpGzJ.s:914    .text:0000000000000440 .L0 
+     /tmp/ccXUpGzJ.s:916    .text:0000000000000444 .L0 
+     /tmp/ccXUpGzJ.s:921    .text:0000000000000448 .L0 
+     /tmp/ccXUpGzJ.s:922    .text:0000000000000448 .L0 
+     /tmp/ccXUpGzJ.s:927    .text:0000000000000450 .L0 
+     /tmp/ccXUpGzJ.s:928    .text:0000000000000450 .L0 
+     /tmp/ccXUpGzJ.s:931    .text:0000000000000454 .L0 
+     /tmp/ccXUpGzJ.s:933    .text:0000000000000458 .L0 
+GAS LISTING /tmp/ccXUpGzJ.s 			page 47
+
+
+     /tmp/ccXUpGzJ.s:936    .text:000000000000045c .L0 
+     /tmp/ccXUpGzJ.s:937    .text:000000000000045c .L0 
+     /tmp/ccXUpGzJ.s:940    .text:0000000000000460 .L0 
+     /tmp/ccXUpGzJ.s:943    .text:0000000000000464 .L0 
+     /tmp/ccXUpGzJ.s:945    .text:0000000000000468 .L0 
+     /tmp/ccXUpGzJ.s:946    .text:0000000000000468 .L0 
+     /tmp/ccXUpGzJ.s:948    .text:000000000000046c .L0 
+     /tmp/ccXUpGzJ.s:949    .text:000000000000046c .L0 
+     /tmp/ccXUpGzJ.s:952    .text:0000000000000470 .L0 
+     /tmp/ccXUpGzJ.s:953    .text:0000000000000470 .L0 
+     /tmp/ccXUpGzJ.s:956    .text:0000000000000474 .L0 
+     /tmp/ccXUpGzJ.s:957    .text:0000000000000474 .L0 
+     /tmp/ccXUpGzJ.s:964    .text:0000000000000488 .L0 
+     /tmp/ccXUpGzJ.s:968    .text:0000000000000494 .L0 
+     /tmp/ccXUpGzJ.s:969    .text:0000000000000494 .L0 
+     /tmp/ccXUpGzJ.s:971    .text:0000000000000498 .L0 
+     /tmp/ccXUpGzJ.s:973    .text:000000000000049c .L0 
+     /tmp/ccXUpGzJ.s:974    .text:000000000000049c .L0 
+     /tmp/ccXUpGzJ.s:976    .text:00000000000004a0 .L0 
+     /tmp/ccXUpGzJ.s:978    .text:00000000000004a4 .L0 
+     /tmp/ccXUpGzJ.s:981    .text:00000000000004ac .L0 
+     /tmp/ccXUpGzJ.s:983    .text:00000000000004b0 .L0 
+     /tmp/ccXUpGzJ.s:984    .text:00000000000004b0 .L0 
+     /tmp/ccXUpGzJ.s:988    .text:00000000000004bc .L0 
+     /tmp/ccXUpGzJ.s:991    .text:00000000000004c0 .L0 
+     /tmp/ccXUpGzJ.s:994    .text:00000000000004c4 .L0 
+     /tmp/ccXUpGzJ.s:996    .text:00000000000004c8 .L0 
+     /tmp/ccXUpGzJ.s:997    .text:00000000000004c8 .L0 
+     /tmp/ccXUpGzJ.s:1000   .text:00000000000004cc .L0 
+     /tmp/ccXUpGzJ.s:1002   .text:00000000000004d0 .L0 
+     /tmp/ccXUpGzJ.s:1006   .text:00000000000004d4 .L0 
+     /tmp/ccXUpGzJ.s:1007   .text:00000000000004d4 .L0 
+     /tmp/ccXUpGzJ.s:1012   .text:00000000000004dc .L0 
+     /tmp/ccXUpGzJ.s:1016   .text:00000000000004e0 .L0 
+     /tmp/ccXUpGzJ.s:1017   .text:00000000000004e0 .L0 
+     /tmp/ccXUpGzJ.s:1019   .text:00000000000004e4 .L0 
+     /tmp/ccXUpGzJ.s:1021   .text:00000000000004e8 .L0 
+     /tmp/ccXUpGzJ.s:1023   .text:00000000000004ec .L0 
+     /tmp/ccXUpGzJ.s:1025   .text:00000000000004f0 .L0 
+     /tmp/ccXUpGzJ.s:1026   .text:00000000000004f0 .L0 
+     /tmp/ccXUpGzJ.s:1028   .text:00000000000004f4 .L0 
+     /tmp/ccXUpGzJ.s:1030   .text:00000000000004f8 .L0 
+     /tmp/ccXUpGzJ.s:1039   .text:000000000000050c .L0 
+     /tmp/ccXUpGzJ.s:1046   .text:000000000000050c .L0 
+     /tmp/ccXUpGzJ.s:1047   .text:000000000000050c .L0 
+     /tmp/ccXUpGzJ.s:1048   .text:000000000000050c .L0 
+     /tmp/ccXUpGzJ.s:1057   .text:0000000000000510 .L0 
+     /tmp/ccXUpGzJ.s:1058   .text:0000000000000510 .L0 
+     /tmp/ccXUpGzJ.s:1065   .text:0000000000000510 .L0 
+     /tmp/ccXUpGzJ.s:1066   .text:0000000000000510 .L0 
+     /tmp/ccXUpGzJ.s:1067   .text:0000000000000510 .L0 
+     /tmp/ccXUpGzJ.s:1080   .text:0000000000000524 .L0 
+     /tmp/ccXUpGzJ.s:1088   .text:0000000000000528 .L0 
+     /tmp/ccXUpGzJ.s:1089   .text:0000000000000528 .L0 
+     /tmp/ccXUpGzJ.s:1090   .text:0000000000000528 .L0 
+     /tmp/ccXUpGzJ.s:1097   .text:000000000000052c .L0 
+     /tmp/ccXUpGzJ.s:1098   .text:000000000000052c .L0 
+GAS LISTING /tmp/ccXUpGzJ.s 			page 48
+
+
+     /tmp/ccXUpGzJ.s:1103   .text:000000000000052c .L0 
+     /tmp/ccXUpGzJ.s:1104   .text:000000000000052c .L0 
+     /tmp/ccXUpGzJ.s:1105   .text:000000000000052c .L0 
+     /tmp/ccXUpGzJ.s:1113   .text:0000000000000538 .L0 
+     /tmp/ccXUpGzJ.s:1114   .text:0000000000000538 .L0 
+     /tmp/ccXUpGzJ.s:1120   .text:0000000000000548 .L0 
+     /tmp/ccXUpGzJ.s:1121   .text:0000000000000548 .L0 
+     /tmp/ccXUpGzJ.s:1125   .text:000000000000054c .L0 
+     /tmp/ccXUpGzJ.s:1126   .text:000000000000054c .L0 
+     /tmp/ccXUpGzJ.s:1128   .text:0000000000000550 .L0 
+     /tmp/ccXUpGzJ.s:1130   .text:0000000000000554 .L0 
+     /tmp/ccXUpGzJ.s:1132   .text:0000000000000558 .L0 
+     /tmp/ccXUpGzJ.s:1135   .text:0000000000000560 .L0 
+     /tmp/ccXUpGzJ.s:1138   .text:0000000000000568 .L0 
+     /tmp/ccXUpGzJ.s:1145   .text:0000000000000570 .L0 
+     /tmp/ccXUpGzJ.s:1148   .text:0000000000000574 .L0 
+     /tmp/ccXUpGzJ.s:1151   .text:000000000000057c .L0 
+     /tmp/ccXUpGzJ.s:1154   .text:0000000000000580 .L0 
+     /tmp/ccXUpGzJ.s:1155   .text:0000000000000584 .L0 
+     /tmp/ccXUpGzJ.s:1157   .text:0000000000000588 .L0 
+     /tmp/ccXUpGzJ.s:1158   .text:0000000000000588 .L0 
+     /tmp/ccXUpGzJ.s:1160   .text:000000000000058c .L0 
+     /tmp/ccXUpGzJ.s:1163   .text:0000000000000590 .L0 
+     /tmp/ccXUpGzJ.s:1166   .text:0000000000000594 .L0 
+     /tmp/ccXUpGzJ.s:1168   .text:0000000000000598 .L0 
+     /tmp/ccXUpGzJ.s:866    .text:00000000000003fc _ZN10_BuddyTreeC1EPvmm
+     /tmp/ccXUpGzJ.s:1176   .text:0000000000000598 _ZN10_BuddyTree10allocBlockEi
+     /tmp/ccXUpGzJ.s:1179   .text:0000000000000598 .L0 
+     /tmp/ccXUpGzJ.s:1181   .text:0000000000000598 .L0 
+     /tmp/ccXUpGzJ.s:1182   .text:000000000000059c .L0 
+     /tmp/ccXUpGzJ.s:1190   .text:00000000000005b8 .L0 
+     /tmp/ccXUpGzJ.s:1191   .text:00000000000005b8 .L0 
+     /tmp/ccXUpGzJ.s:1192   .text:00000000000005b8 .L0 
+     /tmp/ccXUpGzJ.s:1193   .text:00000000000005b8 .L0 
+     /tmp/ccXUpGzJ.s:1194   .text:00000000000005b8 .L0 
+     /tmp/ccXUpGzJ.s:1195   .text:00000000000005b8 .L0 
+     /tmp/ccXUpGzJ.s:1196   .text:00000000000005b8 .L0 
+     /tmp/ccXUpGzJ.s:1198   .text:00000000000005bc .L0 
+     /tmp/ccXUpGzJ.s:1203   .text:00000000000005c4 .L0 
+     /tmp/ccXUpGzJ.s:1204   .text:00000000000005c4 .L0 
+     /tmp/ccXUpGzJ.s:1208   .text:00000000000005c8 .L0 
+     /tmp/ccXUpGzJ.s:1209   .text:00000000000005c8 .L0 
+     /tmp/ccXUpGzJ.s:1210   .text:00000000000005c8 .L0 
+     /tmp/ccXUpGzJ.s:1212   .text:00000000000005cc .L0 
+     /tmp/ccXUpGzJ.s:1214   .text:00000000000005d0 .L0 
+     /tmp/ccXUpGzJ.s:1216   .text:00000000000005d4 .L0 
+     /tmp/ccXUpGzJ.s:1220   .text:00000000000005e0 .L0 
+     /tmp/ccXUpGzJ.s:1223   .text:00000000000005e8 .L0 
+     /tmp/ccXUpGzJ.s:1224   .text:00000000000005e8 .L0 
+     /tmp/ccXUpGzJ.s:1227   .text:00000000000005ec .L0 
+     /tmp/ccXUpGzJ.s:1231   .text:00000000000005f0 .L0 
+     /tmp/ccXUpGzJ.s:1235   .text:00000000000005f4 .L0 
+     /tmp/ccXUpGzJ.s:1236   .text:00000000000005f4 .L0 
+     /tmp/ccXUpGzJ.s:1238   .text:00000000000005f8 .L0 
+     /tmp/ccXUpGzJ.s:1239   .text:00000000000005f8 .L0 
+     /tmp/ccXUpGzJ.s:1244   .text:0000000000000608 .L0 
+     /tmp/ccXUpGzJ.s:1245   .text:0000000000000608 .L0 
+GAS LISTING /tmp/ccXUpGzJ.s 			page 49
+
+
+     /tmp/ccXUpGzJ.s:1248   .text:000000000000060c .L0 
+     /tmp/ccXUpGzJ.s:1252   .text:0000000000000610 .L0 
+     /tmp/ccXUpGzJ.s:1253   .text:0000000000000610 .L0 
+     /tmp/ccXUpGzJ.s:1256   .text:0000000000000614 .L0 
+     /tmp/ccXUpGzJ.s:1259   .text:000000000000061c .L0 
+     /tmp/ccXUpGzJ.s:1262   .text:0000000000000620 .L0 
+     /tmp/ccXUpGzJ.s:1263   .text:0000000000000620 .L0 
+     /tmp/ccXUpGzJ.s:1265   .text:0000000000000624 .L0 
+     /tmp/ccXUpGzJ.s:1267   .text:0000000000000628 .L0 
+     /tmp/ccXUpGzJ.s:1271   .text:0000000000000634 .L0 
+     /tmp/ccXUpGzJ.s:1273   .text:0000000000000638 .L0 
+     /tmp/ccXUpGzJ.s:1275   .text:000000000000063c .L0 
+     /tmp/ccXUpGzJ.s:1280   .text:000000000000064c .L0 
+     /tmp/ccXUpGzJ.s:1282   .text:0000000000000650 .L0 
+     /tmp/ccXUpGzJ.s:1288   .text:0000000000000654 .L0 
+     /tmp/ccXUpGzJ.s:1289   .text:0000000000000654 .L0 
+     /tmp/ccXUpGzJ.s:1290   .text:0000000000000654 .L0 
+     /tmp/ccXUpGzJ.s:1296   .text:0000000000000658 .L0 
+     /tmp/ccXUpGzJ.s:1297   .text:0000000000000658 .L0 
+     /tmp/ccXUpGzJ.s:1301   .text:0000000000000658 .L0 
+     /tmp/ccXUpGzJ.s:1302   .text:0000000000000658 .L0 
+     /tmp/ccXUpGzJ.s:1303   .text:0000000000000658 .L0 
+     /tmp/ccXUpGzJ.s:1314   .text:0000000000000670 .L0 
+     /tmp/ccXUpGzJ.s:1315   .text:0000000000000670 .L0 
+     /tmp/ccXUpGzJ.s:1322   .text:0000000000000684 .L0 
+     /tmp/ccXUpGzJ.s:1323   .text:0000000000000688 .L0 
+     /tmp/ccXUpGzJ.s:1324   .text:0000000000000688 .L0 
+     /tmp/ccXUpGzJ.s:1326   .text:000000000000068c .L0 
+     /tmp/ccXUpGzJ.s:1327   .text:000000000000068c .L0 
+     /tmp/ccXUpGzJ.s:1329   .text:0000000000000690 .L0 
+     /tmp/ccXUpGzJ.s:1331   .text:0000000000000694 .L0 
+     /tmp/ccXUpGzJ.s:1334   .text:0000000000000698 .L0 
+     /tmp/ccXUpGzJ.s:1336   .text:000000000000069c .L0 
+     /tmp/ccXUpGzJ.s:1338   .text:00000000000006a0 .L0 
+     /tmp/ccXUpGzJ.s:1340   .text:00000000000006a4 .L0 
+     /tmp/ccXUpGzJ.s:1344   .text:00000000000006a8 .L0 
+     /tmp/ccXUpGzJ.s:1346   .text:00000000000006a8 .L0 
+     /tmp/ccXUpGzJ.s:1349   .text:00000000000006b0 .L0 
+     /tmp/ccXUpGzJ.s:1355   .text:00000000000006b0 _ZN10_BuddyTree5allocEm
+     /tmp/ccXUpGzJ.s:1358   .text:00000000000006b0 .L0 
+     /tmp/ccXUpGzJ.s:1360   .text:00000000000006b0 .L0 
+     /tmp/ccXUpGzJ.s:1361   .text:00000000000006b4 .L0 
+     /tmp/ccXUpGzJ.s:1365   .text:00000000000006c0 .L0 
+     /tmp/ccXUpGzJ.s:1366   .text:00000000000006c0 .L0 
+     /tmp/ccXUpGzJ.s:1367   .text:00000000000006c0 .L0 
+     /tmp/ccXUpGzJ.s:1369   .text:00000000000006c4 .L0 
+     /tmp/ccXUpGzJ.s:1372   .text:00000000000006c8 .L0 
+     /tmp/ccXUpGzJ.s:1373   .text:00000000000006c8 .L0 
+     /tmp/ccXUpGzJ.s:1378   .text:00000000000006d4 .L0 
+     /tmp/ccXUpGzJ.s:1379   .text:00000000000006d4 .L0 
+     /tmp/ccXUpGzJ.s:1383   .text:00000000000006e0 .L0 
+     /tmp/ccXUpGzJ.s:1384   .text:00000000000006e4 .L0 
+     /tmp/ccXUpGzJ.s:1386   .text:00000000000006e8 .L0 
+     /tmp/ccXUpGzJ.s:1387   .text:00000000000006e8 .L0 
+     /tmp/ccXUpGzJ.s:1389   .text:00000000000006ec .L0 
+     /tmp/ccXUpGzJ.s:1392   .text:00000000000006f0 .L0 
+     /tmp/ccXUpGzJ.s:1394   .text:00000000000006f4 .L0 
+GAS LISTING /tmp/ccXUpGzJ.s 			page 50
+
+
+     /tmp/ccXUpGzJ.s:1400   .text:00000000000006f4 _ZN10_BuddyTree7deallocEPv
+     /tmp/ccXUpGzJ.s:1403   .text:00000000000006f4 .L0 
+     /tmp/ccXUpGzJ.s:1405   .text:00000000000006f4 .L0 
+     /tmp/ccXUpGzJ.s:1406   .text:00000000000006f8 .L0 
+     /tmp/ccXUpGzJ.s:1413   .text:0000000000000710 .L0 
+     /tmp/ccXUpGzJ.s:1414   .text:0000000000000710 .L0 
+     /tmp/ccXUpGzJ.s:1415   .text:0000000000000710 .L0 
+     /tmp/ccXUpGzJ.s:1416   .text:0000000000000710 .L0 
+     /tmp/ccXUpGzJ.s:1417   .text:0000000000000710 .L0 
+     /tmp/ccXUpGzJ.s:1418   .text:0000000000000710 .L0 
+     /tmp/ccXUpGzJ.s:1420   .text:0000000000000714 .L0 
+     /tmp/ccXUpGzJ.s:1423   .text:0000000000000718 .L0 
+     /tmp/ccXUpGzJ.s:1424   .text:0000000000000718 .L0 
+     /tmp/ccXUpGzJ.s:1429   .text:0000000000000724 .L0 
+     /tmp/ccXUpGzJ.s:1434   .text:000000000000072c .L0 
+     /tmp/ccXUpGzJ.s:1435   .text:000000000000072c .L0 
+     /tmp/ccXUpGzJ.s:1437   .text:0000000000000730 .L0 
+     /tmp/ccXUpGzJ.s:1442   .text:0000000000000734 .L0 
+     /tmp/ccXUpGzJ.s:1443   .text:0000000000000734 .L0 
+     /tmp/ccXUpGzJ.s:1445   .text:0000000000000738 .L0 
+     /tmp/ccXUpGzJ.s:1447   .text:000000000000073c .L0 
+     /tmp/ccXUpGzJ.s:1453   .text:0000000000000740 .L0 
+     /tmp/ccXUpGzJ.s:1455   .text:0000000000000744 .L0 
+     /tmp/ccXUpGzJ.s:1462   .text:0000000000000748 .L0 
+     /tmp/ccXUpGzJ.s:1463   .text:0000000000000748 .L0 
+     /tmp/ccXUpGzJ.s:1464   .text:0000000000000748 .L0 
+     /tmp/ccXUpGzJ.s:1469   .text:000000000000074c .L0 
+     /tmp/ccXUpGzJ.s:1475   .text:0000000000000750 .L0 
+     /tmp/ccXUpGzJ.s:1477   .text:0000000000000754 .L0 
+     /tmp/ccXUpGzJ.s:1479   .text:0000000000000758 .L0 
+     /tmp/ccXUpGzJ.s:1485   .text:000000000000075c .L0 
+     /tmp/ccXUpGzJ.s:1486   .text:000000000000075c .L0 
+     /tmp/ccXUpGzJ.s:1487   .text:000000000000075c .L0 
+     /tmp/ccXUpGzJ.s:1493   .text:0000000000000760 .L0 
+     /tmp/ccXUpGzJ.s:1494   .text:0000000000000760 .L0 
+     /tmp/ccXUpGzJ.s:1498   .text:0000000000000760 .L0 
+     /tmp/ccXUpGzJ.s:1499   .text:0000000000000760 .L0 
+     /tmp/ccXUpGzJ.s:1500   .text:0000000000000760 .L0 
+     /tmp/ccXUpGzJ.s:1508   .text:000000000000076c .L0 
+     /tmp/ccXUpGzJ.s:1509   .text:000000000000076c .L0 
+     /tmp/ccXUpGzJ.s:1514   .text:000000000000077c .L0 
+     /tmp/ccXUpGzJ.s:1516   .text:0000000000000780 .L0 
+     /tmp/ccXUpGzJ.s:1518   .text:0000000000000784 .L0 
+     /tmp/ccXUpGzJ.s:1521   .text:000000000000078c .L0 
+     /tmp/ccXUpGzJ.s:1527   .text:000000000000079c .L0 
+     /tmp/ccXUpGzJ.s:1529   .text:00000000000007a0 .L0 
+     /tmp/ccXUpGzJ.s:1531   .text:00000000000007a4 .L0 
+     /tmp/ccXUpGzJ.s:1535   .text:00000000000007a8 .L0 
+     /tmp/ccXUpGzJ.s:1536   .text:00000000000007ac .L0 
+     /tmp/ccXUpGzJ.s:1537   .text:00000000000007ac .L0 
+     /tmp/ccXUpGzJ.s:1539   .text:00000000000007b0 .L0 
+     /tmp/ccXUpGzJ.s:1540   .text:00000000000007b0 .L0 
+     /tmp/ccXUpGzJ.s:1542   .text:00000000000007b4 .L0 
+     /tmp/ccXUpGzJ.s:1544   .text:00000000000007b8 .L0 
+     /tmp/ccXUpGzJ.s:1547   .text:00000000000007bc .L0 
+     /tmp/ccXUpGzJ.s:1549   .text:00000000000007c0 .L0 
+     /tmp/ccXUpGzJ.s:1551   .text:00000000000007c4 .L0 
+GAS LISTING /tmp/ccXUpGzJ.s 			page 51
+
+
+     /tmp/ccXUpGzJ.s:1555   .text:00000000000007c8 .L0 
+     /tmp/ccXUpGzJ.s:1559   .text:00000000000007c8 .L0 
+     /tmp/ccXUpGzJ.s:1570   .text:00000000000007d0 .L0 
+     /tmp/ccXUpGzJ.s:1571   .text:00000000000007d0 .L0 
+     /tmp/ccXUpGzJ.s:1578   .text:00000000000007dc .L0 
+     /tmp/ccXUpGzJ.s:1583   .text:00000000000007e0 .L0 
+     /tmp/ccXUpGzJ.s:1584   .text:00000000000007e0 .L0 
+     /tmp/ccXUpGzJ.s:1591   .text:00000000000007ec .L0 
+     /tmp/ccXUpGzJ.s:1596   .text:00000000000007f0 .L0 
+     /tmp/ccXUpGzJ.s:1597   .text:00000000000007f0 .L0 
+     /tmp/ccXUpGzJ.s:1599   .text:00000000000007f4 .L0 
+     /tmp/ccXUpGzJ.s:1605   .text:00000000000007f8 .L0 
+     /tmp/ccXUpGzJ.s:1606   .text:00000000000007f8 .L0 
+     /tmp/ccXUpGzJ.s:1607   .text:00000000000007f8 .L0 
+     /tmp/ccXUpGzJ.s:1613   .text:00000000000007fc .L0 
+     /tmp/ccXUpGzJ.s:1614   .text:00000000000007fc .L0 
+     /tmp/ccXUpGzJ.s:1618   .text:00000000000007fc .L0 
+     /tmp/ccXUpGzJ.s:1619   .text:00000000000007fc .L0 
+     /tmp/ccXUpGzJ.s:1620   .text:00000000000007fc .L0 
+     /tmp/ccXUpGzJ.s:1629   .text:000000000000080c .L0 
+     /tmp/ccXUpGzJ.s:1632   .text:0000000000000810 .L0 
+     /tmp/ccXUpGzJ.s:1633   .text:0000000000000810 .L0 
+     /tmp/ccXUpGzJ.s:1639   .text:0000000000000814 .L0 
+     /tmp/ccXUpGzJ.s:1640   .text:0000000000000814 .L0 
+     /tmp/ccXUpGzJ.s:1641   .text:0000000000000814 .L0 
+     /tmp/ccXUpGzJ.s:1647   .text:0000000000000818 .L0 
+     /tmp/ccXUpGzJ.s:1648   .text:0000000000000818 .L0 
+     /tmp/ccXUpGzJ.s:1652   .text:0000000000000818 .L0 
+     /tmp/ccXUpGzJ.s:1653   .text:0000000000000818 .L0 
+     /tmp/ccXUpGzJ.s:1654   .text:0000000000000818 .L0 
+     /tmp/ccXUpGzJ.s:1663   .text:0000000000000820 .L0 
+     /tmp/ccXUpGzJ.s:1664   .text:0000000000000820 .L0 
+     /tmp/ccXUpGzJ.s:1665   .text:0000000000000820 .L0 
+     /tmp/ccXUpGzJ.s:1667   .text:0000000000000824 .L0 
+     /tmp/ccXUpGzJ.s:1675   .text:0000000000000830 .L0 
+     /tmp/ccXUpGzJ.s:1676   .text:0000000000000834 .L0 
+     /tmp/ccXUpGzJ.s:1687   .text:0000000000000834 _ZN10_BuddyTree5printEv
+     /tmp/ccXUpGzJ.s:1690   .text:0000000000000834 .L0 
+     /tmp/ccXUpGzJ.s:1692   .text:0000000000000834 .L0 
+     /tmp/ccXUpGzJ.s:1693   .text:0000000000000838 .L0 
+     /tmp/ccXUpGzJ.s:1702   .text:0000000000000858 .L0 
+     /tmp/ccXUpGzJ.s:1703   .text:0000000000000858 .L0 
+     /tmp/ccXUpGzJ.s:1704   .text:0000000000000858 .L0 
+     /tmp/ccXUpGzJ.s:1705   .text:0000000000000858 .L0 
+     /tmp/ccXUpGzJ.s:1706   .text:0000000000000858 .L0 
+     /tmp/ccXUpGzJ.s:1707   .text:0000000000000858 .L0 
+     /tmp/ccXUpGzJ.s:1708   .text:0000000000000858 .L0 
+     /tmp/ccXUpGzJ.s:1709   .text:0000000000000858 .L0 
+     /tmp/ccXUpGzJ.s:1711   .text:000000000000085c .L0 
+     /tmp/ccXUpGzJ.s:1715   .text:0000000000000860 .L0 
+     /tmp/ccXUpGzJ.s:1716   .text:0000000000000860 .L0 
+     /tmp/ccXUpGzJ.s:1718   .text:0000000000000860 .L0 
+     /tmp/ccXUpGzJ.s:1719   .text:0000000000000860 .L0 
+     /tmp/ccXUpGzJ.s:1722   .text:0000000000000864 .L0 
+     /tmp/ccXUpGzJ.s:1724   .text:0000000000000868 .L0 
+     /tmp/ccXUpGzJ.s:1732   .text:0000000000000870 .L0 
+     /tmp/ccXUpGzJ.s:1733   .text:0000000000000870 .L0 
+GAS LISTING /tmp/ccXUpGzJ.s 			page 52
+
+
+     /tmp/ccXUpGzJ.s:1738   .text:0000000000000880 .L0 
+     /tmp/ccXUpGzJ.s:1742   .text:0000000000000884 .L0 
+     /tmp/ccXUpGzJ.s:1743   .text:0000000000000884 .L0 
+     /tmp/ccXUpGzJ.s:1746   .text:000000000000088c .L0 
+     /tmp/ccXUpGzJ.s:1748   .text:0000000000000890 .L0 
+     /tmp/ccXUpGzJ.s:1750   .text:0000000000000894 .L0 
+     /tmp/ccXUpGzJ.s:1752   .text:0000000000000898 .L0 
+     /tmp/ccXUpGzJ.s:1756   .text:00000000000008a4 .L0 
+     /tmp/ccXUpGzJ.s:1757   .text:00000000000008a4 .L0 
+     /tmp/ccXUpGzJ.s:1759   .text:00000000000008a8 .L0 
+     /tmp/ccXUpGzJ.s:1764   .text:00000000000008b0 .L0 
+     /tmp/ccXUpGzJ.s:1765   .text:00000000000008b0 .L0 
+     /tmp/ccXUpGzJ.s:1769   .text:00000000000008bc .L0 
+     /tmp/ccXUpGzJ.s:1770   .text:00000000000008bc .L0 
+     /tmp/ccXUpGzJ.s:1773   .text:00000000000008c0 .L0 
+     /tmp/ccXUpGzJ.s:1776   .text:00000000000008c4 .L0 
+     /tmp/ccXUpGzJ.s:1778   .text:00000000000008c8 .L0 
+     /tmp/ccXUpGzJ.s:1779   .text:00000000000008c8 .L0 
+     /tmp/ccXUpGzJ.s:1783   .text:00000000000008cc .L0 
+     /tmp/ccXUpGzJ.s:1787   .text:00000000000008d0 .L0 
+     /tmp/ccXUpGzJ.s:1788   .text:00000000000008d0 .L0 
+     /tmp/ccXUpGzJ.s:1790   .text:00000000000008d4 .L0 
+     /tmp/ccXUpGzJ.s:1794   .text:00000000000008d8 .L0 
+     /tmp/ccXUpGzJ.s:1801   .text:00000000000008e0 .L0 
+     /tmp/ccXUpGzJ.s:1802   .text:00000000000008e4 .L0 
+     /tmp/ccXUpGzJ.s:1804   .text:00000000000008e8 .L0 
+     /tmp/ccXUpGzJ.s:1805   .text:00000000000008e8 .L0 
+     /tmp/ccXUpGzJ.s:1807   .text:00000000000008ec .L0 
+     /tmp/ccXUpGzJ.s:1809   .text:00000000000008f0 .L0 
+     /tmp/ccXUpGzJ.s:1811   .text:00000000000008f4 .L0 
+     /tmp/ccXUpGzJ.s:1814   .text:00000000000008f8 .L0 
+     /tmp/ccXUpGzJ.s:1817   .text:00000000000008fc .L0 
+     /tmp/ccXUpGzJ.s:1820   .text:0000000000000900 .L0 
+     /tmp/ccXUpGzJ.s:1823   .text:0000000000000904 .L0 
+     /tmp/ccXUpGzJ.s:1825   .text:0000000000000908 .L0 
+     /tmp/ccXUpGzJ.s:1837   .rodata:0000000000000000 _ZN10_BuddyNode4NEXTE
+     /tmp/ccXUpGzJ.s:1841   .rodata:0000000000000004 _ZN10_BuddyNode6M_FREEE
+     /tmp/ccXUpGzJ.s:1845   .rodata:0000000000000008 _ZN10_BuddyNode6M_LEAFE
+     /tmp/ccXUpGzJ.s:1849   .rodata:000000000000000c _ZN10_BuddyNode8M_ACTIVEE
+     /tmp/ccXUpGzJ.s:1853   .rodata:0000000000000010 _ZN10_BuddyNode8DATA_LENE
+     /tmp/ccXUpGzJ.s:1863   .text:0000000000000908 .L0 
+     /tmp/ccXUpGzJ.s:1681   .rodata.str1.8:0000000000000000 .LC0
+     /tmp/ccXUpGzJ.s:1733   .text:0000000000000870 .L0 
+     /tmp/ccXUpGzJ.s:46     .text:0000000000000030 .L3
+     /tmp/ccXUpGzJ.s:36     .text:0000000000000024 .L2
+     /tmp/ccXUpGzJ.s:99     .text:000000000000007c .L7
+     /tmp/ccXUpGzJ.s:79     .text:0000000000000058 .L6
+     /tmp/ccXUpGzJ.s:194    .text:00000000000000c8 .L15
+     /tmp/ccXUpGzJ.s:234    .text:00000000000000f8 .L16
+     /tmp/ccXUpGzJ.s:273    .text:0000000000000128 .L17
+     /tmp/ccXUpGzJ.s:142    .text:00000000000000a4 .L10
+     /tmp/ccXUpGzJ.s:182    .text:00000000000000b8 .L9
+     /tmp/ccXUpGzJ.s:157    .text:00000000000000a8 .L12
+     /tmp/ccXUpGzJ.s:172    .text:00000000000000ac .L13
+     /tmp/ccXUpGzJ.s:361    .text:0000000000000190 .L19
+     /tmp/ccXUpGzJ.s:347    .text:0000000000000180 .L20
+     /tmp/ccXUpGzJ.s:413    .text:00000000000001c4 .L23
+GAS LISTING /tmp/ccXUpGzJ.s 			page 53
+
+
+     /tmp/ccXUpGzJ.s:399    .text:00000000000001b4 .L24
+     /tmp/ccXUpGzJ.s:657    .text:000000000000030c .L29
+     /tmp/ccXUpGzJ.s:635    .text:00000000000002e8 .L26
+     /tmp/ccXUpGzJ.s:840    .text:00000000000003e4 .L37
+     /tmp/ccXUpGzJ.s:844    .text:00000000000003e8 .L35
+     /tmp/ccXUpGzJ.s:854    .text:00000000000003f4 .L38
+     /tmp/ccXUpGzJ.s:763    .text:0000000000000394 .L36
+     /tmp/ccXUpGzJ.s:954    .text:0000000000000474 .L41
+     /tmp/ccXUpGzJ.s:895    .text:0000000000000428 .L42
+     /tmp/ccXUpGzJ.s:1014   .text:00000000000004e0 .L45
+     /tmp/ccXUpGzJ.s:1077   .text:0000000000000524 .L43
+     /tmp/ccXUpGzJ.s:1010   .text:00000000000004dc .L44
+     /tmp/ccXUpGzJ.s:1142   .text:0000000000000570 .L46
+     /tmp/ccXUpGzJ.s:1123   .text:000000000000054c .L47
+     /tmp/ccXUpGzJ.s:1229   .text:00000000000005f0 .L50
+     /tmp/ccXUpGzJ.s:1206   .text:00000000000005c8 .L51
+     /tmp/ccXUpGzJ.s:1343   .text:00000000000006a8 .L55
+     /tmp/ccXUpGzJ.s:1250   .text:0000000000000610 .L53
+     /tmp/ccXUpGzJ.s:1233   .text:00000000000005f4 .L54
+     /tmp/ccXUpGzJ.s:1320   .text:0000000000000684 .L49
+     /tmp/ccXUpGzJ.s:1533   .text:00000000000007a8 .L59
+     /tmp/ccXUpGzJ.s:1471   .text:0000000000000750 .L61
+     /tmp/ccXUpGzJ.s:1554   .text:00000000000007c8 .L62
+     /tmp/ccXUpGzJ.s:1562   .text:00000000000007d0 .L66
+     /tmp/ccXUpGzJ.s:1448   .text:0000000000000740 .L63
+     /tmp/ccXUpGzJ.s:1432   .text:000000000000072c .L64
+     /tmp/ccXUpGzJ.s:1785   .text:00000000000008d0 .L72
+     /tmp/ccXUpGzJ.s:1761   .text:00000000000008b0 .L69
+     /tmp/ccXUpGzJ.s:1736   .text:0000000000000880 .L70
+     /tmp/ccXUpGzJ.s:1727   .text:0000000000000870 .L74
+     /tmp/ccXUpGzJ.s:1796   .text:00000000000008e0 .L67
+     /tmp/ccXUpGzJ.s:1740   .text:0000000000000884 .L71
+     /tmp/ccXUpGzJ.s:4669   .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+     /tmp/ccXUpGzJ.s:7852   .debug_str:000000000000089d .LASF159
+     /tmp/ccXUpGzJ.s:7688   .debug_str:000000000000037e .LASF160
+     /tmp/ccXUpGzJ.s:7786   .debug_str:000000000000064c .LASF161
+     /tmp/ccXUpGzJ.s:5      .text:0000000000000000 .Ltext0
+     /tmp/ccXUpGzJ.s:1856   .text:0000000000000908 .Letext0
+     /tmp/ccXUpGzJ.s:7560   .debug_line:0000000000000000 .Ldebug_line0
+     /tmp/ccXUpGzJ.s:7704   .debug_str:00000000000003d0 .LASF0
+     /tmp/ccXUpGzJ.s:7696   .debug_str:00000000000003a9 .LASF1
+     /tmp/ccXUpGzJ.s:7724   .debug_str:000000000000046c .LASF2
+     /tmp/ccXUpGzJ.s:7800   .debug_str:00000000000006f3 .LASF3
+     /tmp/ccXUpGzJ.s:7806   .debug_str:0000000000000710 .LASF4
+     /tmp/ccXUpGzJ.s:7574   .debug_str:000000000000005f .LASF5
+     /tmp/ccXUpGzJ.s:7778   .debug_str:0000000000000609 .LASF6
+     /tmp/ccXUpGzJ.s:7714   .debug_str:000000000000042a .LASF7
+     /tmp/ccXUpGzJ.s:7666   .debug_str:00000000000002d5 .LASF8
+     /tmp/ccXUpGzJ.s:7674   .debug_str:0000000000000324 .LASF9
+     /tmp/ccXUpGzJ.s:7606   .debug_str:0000000000000135 .LASF10
+     /tmp/ccXUpGzJ.s:7656   .debug_str:0000000000000296 .LASF11
+     /tmp/ccXUpGzJ.s:7620   .debug_str:000000000000019d .LASF12
+     /tmp/ccXUpGzJ.s:7604   .debug_str:0000000000000125 .LASF13
+     /tmp/ccXUpGzJ.s:7832   .debug_str:00000000000007fb .LASF14
+     /tmp/ccXUpGzJ.s:7640   .debug_str:000000000000021f .LASF15
+     /tmp/ccXUpGzJ.s:7826   .debug_str:00000000000007c6 .LASF16
+     /tmp/ccXUpGzJ.s:7580   .debug_str:0000000000000075 .LASF17
+GAS LISTING /tmp/ccXUpGzJ.s 			page 54
+
+
+     /tmp/ccXUpGzJ.s:7572   .debug_str:0000000000000054 .LASF41
+     /tmp/ccXUpGzJ.s:7718   .debug_str:0000000000000443 .LASF67
+     /tmp/ccXUpGzJ.s:7780   .debug_str:000000000000061c .LASF18
+     /tmp/ccXUpGzJ.s:7678   .debug_str:0000000000000346 .LASF19
+     /tmp/ccXUpGzJ.s:7680   .debug_str:000000000000034f .LASF20
+     /tmp/ccXUpGzJ.s:7608   .debug_str:0000000000000144 .LASF21
+     /tmp/ccXUpGzJ.s:7622   .debug_str:00000000000001ad .LASF22
+     /tmp/ccXUpGzJ.s:7812   .debug_str:0000000000000738 .LASF23
+     /tmp/ccXUpGzJ.s:7892   .debug_str:0000000000000a68 .LASF25
+     /tmp/ccXUpGzJ.s:7760   .debug_str:0000000000000586 .LASF24
+     /tmp/ccXUpGzJ.s:7854   .debug_str:000000000000096d .LASF26
+     /tmp/ccXUpGzJ.s:7694   .debug_str:00000000000003a2 .LASF27
+     /tmp/ccXUpGzJ.s:7668   .debug_str:00000000000002e5 .LASF28
+     /tmp/ccXUpGzJ.s:7734   .debug_str:00000000000004c3 .LASF29
+     /tmp/ccXUpGzJ.s:7562   .debug_str:0000000000000000 .LASF31
+     /tmp/ccXUpGzJ.s:7706   .debug_str:00000000000003e2 .LASF30
+     /tmp/ccXUpGzJ.s:7642   .debug_str:0000000000000235 .LASF32
+     /tmp/ccXUpGzJ.s:7636   .debug_str:00000000000001fd .LASF33
+     /tmp/ccXUpGzJ.s:7596   .debug_str:00000000000000d9 .LASF34
+     /tmp/ccXUpGzJ.s:7570   .debug_str:0000000000000048 .LASF35
+     /tmp/ccXUpGzJ.s:7796   .debug_str:00000000000006cd .LASF36
+     /tmp/ccXUpGzJ.s:7872   .debug_str:00000000000009de .LASF37
+     /tmp/ccXUpGzJ.s:7630   .debug_str:00000000000001d4 .LASF38
+     /tmp/ccXUpGzJ.s:7840   .debug_str:0000000000000835 .LASF39
+     /tmp/ccXUpGzJ.s:7728   .debug_str:0000000000000487 .LASF40
+     /tmp/ccXUpGzJ.s:7602   .debug_str:0000000000000111 .LASF42
+     /tmp/ccXUpGzJ.s:7576   .debug_str:0000000000000066 .LASF47
+     /tmp/ccXUpGzJ.s:7836   .debug_str:000000000000080e .LASF49
+     /tmp/ccXUpGzJ.s:7726   .debug_str:000000000000047f .LASF43
+     /tmp/ccXUpGzJ.s:7808   .debug_str:0000000000000717 .LASF44
+     /tmp/ccXUpGzJ.s:7862   .debug_str:000000000000099c .LASF45
+     /tmp/ccXUpGzJ.s:7758   .debug_str:000000000000056b .LASF46
+     /tmp/ccXUpGzJ.s:7600   .debug_str:0000000000000109 .LASF48
+     /tmp/ccXUpGzJ.s:7730   .debug_str:00000000000004a3 .LASF50
+     /tmp/ccXUpGzJ.s:7582   .debug_str:000000000000007c .LASF51
+     /tmp/ccXUpGzJ.s:7772   .debug_str:00000000000005db .LASF52
+     /tmp/ccXUpGzJ.s:7610   .debug_str:000000000000014b .LASF53
+     /tmp/ccXUpGzJ.s:7710   .debug_str:00000000000003fe .LASF54
+     /tmp/ccXUpGzJ.s:7814   .debug_str:0000000000000741 .LASF55
+     /tmp/ccXUpGzJ.s:7670   .debug_str:00000000000002fe .LASF56
+     /tmp/ccXUpGzJ.s:7878   .debug_str:0000000000000a14 .LASF57
+     /tmp/ccXUpGzJ.s:7638   .debug_str:0000000000000205 .LASF58
+     /tmp/ccXUpGzJ.s:7868   .debug_str:00000000000009b9 .LASF59
+     /tmp/ccXUpGzJ.s:7848   .debug_str:0000000000000877 .LASF60
+     /tmp/ccXUpGzJ.s:7662   .debug_str:00000000000002b3 .LASF61
+     /tmp/ccXUpGzJ.s:7846   .debug_str:0000000000000858 .LASF62
+     /tmp/ccXUpGzJ.s:7624   .debug_str:00000000000001b2 .LASF63
+     /tmp/ccXUpGzJ.s:7782   .debug_str:0000000000000625 .LASF64
+     /tmp/ccXUpGzJ.s:7736   .debug_str:00000000000004cd .LASF65
+     /tmp/ccXUpGzJ.s:7890   .debug_str:0000000000000a5d .LASF66
+     /tmp/ccXUpGzJ.s:7754   .debug_str:0000000000000554 .LASF68
+     /tmp/ccXUpGzJ.s:7818   .debug_str:0000000000000766 .LASF69
+     /tmp/ccXUpGzJ.s:7770   .debug_str:00000000000005d2 .LASF70
+     /tmp/ccXUpGzJ.s:7864   .debug_str:00000000000009a5 .LASF71
+     /tmp/ccXUpGzJ.s:7584   .debug_str:0000000000000083 .LASF72
+     /tmp/ccXUpGzJ.s:7874   .debug_str:00000000000009e8 .LASF73
+     /tmp/ccXUpGzJ.s:7578   .debug_str:000000000000006b .LASF74
+GAS LISTING /tmp/ccXUpGzJ.s 			page 55
+
+
+     /tmp/ccXUpGzJ.s:7820   .debug_str:000000000000076c .LASF75
+     /tmp/ccXUpGzJ.s:7816   .debug_str:000000000000074a .LASF76
+     /tmp/ccXUpGzJ.s:7894   .debug_str:0000000000000a83 .LASF77
+     /tmp/ccXUpGzJ.s:7794   .debug_str:00000000000006b6 .LASF78
+     /tmp/ccXUpGzJ.s:7614   .debug_str:000000000000016b .LASF79
+     /tmp/ccXUpGzJ.s:7870   .debug_str:00000000000009c6 .LASF80
+     /tmp/ccXUpGzJ.s:7634   .debug_str:00000000000001f6 .LASF81
+     /tmp/ccXUpGzJ.s:7752   .debug_str:000000000000053b .LASF82
+     /tmp/ccXUpGzJ.s:7682   .debug_str:0000000000000356 .LASF83
+     /tmp/ccXUpGzJ.s:7612   .debug_str:0000000000000151 .LASF84
+     /tmp/ccXUpGzJ.s:7648   .debug_str:0000000000000274 .LASF85
+     /tmp/ccXUpGzJ.s:7646   .debug_str:000000000000025c .LASF86
+     /tmp/ccXUpGzJ.s:7722   .debug_str:0000000000000460 .LASF87
+     /tmp/ccXUpGzJ.s:7822   .debug_str:0000000000000788 .LASF88
+     /tmp/ccXUpGzJ.s:7658   .debug_str:00000000000002a5 .LASF89
+     /tmp/ccXUpGzJ.s:7590   .debug_str:00000000000000a5 .LASF90
+     /tmp/ccXUpGzJ.s:7788   .debug_str:0000000000000670 .LASF91
+     /tmp/ccXUpGzJ.s:7850   .debug_str:0000000000000897 .LASF92
+     /tmp/ccXUpGzJ.s:7900   .debug_str:0000000000000a96 .LASF93
+     /tmp/ccXUpGzJ.s:7672   .debug_str:0000000000000319 .LASF94
+     /tmp/ccXUpGzJ.s:7766   .debug_str:00000000000005af .LASF95
+     /tmp/ccXUpGzJ.s:7738   .debug_str:00000000000004d2 .LASF96
+     /tmp/ccXUpGzJ.s:7744   .debug_str:00000000000004fe .LASF97
+     /tmp/ccXUpGzJ.s:7564   .debug_str:000000000000001c .LASF98
+     /tmp/ccXUpGzJ.s:7764   .debug_str:0000000000000597 .LASF99
+     /tmp/ccXUpGzJ.s:7650   .debug_str:000000000000027a .LASF100
+     /tmp/ccXUpGzJ.s:7830   .debug_str:00000000000007e2 .LASF101
+     /tmp/ccXUpGzJ.s:7776   .debug_str:00000000000005fc .LASF102
+     /tmp/ccXUpGzJ.s:7684   .debug_str:000000000000035e .LASF103
+     /tmp/ccXUpGzJ.s:7880   .debug_str:0000000000000a1c .LASF104
+     /tmp/ccXUpGzJ.s:7802   .debug_str:0000000000000701 .LASF105
+     /tmp/ccXUpGzJ.s:7858   .debug_str:000000000000098b .LASF106
+     /tmp/ccXUpGzJ.s:7884   .debug_str:0000000000000a31 .LASF107
+     /tmp/ccXUpGzJ.s:7768   .debug_str:00000000000005cd .LASF127
+     /tmp/ccXUpGzJ.s:7740   .debug_str:00000000000004da .LASF108
+     /tmp/ccXUpGzJ.s:7588   .debug_str:000000000000009d .LASF109
+     /tmp/ccXUpGzJ.s:7774   .debug_str:00000000000005f4 .LASF110
+     /tmp/ccXUpGzJ.s:7860   .debug_str:0000000000000996 .LASF111
+     /tmp/ccXUpGzJ.s:7856   .debug_str:0000000000000986 .LASF112
+     /tmp/ccXUpGzJ.s:7628   .debug_str:00000000000001cf .LASF113
+     /tmp/ccXUpGzJ.s:7828   .debug_str:00000000000007dc .LASF114
+     /tmp/ccXUpGzJ.s:7810   .debug_str:0000000000000731 .LASF115
+     /tmp/ccXUpGzJ.s:7898   .debug_str:0000000000000a90 .LASF116
+     /tmp/ccXUpGzJ.s:7644   .debug_str:000000000000024f .LASF117
+     /tmp/ccXUpGzJ.s:7568   .debug_str:0000000000000038 .LASF118
+     /tmp/ccXUpGzJ.s:7698   .debug_str:00000000000003b6 .LASF119
+     /tmp/ccXUpGzJ.s:7756   .debug_str:000000000000055a .LASF120
+     /tmp/ccXUpGzJ.s:7838   .debug_str:0000000000000825 .LASF121
+     /tmp/ccXUpGzJ.s:7626   .debug_str:00000000000001bd .LASF162
+     /tmp/ccXUpGzJ.s:7618   .debug_str:000000000000018b .LASF163
+     /tmp/ccXUpGzJ.s:7702   .debug_str:00000000000003cb .LASF122
+     /tmp/ccXUpGzJ.s:7594   .debug_str:00000000000000c6 .LASF123
+     /tmp/ccXUpGzJ.s:7632   .debug_str:00000000000001f0 .LASF124
+     /tmp/ccXUpGzJ.s:7676   .debug_str:0000000000000332 .LASF125
+     /tmp/ccXUpGzJ.s:7842   .debug_str:000000000000083f .LASF126
+     /tmp/ccXUpGzJ.s:7652   .debug_str:0000000000000281 .LASF128
+     /tmp/ccXUpGzJ.s:7748   .debug_str:000000000000051e .LASF129
+GAS LISTING /tmp/ccXUpGzJ.s 			page 56
+
+
+     /tmp/ccXUpGzJ.s:7902   .debug_str:0000000000000aae .LASF130
+     /tmp/ccXUpGzJ.s:7686   .debug_str:000000000000036b .LASF131
+     /tmp/ccXUpGzJ.s:7690   .debug_str:0000000000000396 .LASF132
+     /tmp/ccXUpGzJ.s:7654   .debug_str:000000000000028e .LASF133
+     /tmp/ccXUpGzJ.s:7876   .debug_str:0000000000000a0e .LASF134
+     /tmp/ccXUpGzJ.s:7592   .debug_str:00000000000000c1 .LASF137
+     /tmp/ccXUpGzJ.s:7844   .debug_str:0000000000000844 .LASF139
+     /tmp/ccXUpGzJ.s:7746   .debug_str:0000000000000519 .LASF135
+     /tmp/ccXUpGzJ.s:7712   .debug_str:0000000000000416 .LASF136
+     /tmp/ccXUpGzJ.s:7700   .debug_str:00000000000003c6 .LASF164
+     /tmp/ccXUpGzJ.s:7708   .debug_str:00000000000003ea .LASF165
+     /tmp/ccXUpGzJ.s:7882   .debug_str:0000000000000a2a .LASF138
+     /tmp/ccXUpGzJ.s:7566   .debug_str:0000000000000022 .LASF140
+     /tmp/ccXUpGzJ.s:7798   .debug_str:00000000000006ec .LASF141
+     /tmp/ccXUpGzJ.s:7598   .debug_str:00000000000000f3 .LASF142
+     /tmp/ccXUpGzJ.s:7888   .debug_str:0000000000000a51 .LASF143
+     /tmp/ccXUpGzJ.s:7824   .debug_str:00000000000007a8 .LASF144
+     /tmp/ccXUpGzJ.s:7784   .debug_str:0000000000000643 .LASF166
+     /tmp/ccXUpGzJ.s:7790   .debug_str:0000000000000687 .LASF167
+     /tmp/ccXUpGzJ.s:7616   .debug_str:0000000000000171 .LASF145
+     /tmp/ccXUpGzJ.s:7886   .debug_str:0000000000000a37 .LASF146
+     /tmp/ccXUpGzJ.s:7742   .debug_str:00000000000004e6 .LASF147
+     /tmp/ccXUpGzJ.s:7720   .debug_str:0000000000000448 .LASF148
+     /tmp/ccXUpGzJ.s:7664   .debug_str:00000000000002bf .LASF149
+     /tmp/ccXUpGzJ.s:1688   .text:0000000000000834 .LFB40
+     /tmp/ccXUpGzJ.s:1826   .text:0000000000000908 .LFE40
+     /tmp/ccXUpGzJ.s:7660   .debug_str:00000000000002ae .LASF150
+     /tmp/ccXUpGzJ.s:5867   .debug_loc:0000000000000000 .LLST101
+     /tmp/ccXUpGzJ.s:5885   .debug_loc:000000000000004c .LLST102
+     /tmp/ccXUpGzJ.s:5907   .debug_loc:00000000000000ab .LLST103
+     /tmp/ccXUpGzJ.s:7450   .debug_ranges:0000000000000000 .Ldebug_ranges0
+     /tmp/ccXUpGzJ.s:5923   .debug_loc:00000000000000f5 .LLST104
+     /tmp/ccXUpGzJ.s:5935   .debug_loc:000000000000012c .LLST105
+     /tmp/ccXUpGzJ.s:1735   .text:0000000000000880 .LVL194
+     /tmp/ccXUpGzJ.s:1754   .text:00000000000008a4 .LVL196
+     /tmp/ccXUpGzJ.s:1767   .text:00000000000008bc .LVL197
+     /tmp/ccXUpGzJ.s:1401   .text:00000000000006f4 .LFB39
+     /tmp/ccXUpGzJ.s:1677   .text:0000000000000834 .LFE39
+     /tmp/ccXUpGzJ.s:5942   .debug_loc:000000000000014f .LLST80
+     /tmp/ccXUpGzJ.s:5964   .debug_loc:00000000000001ae .LLST81
+     /tmp/ccXUpGzJ.s:7804   .debug_str:000000000000070b .LASF151
+     /tmp/ccXUpGzJ.s:5978   .debug_loc:00000000000001e7 .LLST82
+     /tmp/ccXUpGzJ.s:6012   .debug_loc:0000000000000261 .LLST83
+     /tmp/ccXUpGzJ.s:1439   .text:0000000000000734 .LBB282
+     /tmp/ccXUpGzJ.s:6019   .debug_loc:0000000000000284 .LLST84
+     /tmp/ccXUpGzJ.s:6030   .debug_loc:00000000000002ba .LLST85
+     /tmp/ccXUpGzJ.s:1457   .text:0000000000000748 .LBB285
+     /tmp/ccXUpGzJ.s:6041   .debug_loc:00000000000002f0 .LLST86
+     /tmp/ccXUpGzJ.s:1460   .text:0000000000000748 .LBB287
+     /tmp/ccXUpGzJ.s:1467   .text:000000000000074c .LBE287
+     /tmp/ccXUpGzJ.s:6066   .debug_loc:0000000000000343 .LLST87
+     /tmp/ccXUpGzJ.s:1567   .text:00000000000007d0 .LBB289
+     /tmp/ccXUpGzJ.s:1576   .text:00000000000007dc .LBE289
+     /tmp/ccXUpGzJ.s:6073   .debug_loc:0000000000000366 .LLST88
+     /tmp/ccXUpGzJ.s:1580   .text:00000000000007e0 .LBB291
+     /tmp/ccXUpGzJ.s:1589   .text:00000000000007ec .LBE291
+     /tmp/ccXUpGzJ.s:6085   .debug_loc:000000000000038e .LLST89
+GAS LISTING /tmp/ccXUpGzJ.s 			page 57
+
+
+     /tmp/ccXUpGzJ.s:1482   .text:000000000000075c .LBB294
+     /tmp/ccXUpGzJ.s:6097   .debug_loc:00000000000003b6 .LLST90
+     /tmp/ccXUpGzJ.s:1483   .text:000000000000075c .LBB295
+     /tmp/ccXUpGzJ.s:1490   .text:0000000000000760 .LBE295
+     /tmp/ccXUpGzJ.s:6104   .debug_loc:00000000000003d9 .LLST91
+     /tmp/ccXUpGzJ.s:1496   .text:0000000000000760 .LBB297
+     /tmp/ccXUpGzJ.s:1505   .text:000000000000076c .LBE297
+     /tmp/ccXUpGzJ.s:6111   .debug_loc:00000000000003fc .LLST92
+     /tmp/ccXUpGzJ.s:1602   .text:00000000000007f8 .LBB302
+     /tmp/ccXUpGzJ.s:6118   .debug_loc:000000000000041f .LLST93
+     /tmp/ccXUpGzJ.s:1603   .text:00000000000007f8 .LBB303
+     /tmp/ccXUpGzJ.s:1610   .text:00000000000007fc .LBE303
+     /tmp/ccXUpGzJ.s:6125   .debug_loc:0000000000000442 .LLST94
+     /tmp/ccXUpGzJ.s:1616   .text:00000000000007fc .LBB305
+     /tmp/ccXUpGzJ.s:1626   .text:000000000000080c .LBE305
+     /tmp/ccXUpGzJ.s:6132   .debug_loc:0000000000000465 .LLST95
+     /tmp/ccXUpGzJ.s:1636   .text:0000000000000814 .LBB308
+     /tmp/ccXUpGzJ.s:6139   .debug_loc:0000000000000488 .LLST96
+     /tmp/ccXUpGzJ.s:1637   .text:0000000000000814 .LBB309
+     /tmp/ccXUpGzJ.s:1644   .text:0000000000000818 .LBE309
+     /tmp/ccXUpGzJ.s:6146   .debug_loc:00000000000004ab .LLST97
+     /tmp/ccXUpGzJ.s:1650   .text:0000000000000818 .LBB311
+     /tmp/ccXUpGzJ.s:1658   .text:0000000000000820 .LBE311
+     /tmp/ccXUpGzJ.s:6153   .debug_loc:00000000000004ce .LLST98
+     /tmp/ccXUpGzJ.s:1661   .text:0000000000000820 .LBB314
+     /tmp/ccXUpGzJ.s:1673   .text:0000000000000830 .LBE314
+     /tmp/ccXUpGzJ.s:6160   .debug_loc:00000000000004f1 .LLST99
+     /tmp/ccXUpGzJ.s:6173   .debug_loc:0000000000000529 .LLST100
+     /tmp/ccXUpGzJ.s:1425   .text:0000000000000720 .LVL160
+     /tmp/ccXUpGzJ.s:1512   .text:000000000000077c .LVL171
+     /tmp/ccXUpGzJ.s:1525   .text:000000000000079c .LVL173
+     /tmp/ccXUpGzJ.s:1177   .text:0000000000000598 .LFB38
+     /tmp/ccXUpGzJ.s:1350   .text:00000000000006b0 .LFE38
+     /tmp/ccXUpGzJ.s:6180   .debug_loc:000000000000054c .LLST70
+     /tmp/ccXUpGzJ.s:7716   .debug_str:000000000000043d .LASF152
+     /tmp/ccXUpGzJ.s:6206   .debug_loc:00000000000005be .LLST71
+     /tmp/ccXUpGzJ.s:7834   .debug_str:0000000000000807 .LASF153
+     /tmp/ccXUpGzJ.s:6224   .debug_loc:000000000000060a .LLST72
+     /tmp/ccXUpGzJ.s:6247   .debug_loc:0000000000000679 .LLST73
+     /tmp/ccXUpGzJ.s:1285   .text:0000000000000654 .LBB276
+     /tmp/ccXUpGzJ.s:6254   .debug_loc:000000000000069c .LLST74
+     /tmp/ccXUpGzJ.s:1286   .text:0000000000000654 .LBB277
+     /tmp/ccXUpGzJ.s:1293   .text:0000000000000658 .LBE277
+     /tmp/ccXUpGzJ.s:6261   .debug_loc:00000000000006bf .LLST75
+     /tmp/ccXUpGzJ.s:1299   .text:0000000000000658 .LBB279
+     /tmp/ccXUpGzJ.s:1311   .text:0000000000000670 .LBE279
+     /tmp/ccXUpGzJ.s:6268   .debug_loc:00000000000006e2 .LLST76
+     /tmp/ccXUpGzJ.s:1242   .text:0000000000000608 .LVL140
+     /tmp/ccXUpGzJ.s:1269   .text:0000000000000634 .LVL145
+     /tmp/ccXUpGzJ.s:1278   .text:000000000000064c .LVL146
+     /tmp/ccXUpGzJ.s:1319   .text:0000000000000684 .LVL150
+     /tmp/ccXUpGzJ.s:1356   .text:00000000000006b0 .LFB37
+     /tmp/ccXUpGzJ.s:1395   .text:00000000000006f4 .LFE37
+     /tmp/ccXUpGzJ.s:6275   .debug_loc:0000000000000705 .LLST77
+     /tmp/ccXUpGzJ.s:6293   .debug_loc:0000000000000751 .LLST78
+     /tmp/ccXUpGzJ.s:6307   .debug_loc:000000000000078a .LLST79
+     /tmp/ccXUpGzJ.s:1374   .text:00000000000006d0 .LVL155
+GAS LISTING /tmp/ccXUpGzJ.s 			page 58
+
+
+     /tmp/ccXUpGzJ.s:1381   .text:00000000000006e0 .LVL157
+     /tmp/ccXUpGzJ.s:7896   .debug_str:0000000000000a88 .LASF154
+     /tmp/ccXUpGzJ.s:7762   .debug_str:000000000000058d .LASF155
+     /tmp/ccXUpGzJ.s:7732   .debug_str:00000000000004bd .LASF156
+     /tmp/ccXUpGzJ.s:7866   .debug_str:00000000000009af .LASF157
+     /tmp/ccXUpGzJ.s:7792   .debug_str:000000000000069f .LASF168
+     /tmp/ccXUpGzJ.s:867    .text:00000000000003fc .LFB35
+     /tmp/ccXUpGzJ.s:1169   .text:0000000000000598 .LFE35
+     /tmp/ccXUpGzJ.s:6314   .debug_loc:00000000000007ad .LLST53
+     /tmp/ccXUpGzJ.s:6332   .debug_loc:00000000000007f9 .LLST54
+     /tmp/ccXUpGzJ.s:6346   .debug_loc:0000000000000832 .LLST55
+     /tmp/ccXUpGzJ.s:6365   .debug_loc:000000000000087f .LLST56
+     /tmp/ccXUpGzJ.s:1033   .text:0000000000000508 .LVL120
+     /tmp/ccXUpGzJ.s:897    .text:0000000000000428 .LBB251
+     /tmp/ccXUpGzJ.s:950    .text:0000000000000470 .LBE251
+     /tmp/ccXUpGzJ.s:6379   .debug_loc:00000000000008b8 .LLST57
+     /tmp/ccXUpGzJ.s:6432   .debug_loc:0000000000000936 .LLST58
+     /tmp/ccXUpGzJ.s:903    .text:0000000000000430 .LBB252
+     /tmp/ccXUpGzJ.s:919    .text:0000000000000448 .LBE252
+     /tmp/ccXUpGzJ.s:6570   .debug_loc:0000000000000a27 .LLST59
+     /tmp/ccXUpGzJ.s:6577   .debug_loc:0000000000000a4a .LLST60
+     /tmp/ccXUpGzJ.s:6584   .debug_loc:0000000000000a6d .LLST61
+     /tmp/ccXUpGzJ.s:1042   .text:000000000000050c .LBB255
+     /tmp/ccXUpGzJ.s:6596   .debug_loc:0000000000000aa4 .LLST62
+     /tmp/ccXUpGzJ.s:1043   .text:000000000000050c .LBB256
+     /tmp/ccXUpGzJ.s:1044   .text:000000000000050c .LBB257
+     /tmp/ccXUpGzJ.s:1051   .text:0000000000000510 .LBE257
+     /tmp/ccXUpGzJ.s:6603   .debug_loc:0000000000000ac7 .LLST64
+     /tmp/ccXUpGzJ.s:1063   .text:0000000000000510 .LBB259
+     /tmp/ccXUpGzJ.s:1073   .text:0000000000000520 .LBE259
+     /tmp/ccXUpGzJ.s:6610   .debug_loc:0000000000000aea .LLST65
+     /tmp/ccXUpGzJ.s:1085   .text:0000000000000528 .LBB265
+     /tmp/ccXUpGzJ.s:6617   .debug_loc:0000000000000b0d .LLST66
+     /tmp/ccXUpGzJ.s:1086   .text:0000000000000528 .LBB266
+     /tmp/ccXUpGzJ.s:1093   .text:000000000000052c .LBE266
+     /tmp/ccXUpGzJ.s:6624   .debug_loc:0000000000000b30 .LLST67
+     /tmp/ccXUpGzJ.s:1101   .text:000000000000052c .LBB268
+     /tmp/ccXUpGzJ.s:1110   .text:0000000000000538 .LBE268
+     /tmp/ccXUpGzJ.s:6631   .debug_loc:0000000000000b53 .LLST68
+     /tmp/ccXUpGzJ.s:1119   .text:0000000000000548 .LBB271
+     /tmp/ccXUpGzJ.s:1143   .text:0000000000000570 .LBE271
+     /tmp/ccXUpGzJ.s:6638   .debug_loc:0000000000000b76 .LLST69
+     /tmp/ccXUpGzJ.s:1117   .text:0000000000000548 .LVL127
+     /tmp/ccXUpGzJ.s:721    .text:0000000000000354 .LFB33
+     /tmp/ccXUpGzJ.s:861    .text:00000000000003fc .LFE33
+     /tmp/ccXUpGzJ.s:6654   .debug_loc:0000000000000bc0 .LLST43
+     /tmp/ccXUpGzJ.s:6665   .debug_loc:0000000000000bf6 .LLST44
+     /tmp/ccXUpGzJ.s:7692   .debug_str:000000000000039d .LASF158
+     /tmp/ccXUpGzJ.s:6679   .debug_loc:0000000000000c2f .LLST45
+     /tmp/ccXUpGzJ.s:6722   .debug_loc:0000000000000ca3 .LLST46
+     /tmp/ccXUpGzJ.s:773    .text:00000000000003a0 .LBB240
+     /tmp/ccXUpGzJ.s:815    .text:00000000000003c8 .LBE240
+     /tmp/ccXUpGzJ.s:6752   .debug_loc:0000000000000d0a .LLST47
+     /tmp/ccXUpGzJ.s:776    .text:00000000000003a0 .LBB242
+     /tmp/ccXUpGzJ.s:783    .text:00000000000003a4 .LBE242
+     /tmp/ccXUpGzJ.s:6781   .debug_loc:0000000000000d61 .LLST48
+     /tmp/ccXUpGzJ.s:787    .text:00000000000003a8 .LBB244
+GAS LISTING /tmp/ccXUpGzJ.s 			page 59
+
+
+     /tmp/ccXUpGzJ.s:797    .text:00000000000003b4 .LBE244
+     /tmp/ccXUpGzJ.s:6788   .debug_loc:0000000000000d84 .LLST49
+     /tmp/ccXUpGzJ.s:801    .text:00000000000003b8 .LBB246
+     /tmp/ccXUpGzJ.s:810    .text:00000000000003c4 .LBE246
+     /tmp/ccXUpGzJ.s:6813   .debug_loc:0000000000000dc8 .LLST50
+     /tmp/ccXUpGzJ.s:823    .text:00000000000003d0 .LBB248
+     /tmp/ccXUpGzJ.s:835    .text:00000000000003e0 .LBE248
+     /tmp/ccXUpGzJ.s:6828   .debug_loc:0000000000000df3 .LLST51
+     /tmp/ccXUpGzJ.s:6841   .debug_loc:0000000000000e2b .LLST52
+     /tmp/ccXUpGzJ.s:666    .text:0000000000000310 .LFB32
+     /tmp/ccXUpGzJ.s:715    .text:0000000000000354 .LFE32
+     /tmp/ccXUpGzJ.s:6848   .debug_loc:0000000000000e4e .LLST39
+     /tmp/ccXUpGzJ.s:6862   .debug_loc:0000000000000e87 .LLST40
+     /tmp/ccXUpGzJ.s:6876   .debug_loc:0000000000000ec0 .LLST41
+     /tmp/ccXUpGzJ.s:6890   .debug_loc:0000000000000ef9 .LLST42
+     /tmp/ccXUpGzJ.s:433    .text:00000000000001d8 .LFB31
+     /tmp/ccXUpGzJ.s:660    .text:0000000000000310 .LFE31
+     /tmp/ccXUpGzJ.s:6940   .debug_loc:0000000000000f74 .LLST22
+     /tmp/ccXUpGzJ.s:6962   .debug_loc:0000000000000fd3 .LLST23
+     /tmp/ccXUpGzJ.s:6980   .debug_loc:000000000000101f .LLST24
+     /tmp/ccXUpGzJ.s:6993   .debug_loc:0000000000001057 .LLST25
+     /tmp/ccXUpGzJ.s:478    .text:0000000000000228 .LBB218
+     /tmp/ccXUpGzJ.s:7000   .debug_loc:000000000000107a .LLST26
+     /tmp/ccXUpGzJ.s:479    .text:0000000000000228 .LBB219
+     /tmp/ccXUpGzJ.s:486    .text:000000000000022c .LBE219
+     /tmp/ccXUpGzJ.s:7007   .debug_loc:000000000000109d .LLST27
+     /tmp/ccXUpGzJ.s:492    .text:000000000000022c .LBB221
+     /tmp/ccXUpGzJ.s:504    .text:0000000000000244 .LBE221
+     /tmp/ccXUpGzJ.s:7014   .debug_loc:00000000000010c0 .LLST28
+     /tmp/ccXUpGzJ.s:522    .text:0000000000000260 .LBB224
+     /tmp/ccXUpGzJ.s:532    .text:000000000000026c .LBE224
+     /tmp/ccXUpGzJ.s:7021   .debug_loc:00000000000010e3 .LLST29
+     /tmp/ccXUpGzJ.s:7028   .debug_loc:0000000000001106 .LLST30
+     /tmp/ccXUpGzJ.s:533    .text:000000000000026c .LBB226
+     /tmp/ccXUpGzJ.s:543    .text:0000000000000274 .LBE226
+     /tmp/ccXUpGzJ.s:7035   .debug_loc:0000000000001129 .LLST31
+     /tmp/ccXUpGzJ.s:7048   .debug_loc:0000000000001161 .LLST32
+     /tmp/ccXUpGzJ.s:552    .text:0000000000000280 .LBB228
+     /tmp/ccXUpGzJ.s:7055   .debug_loc:0000000000001184 .LLST33
+     /tmp/ccXUpGzJ.s:553    .text:0000000000000280 .LBB229
+     /tmp/ccXUpGzJ.s:560    .text:0000000000000284 .LBE229
+     /tmp/ccXUpGzJ.s:7062   .debug_loc:00000000000011a7 .LLST34
+     /tmp/ccXUpGzJ.s:566    .text:0000000000000284 .LBB231
+     /tmp/ccXUpGzJ.s:575    .text:0000000000000290 .LBE231
+     /tmp/ccXUpGzJ.s:7069   .debug_loc:00000000000011ca .LLST35
+     /tmp/ccXUpGzJ.s:585    .text:000000000000029c .LBB234
+     /tmp/ccXUpGzJ.s:7076   .debug_loc:00000000000011ed .LLST36
+     /tmp/ccXUpGzJ.s:586    .text:000000000000029c .LBB235
+     /tmp/ccXUpGzJ.s:593    .text:00000000000002a0 .LBE235
+     /tmp/ccXUpGzJ.s:7083   .debug_loc:0000000000001210 .LLST37
+     /tmp/ccXUpGzJ.s:599    .text:00000000000002a0 .LBB237
+     /tmp/ccXUpGzJ.s:607    .text:00000000000002a8 .LBE237
+     /tmp/ccXUpGzJ.s:7090   .debug_loc:0000000000001233 .LLST38
+     /tmp/ccXUpGzJ.s:517    .text:000000000000025c .LVL60
+     /tmp/ccXUpGzJ.s:620    .text:00000000000002c8 .LVL71
+     /tmp/ccXUpGzJ.s:627    .text:00000000000002dc .LVL72
+     /tmp/ccXUpGzJ.s:377    .text:000000000000019c .LFB30
+GAS LISTING /tmp/ccXUpGzJ.s 			page 60
+
+
+     /tmp/ccXUpGzJ.s:427    .text:00000000000001d8 .LFE30
+     /tmp/ccXUpGzJ.s:7097   .debug_loc:0000000000001256 .LLST18
+     /tmp/ccXUpGzJ.s:7111   .debug_loc:000000000000128f .LLST19
+     /tmp/ccXUpGzJ.s:7131   .debug_loc:00000000000012dd .LLST20
+     /tmp/ccXUpGzJ.s:7147   .debug_loc:0000000000001327 .LLST21
+     /tmp/ccXUpGzJ.s:318    .text:0000000000000158 .LFB29
+     /tmp/ccXUpGzJ.s:371    .text:000000000000019c .LFE29
+     /tmp/ccXUpGzJ.s:7169   .debug_loc:0000000000001377 .LLST15
+     /tmp/ccXUpGzJ.s:7183   .debug_loc:00000000000013b0 .LLST16
+     /tmp/ccXUpGzJ.s:7199   .debug_loc:00000000000013fa .LLST17
+     /tmp/ccXUpGzJ.s:113    .text:0000000000000088 .LFB28
+     /tmp/ccXUpGzJ.s:312    .text:0000000000000158 .LFE28
+     /tmp/ccXUpGzJ.s:7215   .debug_loc:0000000000001444 .LLST4
+     /tmp/ccXUpGzJ.s:127    .text:0000000000000098 .LBB188
+     /tmp/ccXUpGzJ.s:7262   .debug_loc:00000000000014f8 .LLST5
+     /tmp/ccXUpGzJ.s:131    .text:0000000000000098 .LBB190
+     /tmp/ccXUpGzJ.s:139    .text:00000000000000a0 .LBE190
+     /tmp/ccXUpGzJ.s:7273   .debug_loc:000000000000152e .LLST6
+     /tmp/ccXUpGzJ.s:198    .text:00000000000000c8 .LBB192
+     /tmp/ccXUpGzJ.s:207    .text:00000000000000d4 .LBE192
+     /tmp/ccXUpGzJ.s:7280   .debug_loc:0000000000001551 .LLST7
+     /tmp/ccXUpGzJ.s:211    .text:00000000000000d8 .LBB194
+     /tmp/ccXUpGzJ.s:220    .text:00000000000000e4 .LBE194
+     /tmp/ccXUpGzJ.s:7287   .debug_loc:0000000000001574 .LLST8
+     /tmp/ccXUpGzJ.s:147    .text:00000000000000a4 .LBB197
+     /tmp/ccXUpGzJ.s:7294   .debug_loc:0000000000001597 .LLST9
+     /tmp/ccXUpGzJ.s:237    .text:00000000000000f8 .LBB199
+     /tmp/ccXUpGzJ.s:246    .text:0000000000000104 .LBE199
+     /tmp/ccXUpGzJ.s:7305   .debug_loc:00000000000015cd .LLST10
+     /tmp/ccXUpGzJ.s:250    .text:0000000000000108 .LBB201
+     /tmp/ccXUpGzJ.s:259    .text:0000000000000114 .LBE201
+     /tmp/ccXUpGzJ.s:7312   .debug_loc:00000000000015f0 .LLST11
+     /tmp/ccXUpGzJ.s:162    .text:00000000000000a8 .LBB206
+     /tmp/ccXUpGzJ.s:7319   .debug_loc:0000000000001613 .LLST12
+     /tmp/ccXUpGzJ.s:276    .text:0000000000000128 .LBB208
+     /tmp/ccXUpGzJ.s:285    .text:0000000000000134 .LBE208
+     /tmp/ccXUpGzJ.s:7330   .debug_loc:0000000000001649 .LLST13
+     /tmp/ccXUpGzJ.s:289    .text:0000000000000138 .LBB210
+     /tmp/ccXUpGzJ.s:298    .text:0000000000000144 .LBE210
+     /tmp/ccXUpGzJ.s:7337   .debug_loc:000000000000166c .LLST14
+     /tmp/ccXUpGzJ.s:181    .text:00000000000000b8 .LVL17
+     /tmp/ccXUpGzJ.s:231    .text:00000000000000f4 .LVL24
+     /tmp/ccXUpGzJ.s:270    .text:0000000000000124 .LVL31
+     /tmp/ccXUpGzJ.s:309    .text:0000000000000154 .LVL38
+     /tmp/ccXUpGzJ.s:59     .text:0000000000000038 .LFB27
+     /tmp/ccXUpGzJ.s:107    .text:0000000000000088 .LFE27
+     /tmp/ccXUpGzJ.s:7344   .debug_loc:000000000000168f .LLST2
+     /tmp/ccXUpGzJ.s:7369   .debug_loc:00000000000016f1 .LLST3
+     /tmp/ccXUpGzJ.s:10     .text:0000000000000000 .LFB26
+     /tmp/ccXUpGzJ.s:53     .text:0000000000000038 .LFE26
+     /tmp/ccXUpGzJ.s:7376   .debug_loc:0000000000001714 .LLST0
+     /tmp/ccXUpGzJ.s:7390   .debug_loc:000000000000174d .LLST1
+     /tmp/ccXUpGzJ.s:7750   .debug_str:0000000000000527 .LASF169
+     /tmp/ccXUpGzJ.s:7586   .debug_str:0000000000000095 .LASF170
+     /tmp/ccXUpGzJ.s:1691   .text:0000000000000834 .LVL191
+     /tmp/ccXUpGzJ.s:1726   .text:0000000000000870 .LVL193
+     /tmp/ccXUpGzJ.s:1818   .text:00000000000008fc .LVL204
+GAS LISTING /tmp/ccXUpGzJ.s 			page 61
+
+
+     /tmp/ccXUpGzJ.s:1714   .text:0000000000000860 .LVL192
+     /tmp/ccXUpGzJ.s:1771   .text:00000000000008c0 .LVL198
+     /tmp/ccXUpGzJ.s:1774   .text:00000000000008c4 .LVL199
+     /tmp/ccXUpGzJ.s:1784   .text:00000000000008d0 .LVL201
+     /tmp/ccXUpGzJ.s:1812   .text:00000000000008f4 .LVL202
+     /tmp/ccXUpGzJ.s:1780   .text:00000000000008cc .LVL200
+     /tmp/ccXUpGzJ.s:1815   .text:00000000000008f8 .LVL203
+     /tmp/ccXUpGzJ.s:1821   .text:0000000000000900 .LVL205
+     /tmp/ccXUpGzJ.s:1404   .text:00000000000006f4 .LVL159
+     /tmp/ccXUpGzJ.s:1545   .text:00000000000007b8 .LVL175
+     /tmp/ccXUpGzJ.s:1553   .text:00000000000007c8 .LVL176
+     /tmp/ccXUpGzJ.s:1427   .text:0000000000000724 .LVL161
+     /tmp/ccXUpGzJ.s:1431   .text:000000000000072c .LVL162
+     /tmp/ccXUpGzJ.s:1532   .text:00000000000007a8 .LVL174
+     /tmp/ccXUpGzJ.s:1668   .text:0000000000000828 .LVL189
+     /tmp/ccXUpGzJ.s:1671   .text:0000000000000830 .LVL190
+     /tmp/ccXUpGzJ.s:1523   .text:0000000000000794 .LVL172
+     /tmp/ccXUpGzJ.s:1438   .text:0000000000000734 .LVL163
+     /tmp/ccXUpGzJ.s:1449   .text:0000000000000740 .LVL164
+     /tmp/ccXUpGzJ.s:1561   .text:00000000000007d0 .LVL177
+     /tmp/ccXUpGzJ.s:1456   .text:0000000000000748 .LVL165
+     /tmp/ccXUpGzJ.s:1465   .text:000000000000074c .LVL166
+     /tmp/ccXUpGzJ.s:1470   .text:0000000000000750 .LVL167
+     /tmp/ccXUpGzJ.s:1592   .text:00000000000007f0 .LVL181
+     /tmp/ccXUpGzJ.s:1574   .text:00000000000007dc .LVL178
+     /tmp/ccXUpGzJ.s:1579   .text:00000000000007e0 .LVL179
+     /tmp/ccXUpGzJ.s:1587   .text:00000000000007ec .LVL180
+     /tmp/ccXUpGzJ.s:1480   .text:000000000000075c .LVL168
+     /tmp/ccXUpGzJ.s:1503   .text:000000000000076c .LVL170
+     /tmp/ccXUpGzJ.s:1488   .text:0000000000000760 .LVL169
+     /tmp/ccXUpGzJ.s:1600   .text:00000000000007f8 .LVL182
+     /tmp/ccXUpGzJ.s:1624   .text:000000000000080c .LVL184
+     /tmp/ccXUpGzJ.s:1608   .text:00000000000007fc .LVL183
+     /tmp/ccXUpGzJ.s:1634   .text:0000000000000814 .LVL186
+     /tmp/ccXUpGzJ.s:1656   .text:0000000000000820 .LVL188
+     /tmp/ccXUpGzJ.s:1642   .text:0000000000000818 .LVL187
+     /tmp/ccXUpGzJ.s:1180   .text:0000000000000598 .LVL134
+     /tmp/ccXUpGzJ.s:1232   .text:00000000000005f4 .LVL139
+     /tmp/ccXUpGzJ.s:1332   .text:0000000000000694 .LVL151
+     /tmp/ccXUpGzJ.s:1342   .text:00000000000006a8 .LVL152
+     /tmp/ccXUpGzJ.s:1347   .text:00000000000006ac .LVL153
+     /tmp/ccXUpGzJ.s:1202   .text:00000000000005c4 .LVL135
+     /tmp/ccXUpGzJ.s:1205   .text:00000000000005c8 .LVL136
+     /tmp/ccXUpGzJ.s:1225   .text:00000000000005ec .LVL137
+     /tmp/ccXUpGzJ.s:1228   .text:00000000000005f0 .LVL138
+     /tmp/ccXUpGzJ.s:1246   .text:000000000000060c .LVL141
+     /tmp/ccXUpGzJ.s:1249   .text:0000000000000610 .LVL142
+     /tmp/ccXUpGzJ.s:1254   .text:0000000000000614 .LVL143
+     /tmp/ccXUpGzJ.s:1260   .text:0000000000000620 .LVL144
+     /tmp/ccXUpGzJ.s:1283   .text:0000000000000654 .LVL147
+     /tmp/ccXUpGzJ.s:1309   .text:0000000000000670 .LVL149
+     /tmp/ccXUpGzJ.s:1291   .text:0000000000000658 .LVL148
+     /tmp/ccXUpGzJ.s:1359   .text:00000000000006b0 .LVL154
+     /tmp/ccXUpGzJ.s:1390   .text:00000000000006ec .LVL158
+     /tmp/ccXUpGzJ.s:1376   .text:00000000000006d4 .LVL156
+     /tmp/ccXUpGzJ.s:870    .text:00000000000003fc .LVL103
+     /tmp/ccXUpGzJ.s:894    .text:0000000000000428 .LVL104
+GAS LISTING /tmp/ccXUpGzJ.s 			page 62
+
+
+     /tmp/ccXUpGzJ.s:1161   .text:000000000000058c .LVL132
+     /tmp/ccXUpGzJ.s:961    .text:0000000000000484 .LVL113
+     /tmp/ccXUpGzJ.s:998    .text:00000000000004cc .LVL116
+     /tmp/ccXUpGzJ.s:1009   .text:00000000000004dc .LVL118
+     /tmp/ccXUpGzJ.s:989    .text:00000000000004c0 .LVL114
+     /tmp/ccXUpGzJ.s:917    .text:0000000000000448 .LVL106
+     /tmp/ccXUpGzJ.s:923    .text:000000000000044c .LVL107
+     /tmp/ccXUpGzJ.s:925    .text:0000000000000450 .LVL108
+     /tmp/ccXUpGzJ.s:938    .text:0000000000000460 .LVL111
+     /tmp/ccXUpGzJ.s:929    .text:0000000000000454 .LVL109
+     /tmp/ccXUpGzJ.s:934    .text:000000000000045c .LVL110
+     /tmp/ccXUpGzJ.s:941    .text:0000000000000464 .LVL112
+     /tmp/ccXUpGzJ.s:992    .text:00000000000004c4 .LVL115
+     /tmp/ccXUpGzJ.s:902    .text:0000000000000430 .LVL105
+     /tmp/ccXUpGzJ.s:1004   .text:00000000000004d4 .LVL117
+     /tmp/ccXUpGzJ.s:1164   .text:0000000000000590 .LVL133
+     /tmp/ccXUpGzJ.s:1035   .text:000000000000050c .LVL121
+     /tmp/ccXUpGzJ.s:1071   .text:0000000000000520 .LVL123
+     /tmp/ccXUpGzJ.s:1049   .text:0000000000000510 .LVL122
+     /tmp/ccXUpGzJ.s:1081   .text:0000000000000528 .LVL124
+     /tmp/ccXUpGzJ.s:1108   .text:0000000000000538 .LVL126
+     /tmp/ccXUpGzJ.s:1091   .text:000000000000052c .LVL125
+     /tmp/ccXUpGzJ.s:1122   .text:000000000000054c .LVL128
+     /tmp/ccXUpGzJ.s:1139   .text:000000000000056c .LVL129
+     /tmp/ccXUpGzJ.s:1141   .text:0000000000000570 .LVL130
+     /tmp/ccXUpGzJ.s:1146   .text:0000000000000574 .LVL131
+     /tmp/ccXUpGzJ.s:724    .text:0000000000000354 .LVL83
+     /tmp/ccXUpGzJ.s:743    .text:0000000000000374 .LVL85
+     /tmp/ccXUpGzJ.s:737    .text:000000000000036c .LVL84
+     /tmp/ccXUpGzJ.s:746    .text:0000000000000378 .LVL86
+     /tmp/ccXUpGzJ.s:762    .text:0000000000000394 .LVL87
+     /tmp/ccXUpGzJ.s:839    .text:00000000000003e4 .LVL99
+     /tmp/ccXUpGzJ.s:843    .text:00000000000003e8 .LVL100
+     /tmp/ccXUpGzJ.s:830    .text:00000000000003d8 .LVL97
+     /tmp/ccXUpGzJ.s:833    .text:00000000000003e0 .LVL98
+     /tmp/ccXUpGzJ.s:853    .text:00000000000003f4 .LVL101
+     /tmp/ccXUpGzJ.s:858    .text:00000000000003f8 .LVL102
+     /tmp/ccXUpGzJ.s:772    .text:00000000000003a0 .LVL88
+     /tmp/ccXUpGzJ.s:781    .text:00000000000003a4 .LVL89
+     /tmp/ccXUpGzJ.s:792    .text:00000000000003ac .LVL91
+     /tmp/ccXUpGzJ.s:813    .text:00000000000003c8 .LVL95
+     /tmp/ccXUpGzJ.s:786    .text:00000000000003a8 .LVL90
+     /tmp/ccXUpGzJ.s:795    .text:00000000000003b4 .LVL92
+     /tmp/ccXUpGzJ.s:800    .text:00000000000003b8 .LVL93
+     /tmp/ccXUpGzJ.s:808    .text:00000000000003c4 .LVL94
+     /tmp/ccXUpGzJ.s:822    .text:00000000000003d0 .LVL96
+     /tmp/ccXUpGzJ.s:669    .text:0000000000000310 .LVL76
+     /tmp/ccXUpGzJ.s:703    .text:0000000000000340 .LVL82
+     /tmp/ccXUpGzJ.s:699    .text:000000000000033c .LVL81
+     /tmp/ccXUpGzJ.s:695    .text:0000000000000338 .LVL80
+     /tmp/ccXUpGzJ.s:681    .text:0000000000000324 .LVL77
+     /tmp/ccXUpGzJ.s:685    .text:0000000000000328 .LVL78
+     /tmp/ccXUpGzJ.s:436    .text:00000000000001d8 .LVL54
+     /tmp/ccXUpGzJ.s:509    .text:0000000000000248 .LVL59
+     /tmp/ccXUpGzJ.s:646    .text:00000000000002f8 .LVL74
+     /tmp/ccXUpGzJ.s:656    .text:000000000000030c .LVL75
+     /tmp/ccXUpGzJ.s:469    .text:000000000000021c .LVL55
+GAS LISTING /tmp/ccXUpGzJ.s 			page 63
+
+
+     /tmp/ccXUpGzJ.s:538    .text:0000000000000270 .LVL63
+     /tmp/ccXUpGzJ.s:541    .text:0000000000000274 .LVL64
+     /tmp/ccXUpGzJ.s:530    .text:000000000000026c .LVL62
+     /tmp/ccXUpGzJ.s:634    .text:00000000000002e8 .LVL73
+     /tmp/ccXUpGzJ.s:476    .text:0000000000000228 .LVL56
+     /tmp/ccXUpGzJ.s:502    .text:0000000000000244 .LVL58
+     /tmp/ccXUpGzJ.s:484    .text:000000000000022c .LVL57
+     /tmp/ccXUpGzJ.s:521    .text:0000000000000260 .LVL61
+     /tmp/ccXUpGzJ.s:550    .text:0000000000000280 .LVL65
+     /tmp/ccXUpGzJ.s:573    .text:0000000000000290 .LVL67
+     /tmp/ccXUpGzJ.s:558    .text:0000000000000284 .LVL66
+     /tmp/ccXUpGzJ.s:583    .text:000000000000029c .LVL68
+     /tmp/ccXUpGzJ.s:605    .text:00000000000002a8 .LVL70
+     /tmp/ccXUpGzJ.s:591    .text:00000000000002a0 .LVL69
+     /tmp/ccXUpGzJ.s:380    .text:000000000000019c .LVL45
+     /tmp/ccXUpGzJ.s:417    .text:00000000000001c8 .LVL53
+     /tmp/ccXUpGzJ.s:392    .text:00000000000001ac .LVL47
+     /tmp/ccXUpGzJ.s:395    .text:00000000000001b0 .LVL48
+     /tmp/ccXUpGzJ.s:388    .text:00000000000001a8 .LVL46
+     /tmp/ccXUpGzJ.s:398    .text:00000000000001b4 .LVL49
+     /tmp/ccXUpGzJ.s:406    .text:00000000000001bc .LVL50
+     /tmp/ccXUpGzJ.s:412    .text:00000000000001c4 .LVL52
+     /tmp/ccXUpGzJ.s:409    .text:00000000000001c0 .LVL51
+     /tmp/ccXUpGzJ.s:321    .text:0000000000000158 .LVL39
+     /tmp/ccXUpGzJ.s:346    .text:0000000000000180 .LVL41
+     /tmp/ccXUpGzJ.s:339    .text:0000000000000178 .LVL40
+     /tmp/ccXUpGzJ.s:357    .text:000000000000018c .LVL43
+     /tmp/ccXUpGzJ.s:360    .text:0000000000000190 .LVL44
+     /tmp/ccXUpGzJ.s:354    .text:0000000000000188 .LVL42
+     /tmp/ccXUpGzJ.s:116    .text:0000000000000088 .LVL10
+     /tmp/ccXUpGzJ.s:179    .text:00000000000000b0 .LVL16
+     /tmp/ccXUpGzJ.s:193    .text:00000000000000c8 .LVL18
+     /tmp/ccXUpGzJ.s:229    .text:00000000000000ec .LVL23
+     /tmp/ccXUpGzJ.s:233    .text:00000000000000f8 .LVL25
+     /tmp/ccXUpGzJ.s:268    .text:000000000000011c .LVL30
+     /tmp/ccXUpGzJ.s:272    .text:0000000000000128 .LVL32
+     /tmp/ccXUpGzJ.s:307    .text:000000000000014c .LVL37
+     /tmp/ccXUpGzJ.s:126    .text:0000000000000098 .LVL11
+     /tmp/ccXUpGzJ.s:143    .text:00000000000000a4 .LVL13
+     /tmp/ccXUpGzJ.s:223    .text:00000000000000e8 .LVL22
+     /tmp/ccXUpGzJ.s:137    .text:00000000000000a0 .LVL12
+     /tmp/ccXUpGzJ.s:205    .text:00000000000000d4 .LVL19
+     /tmp/ccXUpGzJ.s:210    .text:00000000000000d8 .LVL20
+     /tmp/ccXUpGzJ.s:218    .text:00000000000000e4 .LVL21
+     /tmp/ccXUpGzJ.s:158    .text:00000000000000a8 .LVL14
+     /tmp/ccXUpGzJ.s:262    .text:0000000000000118 .LVL29
+     /tmp/ccXUpGzJ.s:244    .text:0000000000000104 .LVL26
+     /tmp/ccXUpGzJ.s:249    .text:0000000000000108 .LVL27
+     /tmp/ccXUpGzJ.s:257    .text:0000000000000114 .LVL28
+     /tmp/ccXUpGzJ.s:173    .text:00000000000000ac .LVL15
+     /tmp/ccXUpGzJ.s:301    .text:0000000000000148 .LVL36
+     /tmp/ccXUpGzJ.s:283    .text:0000000000000134 .LVL33
+     /tmp/ccXUpGzJ.s:288    .text:0000000000000138 .LVL34
+     /tmp/ccXUpGzJ.s:296    .text:0000000000000144 .LVL35
+     /tmp/ccXUpGzJ.s:62     .text:0000000000000038 .LVL6
+     /tmp/ccXUpGzJ.s:78     .text:0000000000000058 .LVL7
+     /tmp/ccXUpGzJ.s:98     .text:000000000000007c .LVL8
+GAS LISTING /tmp/ccXUpGzJ.s 			page 64
+
+
+     /tmp/ccXUpGzJ.s:103    .text:0000000000000080 .LVL9
+     /tmp/ccXUpGzJ.s:14     .text:0000000000000000 .LVL0
+     /tmp/ccXUpGzJ.s:24     .text:0000000000000010 .LVL1
+     /tmp/ccXUpGzJ.s:29     .text:000000000000001c .LVL2
+     /tmp/ccXUpGzJ.s:35     .text:0000000000000024 .LVL3
+     /tmp/ccXUpGzJ.s:45     .text:0000000000000030 .LVL4
+     /tmp/ccXUpGzJ.s:50     .text:0000000000000034 .LVL5
+     /tmp/ccXUpGzJ.s:1864   .debug_info:0000000000000000 .Ldebug_info0
+     /tmp/ccXUpGzJ.s:145    .text:00000000000000a4 .LBE188
+     /tmp/ccXUpGzJ.s:196    .text:00000000000000c8 .LBB215
+     /tmp/ccXUpGzJ.s:225    .text:00000000000000e8 .LBE215
+     /tmp/ccXUpGzJ.s:151    .text:00000000000000a4 .LBE197
+     /tmp/ccXUpGzJ.s:153    .text:00000000000000a4 .LBB205
+     /tmp/ccXUpGzJ.s:160    .text:00000000000000a8 .LBE205
+     /tmp/ccXUpGzJ.s:235    .text:00000000000000f8 .LBB216
+     /tmp/ccXUpGzJ.s:264    .text:0000000000000118 .LBE216
+     /tmp/ccXUpGzJ.s:166    .text:00000000000000a8 .LBE206
+     /tmp/ccXUpGzJ.s:168    .text:00000000000000a8 .LBB214
+     /tmp/ccXUpGzJ.s:175    .text:00000000000000ac .LBE214
+     /tmp/ccXUpGzJ.s:274    .text:0000000000000128 .LBB217
+     /tmp/ccXUpGzJ.s:303    .text:0000000000000148 .LBE217
+     /tmp/ccXUpGzJ.s:487    .text:000000000000022c .LBE218
+     /tmp/ccXUpGzJ.s:491    .text:000000000000022c .LBB223
+     /tmp/ccXUpGzJ.s:505    .text:0000000000000244 .LBE223
+     /tmp/ccXUpGzJ.s:561    .text:0000000000000284 .LBE228
+     /tmp/ccXUpGzJ.s:565    .text:0000000000000284 .LBB233
+     /tmp/ccXUpGzJ.s:576    .text:0000000000000290 .LBE233
+     /tmp/ccXUpGzJ.s:594    .text:00000000000002a0 .LBE234
+     /tmp/ccXUpGzJ.s:598    .text:00000000000002a0 .LBB239
+     /tmp/ccXUpGzJ.s:608    .text:00000000000002a8 .LBE239
+     /tmp/ccXUpGzJ.s:1005   .text:00000000000004d4 .LBB254
+     /tmp/ccXUpGzJ.s:1036   .text:000000000000050c .LBE254
+     /tmp/ccXUpGzJ.s:1041   .text:000000000000050c .LBB263
+     /tmp/ccXUpGzJ.s:1054   .text:0000000000000510 .LBE263
+     /tmp/ccXUpGzJ.s:1060   .text:0000000000000510 .LBB264
+     /tmp/ccXUpGzJ.s:1078   .text:0000000000000524 .LBE264
+     /tmp/ccXUpGzJ.s:1053   .text:0000000000000510 .LBE255
+     /tmp/ccXUpGzJ.s:1061   .text:0000000000000510 .LBB262
+     /tmp/ccXUpGzJ.s:1075   .text:0000000000000520 .LBE262
+     /tmp/ccXUpGzJ.s:1094   .text:000000000000052c .LBE265
+     /tmp/ccXUpGzJ.s:1100   .text:000000000000052c .LBB270
+     /tmp/ccXUpGzJ.s:1111   .text:0000000000000538 .LBE270
+     /tmp/ccXUpGzJ.s:1294   .text:0000000000000658 .LBE276
+     /tmp/ccXUpGzJ.s:1298   .text:0000000000000658 .LBB281
+     /tmp/ccXUpGzJ.s:1312   .text:0000000000000670 .LBE281
+     /tmp/ccXUpGzJ.s:1451   .text:0000000000000740 .LBE282
+     /tmp/ccXUpGzJ.s:1556   .text:00000000000007c8 .LBB300
+     /tmp/ccXUpGzJ.s:1564   .text:00000000000007d0 .LBE300
+     /tmp/ccXUpGzJ.s:1473   .text:0000000000000750 .LBE285
+     /tmp/ccXUpGzJ.s:1565   .text:00000000000007d0 .LBB301
+     /tmp/ccXUpGzJ.s:1594   .text:00000000000007f0 .LBE301
+     /tmp/ccXUpGzJ.s:1491   .text:0000000000000760 .LBE294
+     /tmp/ccXUpGzJ.s:1495   .text:0000000000000760 .LBB299
+     /tmp/ccXUpGzJ.s:1506   .text:000000000000076c .LBE299
+     /tmp/ccXUpGzJ.s:1611   .text:00000000000007fc .LBE302
+     /tmp/ccXUpGzJ.s:1615   .text:00000000000007fc .LBB307
+     /tmp/ccXUpGzJ.s:1627   .text:000000000000080c .LBE307
+GAS LISTING /tmp/ccXUpGzJ.s 			page 65
+
+
+     /tmp/ccXUpGzJ.s:1645   .text:0000000000000818 .LBE308
+     /tmp/ccXUpGzJ.s:1649   .text:0000000000000818 .LBB313
+     /tmp/ccXUpGzJ.s:1659   .text:0000000000000820 .LBE313
+     /tmp/ccXUpGzJ.s:1717   .text:0000000000000860 .LBB316
+     /tmp/ccXUpGzJ.s:1720   .text:0000000000000864 .LBE316
+     /tmp/ccXUpGzJ.s:1728   .text:0000000000000870 .LBB321
+     /tmp/ccXUpGzJ.s:1799   .text:00000000000008e0 .LBE321
+     /tmp/ccXUpGzJ.s:1730   .text:0000000000000870 .LBB318
+     /tmp/ccXUpGzJ.s:1762   .text:00000000000008b0 .LBE318
+     /tmp/ccXUpGzJ.s:1792   .text:00000000000008d8 .LBB319
+     /tmp/ccXUpGzJ.s:1797   .text:00000000000008e0 .LBE319
+
+UNDEFINED SYMBOLS
+_ZN8_Console4putcEc
+_ZnwmPv
+_ZN8_Console11printStringEPKc

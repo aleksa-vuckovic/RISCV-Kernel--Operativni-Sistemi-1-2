@@ -1,0 +1,1190 @@
+GAS LISTING /tmp/ccYRWKA3.s 			page 1
+
+
+   1              		.file	"_Sleep.cpp"
+   2              		.option pic
+   3              		.option norelax
+   4              		.text
+   5              	.Ltext0:
+   6              		.section	.rodata.str1.8,"aMS",@progbits,1
+   7              		.align	3
+   8              	.LC0:
+   9 0000 536C6565 		.string	"Sleep::Node Cache"
+   9      703A3A4E 
+   9      6F646520 
+   9      43616368 
+   9      6500
+  10              		.text
+  11              		.align	2
+  12              		.globl	_ZN6_Sleep4NodenwEm
+  14              	_ZN6_Sleep4NodenwEm:
+  15              	.LFB11:
+  16              		.file 1 "src/_Sleep.cpp"
+   1:src/_Sleep.cpp **** //
+   2:src/_Sleep.cpp **** // Created by os on 5/3/22.
+   3:src/_Sleep.cpp **** //
+   4:src/_Sleep.cpp **** 
+   5:src/_Sleep.cpp **** #include "../h/_Sleep.h"
+   6:src/_Sleep.cpp **** #include "../h/_Mem.h"
+   7:src/_Sleep.cpp **** #include "../h/_Scheduler.h"
+   8:src/_Sleep.cpp **** 
+   9:src/_Sleep.cpp **** kmem_cache_t* _Sleep::Node::cache = nullptr;
+  10:src/_Sleep.cpp **** 
+  11:src/_Sleep.cpp **** void *_Sleep::Node::operator new(size_t size) {
+  17              		.loc 1 11 47
+  18              		.cfi_startproc
+  19              	.LVL0:
+  20 0000 130101FF 		addi	sp,sp,-16
+  21              		.cfi_def_cfa_offset 16
+  22 0004 23341100 		sd	ra,8(sp)
+  23 0008 23308100 		sd	s0,0(sp)
+  24              		.cfi_offset 1, -8
+  25              		.cfi_offset 8, -16
+  26 000c 13040101 		addi	s0,sp,16
+  27              		.cfi_def_cfa 8, 0
+  12:src/_Sleep.cpp ****     if (!cache) cache = kmem_cache_create("Sleep::Node Cache", sizeof(_Sleep::Node), nullptr, nullp
+  28              		.loc 1 12 5
+  29              		.loc 1 12 9 is_stmt 0
+  30 0010 97070000 		ld	a5,.LANCHOR0
+  30      83B70700 
+  31              		.loc 1 12 5
+  32 0018 63820702 		beqz	a5,.L4
+  33              	.LVL1:
+  34              	.L2:
+  13:src/_Sleep.cpp ****     return kmem_cache_alloc(cache);
+  35              		.loc 1 13 5 is_stmt 1
+  36              		.loc 1 13 28 is_stmt 0
+  37 001c 17050000 		ld	a0,.LANCHOR0
+  37      03350500 
+  38 0024 97000000 		call	_Z16kmem_cache_allocP12kmem_cache_t@plt
+  38      E7800000 
+GAS LISTING /tmp/ccYRWKA3.s 			page 2
+
+
+  39              	.LVL2:
+  14:src/_Sleep.cpp **** }
+  40              		.loc 1 14 1
+  41 002c 83308100 		ld	ra,8(sp)
+  42              		.cfi_remember_state
+  43              		.cfi_restore 1
+  44 0030 03340100 		ld	s0,0(sp)
+  45              		.cfi_restore 8
+  46              		.cfi_def_cfa 2, 16
+  47 0034 13010101 		addi	sp,sp,16
+  48              		.cfi_def_cfa_offset 0
+  49 0038 67800000 		jr	ra
+  50              	.LVL3:
+  51              	.L4:
+  52              		.cfi_restore_state
+  12:src/_Sleep.cpp ****     if (!cache) cache = kmem_cache_create("Sleep::Node Cache", sizeof(_Sleep::Node), nullptr, nullp
+  53              		.loc 1 12 17 is_stmt 1 discriminator 1
+  12:src/_Sleep.cpp ****     if (!cache) cache = kmem_cache_create("Sleep::Node Cache", sizeof(_Sleep::Node), nullptr, nullp
+  54              		.loc 1 12 42 is_stmt 0 discriminator 1
+  55 003c 93060000 		li	a3,0
+  56 0040 13060000 		li	a2,0
+  57 0044 93058001 		li	a1,24
+  58 0048 17050000 		lla	a0,.LC0
+  58      13050500 
+  59              	.LVL4:
+  60 0050 97000000 		call	_Z17kmem_cache_createPKcmPFvPvES3_@plt
+  60      E7800000 
+  61              	.LVL5:
+  12:src/_Sleep.cpp ****     if (!cache) cache = kmem_cache_create("Sleep::Node Cache", sizeof(_Sleep::Node), nullptr, nullp
+  62              		.loc 1 12 23 discriminator 1
+  63 0058 97070000 		sd	a0,.LANCHOR0,a5
+  63      23B0A700 
+  64 0060 6FF0DFFB 		j	.L2
+  65              		.cfi_endproc
+  66              	.LFE11:
+  68              		.align	2
+  69              		.globl	_ZN6_Sleep4NodedlEPv
+  71              	_ZN6_Sleep4NodedlEPv:
+  72              	.LFB12:
+  15:src/_Sleep.cpp **** void _Sleep::Node::operator delete(void *adr) {
+  73              		.loc 1 15 47 is_stmt 1
+  74              		.cfi_startproc
+  75              	.LVL6:
+  76 0064 130101FF 		addi	sp,sp,-16
+  77              		.cfi_def_cfa_offset 16
+  78 0068 23341100 		sd	ra,8(sp)
+  79 006c 23308100 		sd	s0,0(sp)
+  80              		.cfi_offset 1, -8
+  81              		.cfi_offset 8, -16
+  82 0070 13040101 		addi	s0,sp,16
+  83              		.cfi_def_cfa 8, 0
+  84 0074 93050500 		mv	a1,a0
+  16:src/_Sleep.cpp ****     kmem_cache_free(cache, adr);
+  85              		.loc 1 16 5
+  86              		.loc 1 16 20 is_stmt 0
+  87 0078 17050000 		ld	a0,.LANCHOR0
+  87      03350500 
+GAS LISTING /tmp/ccYRWKA3.s 			page 3
+
+
+  88              	.LVL7:
+  89 0080 97000000 		call	_Z15kmem_cache_freeP12kmem_cache_tPv@plt
+  89      E7800000 
+  90              	.LVL8:
+  17:src/_Sleep.cpp **** }
+  91              		.loc 1 17 1
+  92 0088 83308100 		ld	ra,8(sp)
+  93              		.cfi_restore 1
+  94 008c 03340100 		ld	s0,0(sp)
+  95              		.cfi_restore 8
+  96              		.cfi_def_cfa 2, 16
+  97 0090 13010101 		addi	sp,sp,16
+  98              		.cfi_def_cfa_offset 0
+  99 0094 67800000 		jr	ra
+ 100              		.cfi_endproc
+ 101              	.LFE12:
+ 103              		.align	2
+ 104              		.globl	_ZN6_Sleep10wake_firstEv
+ 106              	_ZN6_Sleep10wake_firstEv:
+ 107              	.LFB13:
+  18:src/_Sleep.cpp **** 
+  19:src/_Sleep.cpp **** _Sleep::Node* _Sleep::first = nullptr;
+  20:src/_Sleep.cpp **** 
+  21:src/_Sleep.cpp **** thread_t _Sleep::wake_first() {
+ 108              		.loc 1 21 31 is_stmt 1
+ 109              		.cfi_startproc
+ 110 0098 130101FE 		addi	sp,sp,-32
+ 111              		.cfi_def_cfa_offset 32
+ 112 009c 233C1100 		sd	ra,24(sp)
+ 113 00a0 23388100 		sd	s0,16(sp)
+ 114 00a4 23349100 		sd	s1,8(sp)
+ 115              		.cfi_offset 1, -8
+ 116              		.cfi_offset 8, -16
+ 117              		.cfi_offset 9, -24
+ 118 00a8 13040102 		addi	s0,sp,32
+ 119              		.cfi_def_cfa 8, 0
+  22:src/_Sleep.cpp ****     thread_t ret;
+ 120              		.loc 1 22 5
+  23:src/_Sleep.cpp ****     if (first && first->left == 0) {
+ 121              		.loc 1 23 5
+ 122              	.LBB5:
+ 123              		.loc 1 23 33 is_stmt 0
+ 124 00ac 17050000 		ld	a0,.LANCHOR0+8
+ 124      03350500 
+ 125              		.loc 1 23 5
+ 126 00b4 63020504 		beqz	a0,.L9
+ 127              		.loc 1 23 25 discriminator 1
+ 128 00b8 83378500 		ld	a5,8(a0)
+ 129              		.loc 1 23 15 discriminator 1
+ 130 00bc 63800702 		beqz	a5,.L12
+ 131              	.LBE5:
+  24:src/_Sleep.cpp ****         ret = first->thread;
+  25:src/_Sleep.cpp ****         Node* old = first;
+  26:src/_Sleep.cpp ****         first = first->next;
+  27:src/_Sleep.cpp ****         delete old;
+  28:src/_Sleep.cpp ****         return ret;
+  29:src/_Sleep.cpp ****     }
+GAS LISTING /tmp/ccYRWKA3.s 			page 4
+
+
+  30:src/_Sleep.cpp ****     return nullptr;//nema vise niti za budjenje
+ 132              		.loc 1 30 12
+ 133 00c0 93040000 		li	s1,0
+ 134              	.L7:
+  31:src/_Sleep.cpp **** }
+ 135              		.loc 1 31 1
+ 136 00c4 13850400 		mv	a0,s1
+ 137 00c8 83308101 		ld	ra,24(sp)
+ 138              		.cfi_remember_state
+ 139              		.cfi_restore 1
+ 140 00cc 03340101 		ld	s0,16(sp)
+ 141              		.cfi_restore 8
+ 142              		.cfi_def_cfa 2, 32
+ 143 00d0 83348100 		ld	s1,8(sp)
+ 144              		.cfi_restore 9
+ 145 00d4 13010102 		addi	sp,sp,32
+ 146              		.cfi_def_cfa_offset 0
+ 147 00d8 67800000 		jr	ra
+ 148              	.L12:
+ 149              		.cfi_restore_state
+ 150              	.LBB7:
+ 151              	.LBB6:
+  24:src/_Sleep.cpp ****         ret = first->thread;
+ 152              		.loc 1 24 9 is_stmt 1
+  24:src/_Sleep.cpp ****         ret = first->thread;
+ 153              		.loc 1 24 13 is_stmt 0
+ 154 00dc 83340500 		ld	s1,0(a0)
+ 155              	.LVL9:
+  25:src/_Sleep.cpp ****         first = first->next;
+ 156              		.loc 1 25 9 is_stmt 1
+  26:src/_Sleep.cpp ****         delete old;
+ 157              		.loc 1 26 9
+  26:src/_Sleep.cpp ****         delete old;
+ 158              		.loc 1 26 24 is_stmt 0
+ 159 00e0 83370501 		ld	a5,16(a0)
+  26:src/_Sleep.cpp ****         delete old;
+ 160              		.loc 1 26 15
+ 161 00e4 17070000 		sd	a5,.LANCHOR0+8,a4
+ 161      2330F700 
+  27:src/_Sleep.cpp ****         return ret;
+ 162              		.loc 1 27 9 is_stmt 1
+  27:src/_Sleep.cpp ****         return ret;
+ 163              		.loc 1 27 16 is_stmt 0
+ 164 00ec 97000000 		call	_ZN6_Sleep4NodedlEPv
+ 164      E7800000 
+ 165              	.LVL10:
+  28:src/_Sleep.cpp ****     }
+ 166              		.loc 1 28 9 is_stmt 1
+  28:src/_Sleep.cpp ****     }
+ 167              		.loc 1 28 16 is_stmt 0
+ 168 00f4 6FF01FFD 		j	.L7
+ 169              	.LVL11:
+ 170              	.L9:
+ 171              	.LBE6:
+ 172              	.LBE7:
+  30:src/_Sleep.cpp **** }
+ 173              		.loc 1 30 12
+GAS LISTING /tmp/ccYRWKA3.s 			page 5
+
+
+ 174 00f8 93040500 		mv	s1,a0
+ 175 00fc 6FF09FFC 		j	.L7
+ 176              		.cfi_endproc
+ 177              	.LFE13:
+ 179              		.align	2
+ 180              		.globl	_ZN6_Sleep3putEP7_Threadm
+ 182              	_ZN6_Sleep3putEP7_Threadm:
+ 183              	.LFB14:
+  32:src/_Sleep.cpp **** int _Sleep::put(thread_t thread, time_t time) {
+ 184              		.loc 1 32 47 is_stmt 1
+ 185              		.cfi_startproc
+ 186              	.LVL12:
+ 187 0100 130101FD 		addi	sp,sp,-48
+ 188              		.cfi_def_cfa_offset 48
+ 189 0104 23341102 		sd	ra,40(sp)
+ 190 0108 23308102 		sd	s0,32(sp)
+ 191 010c 233C9100 		sd	s1,24(sp)
+ 192 0110 23382101 		sd	s2,16(sp)
+ 193 0114 23343101 		sd	s3,8(sp)
+ 194 0118 23304101 		sd	s4,0(sp)
+ 195              		.cfi_offset 1, -8
+ 196              		.cfi_offset 8, -16
+ 197              		.cfi_offset 9, -24
+ 198              		.cfi_offset 18, -32
+ 199              		.cfi_offset 19, -40
+ 200              		.cfi_offset 20, -48
+ 201 011c 13040103 		addi	s0,sp,48
+ 202              		.cfi_def_cfa 8, 0
+ 203 0120 130A0500 		mv	s4,a0
+ 204 0124 13890500 		mv	s2,a1
+  33:src/_Sleep.cpp ****     Node* cur = first, *prev = 0;
+ 205              		.loc 1 33 5
+ 206              		.loc 1 33 11 is_stmt 0
+ 207 0128 97040000 		ld	s1,.LANCHOR0+8
+ 207      83B40400 
+ 208              	.LVL13:
+  34:src/_Sleep.cpp ****     time_t left = time;
+ 209              		.loc 1 34 5 is_stmt 1
+  33:src/_Sleep.cpp ****     Node* cur = first, *prev = 0;
+ 210              		.loc 1 33 25 is_stmt 0
+ 211 0130 93090000 		li	s3,0
+ 212              	.LVL14:
+ 213              	.L15:
+  35:src/_Sleep.cpp ****     while (cur && left >= cur->left) {
+ 214              		.loc 1 35 5 is_stmt 1
+ 215              		.loc 1 35 16
+ 216 0134 638E0400 		beqz	s1,.L14
+ 217              		.loc 1 35 32 is_stmt 0 discriminator 1
+ 218 0138 83B78400 		ld	a5,8(s1)
+ 219              		.loc 1 35 16 discriminator 1
+ 220 013c 636AF900 		bgtu	a5,s2,.L14
+  36:src/_Sleep.cpp ****         left -= cur->left;
+ 221              		.loc 1 36 9 is_stmt 1
+ 222              		.loc 1 36 14 is_stmt 0
+ 223 0140 3309F940 		sub	s2,s2,a5
+ 224              	.LVL15:
+  37:src/_Sleep.cpp ****         prev = cur, cur = cur->next;
+GAS LISTING /tmp/ccYRWKA3.s 			page 6
+
+
+ 225              		.loc 1 37 9 is_stmt 1
+ 226              		.loc 1 37 14 is_stmt 0
+ 227 0144 93890400 		mv	s3,s1
+ 228              		.loc 1 37 25
+ 229 0148 83B40401 		ld	s1,16(s1)
+ 230              	.LVL16:
+  35:src/_Sleep.cpp ****     while (cur && left >= cur->left) {
+ 231              		.loc 1 35 5
+ 232 014c 6FF09FFE 		j	.L15
+ 233              	.L14:
+  38:src/_Sleep.cpp ****     }
+  39:src/_Sleep.cpp ****     Node* newnode = new Node(thread, left);
+ 234              		.loc 1 39 5 is_stmt 1
+ 235              		.loc 1 39 42 is_stmt 0
+ 236 0150 13058001 		li	a0,24
+ 237              	.LVL17:
+ 238 0154 97000000 		call	_ZN6_Sleep4NodenwEm
+ 238      E7800000 
+ 239              	.LVL18:
+ 240 015c 63080500 		beqz	a0,.L16
+ 241              	.LVL19:
+ 242              	.LBB8:
+ 243              	.LBB9:
+ 244              		.file 2 "src/../h/_Sleep.h"
+   1:src/../h/_Sleep.h **** //
+   2:src/../h/_Sleep.h **** // Created by os on 5/3/22.
+   3:src/../h/_Sleep.h **** //
+   4:src/../h/_Sleep.h **** 
+   5:src/../h/_Sleep.h **** #ifndef PROJECT_BASE__SLEEP_H
+   6:src/../h/_Sleep.h **** #define PROJECT_BASE__SLEEP_H
+   7:src/../h/_Sleep.h **** #include "_Thread.h"
+   8:src/../h/_Sleep.h **** #include "_slab.h"
+   9:src/../h/_Sleep.h **** 
+  10:src/../h/_Sleep.h **** class _Sleep {
+  11:src/../h/_Sleep.h ****     struct Node {
+  12:src/../h/_Sleep.h ****         thread_t thread;
+  13:src/../h/_Sleep.h ****         time_t left;
+  14:src/../h/_Sleep.h ****         Node* next;
+  15:src/../h/_Sleep.h ****         Node(thread_t thread, time_t left) : thread(thread), left(left), next(nullptr) {}
+ 245              		.loc 2 15 86
+ 246 0160 23304501 		sd	s4,0(a0)
+ 247 0164 23342501 		sd	s2,8(a0)
+ 248 0168 23380500 		sd	zero,16(a0)
+ 249              	.LVL20:
+ 250              	.L16:
+ 251              	.LBE9:
+ 252              	.LBE8:
+  40:src/_Sleep.cpp ****     if (!newnode) return -1; //greska u alokaciji
+ 253              		.loc 1 40 5 is_stmt 1 discriminator 4
+ 254 016c 63080504 		beqz	a0,.L20
+  41:src/_Sleep.cpp ****     newnode->next = cur;
+ 255              		.loc 1 41 5
+ 256              		.loc 1 41 19 is_stmt 0
+ 257 0170 23389500 		sd	s1,16(a0)
+  42:src/_Sleep.cpp ****     if (prev) prev->next = newnode;
+ 258              		.loc 1 42 5 is_stmt 1
+ 259 0174 638E0902 		beqz	s3,.L18
+GAS LISTING /tmp/ccYRWKA3.s 			page 7
+
+
+ 260              		.loc 1 42 15 discriminator 1
+ 261              		.loc 1 42 26 is_stmt 0 discriminator 1
+ 262 0178 23B8A900 		sd	a0,16(s3)
+ 263              	.L19:
+  43:src/_Sleep.cpp ****     else first = newnode;
+  44:src/_Sleep.cpp ****     if (cur) cur->left -= left;
+ 264              		.loc 1 44 5 is_stmt 1
+ 265 017c 63840404 		beqz	s1,.L21
+ 266              		.loc 1 44 14 discriminator 1
+ 267              		.loc 1 44 24 is_stmt 0 discriminator 1
+ 268 0180 83B58400 		ld	a1,8(s1)
+ 269 0184 33892541 		sub	s2,a1,s2
+ 270              	.LVL21:
+ 271 0188 23B42401 		sd	s2,8(s1)
+  45:src/_Sleep.cpp ****     return 0;
+ 272              		.loc 1 45 12 discriminator 1
+ 273 018c 13050000 		li	a0,0
+ 274              	.LVL22:
+ 275              	.L17:
+  46:src/_Sleep.cpp **** }
+ 276              		.loc 1 46 1
+ 277 0190 83308102 		ld	ra,40(sp)
+ 278              		.cfi_remember_state
+ 279              		.cfi_restore 1
+ 280 0194 03340102 		ld	s0,32(sp)
+ 281              		.cfi_restore 8
+ 282              		.cfi_def_cfa 2, 48
+ 283 0198 83348101 		ld	s1,24(sp)
+ 284              		.cfi_restore 9
+ 285              	.LVL23:
+ 286 019c 03390101 		ld	s2,16(sp)
+ 287              		.cfi_restore 18
+ 288 01a0 83398100 		ld	s3,8(sp)
+ 289              		.cfi_restore 19
+ 290              	.LVL24:
+ 291 01a4 033A0100 		ld	s4,0(sp)
+ 292              		.cfi_restore 20
+ 293              	.LVL25:
+ 294 01a8 13010103 		addi	sp,sp,48
+ 295              		.cfi_def_cfa_offset 0
+ 296 01ac 67800000 		jr	ra
+ 297              	.LVL26:
+ 298              	.L18:
+ 299              		.cfi_restore_state
+  43:src/_Sleep.cpp ****     else first = newnode;
+ 300              		.loc 1 43 10 is_stmt 1
+  43:src/_Sleep.cpp ****     else first = newnode;
+ 301              		.loc 1 43 16 is_stmt 0
+ 302 01b0 97070000 		sd	a0,.LANCHOR0+8,a5
+ 302      23B0A700 
+ 303 01b8 6FF05FFC 		j	.L19
+ 304              	.L20:
+  40:src/_Sleep.cpp ****     newnode->next = cur;
+ 305              		.loc 1 40 27
+ 306 01bc 1305F0FF 		li	a0,-1
+ 307              	.LVL27:
+ 308 01c0 6FF01FFD 		j	.L17
+GAS LISTING /tmp/ccYRWKA3.s 			page 8
+
+
+ 309              	.LVL28:
+ 310              	.L21:
+  45:src/_Sleep.cpp ****     return 0;
+ 311              		.loc 1 45 12
+ 312 01c4 13050000 		li	a0,0
+ 313              	.LVL29:
+ 314 01c8 6FF09FFC 		j	.L17
+ 315              		.cfi_endproc
+ 316              	.LFE14:
+ 318              		.align	2
+ 319              		.globl	_ZN6_Sleep4tickEv
+ 321              	_ZN6_Sleep4tickEv:
+ 322              	.LFB15:
+  47:src/_Sleep.cpp **** void _Sleep::tick() {
+ 323              		.loc 1 47 21 is_stmt 1
+ 324              		.cfi_startproc
+ 325 01cc 130101FF 		addi	sp,sp,-16
+ 326              		.cfi_def_cfa_offset 16
+ 327 01d0 23341100 		sd	ra,8(sp)
+ 328 01d4 23308100 		sd	s0,0(sp)
+ 329              		.cfi_offset 1, -8
+ 330              		.cfi_offset 8, -16
+ 331 01d8 13040101 		addi	s0,sp,16
+ 332              		.cfi_def_cfa 8, 0
+  48:src/_Sleep.cpp ****     if (first) first->left--;
+ 333              		.loc 1 48 5
+ 334              		.loc 1 48 14 is_stmt 0
+ 335 01dc 97070000 		ld	a5,.LANCHOR0+8
+ 335      83B70700 
+ 336              		.loc 1 48 5
+ 337 01e4 63880700 		beqz	a5,.L26
+ 338              		.loc 1 48 16 is_stmt 1 discriminator 1
+ 339              		.loc 1 48 23 is_stmt 0 discriminator 1
+ 340 01e8 03B78700 		ld	a4,8(a5)
+ 341              		.loc 1 48 27 discriminator 1
+ 342 01ec 1307F7FF 		addi	a4,a4,-1
+ 343 01f0 23B4E700 		sd	a4,8(a5)
+ 344              	.L26:
+  49:src/_Sleep.cpp ****     thread_t woken;
+ 345              		.loc 1 49 5 is_stmt 1
+  50:src/_Sleep.cpp ****     while ((woken = wake_first())) {
+ 346              		.loc 1 50 5
+ 347              		.loc 1 50 33
+ 348              		.loc 1 50 31 is_stmt 0
+ 349 01f4 97000000 		call	_ZN6_Sleep10wake_firstEv
+ 349      E7800000 
+ 350              	.LVL30:
+ 351              		.loc 1 50 33
+ 352 01fc 63080500 		beqz	a0,.L23
+  51:src/_Sleep.cpp ****         woken->sleepPass();
+ 353              		.loc 1 51 9 is_stmt 1
+ 354              		.loc 1 51 25 is_stmt 0
+ 355 0200 97000000 		call	_ZN7_Thread9sleepPassEv@plt
+ 355      E7800000 
+ 356              	.LVL31:
+  50:src/_Sleep.cpp ****     while ((woken = wake_first())) {
+ 357              		.loc 1 50 5
+GAS LISTING /tmp/ccYRWKA3.s 			page 9
+
+
+ 358 0208 6FF0DFFE 		j	.L26
+ 359              	.LVL32:
+ 360              	.L23:
+  52:src/_Sleep.cpp ****     }
+  53:src/_Sleep.cpp **** }
+ 361              		.loc 1 53 1
+ 362 020c 83308100 		ld	ra,8(sp)
+ 363              		.cfi_restore 1
+ 364 0210 03340100 		ld	s0,0(sp)
+ 365              		.cfi_restore 8
+ 366              		.cfi_def_cfa 2, 16
+ 367 0214 13010101 		addi	sp,sp,16
+ 368              		.cfi_def_cfa_offset 0
+ 369 0218 67800000 		jr	ra
+ 370              		.cfi_endproc
+ 371              	.LFE15:
+ 373              		.align	2
+ 374              		.globl	_ZN6_Sleep6removeEP7_Thread
+ 376              	_ZN6_Sleep6removeEP7_Thread:
+ 377              	.LFB16:
+  54:src/_Sleep.cpp **** 
+  55:src/_Sleep.cpp **** int _Sleep::remove(thread_t thread) {
+ 378              		.loc 1 55 37 is_stmt 1
+ 379              		.cfi_startproc
+ 380              	.LVL33:
+ 381 021c 13070500 		mv	a4,a0
+  56:src/_Sleep.cpp ****     Node* prev = nullptr, *cur = first;
+ 382              		.loc 1 56 5
+ 383              	.LVL34:
+ 384              		.loc 1 56 28 is_stmt 0
+ 385 0220 17050000 		ld	a0,.LANCHOR0+8
+ 385      03350500 
+ 386              	.LVL35:
+ 387              		.loc 1 56 11
+ 388 0228 93060000 		li	a3,0
+ 389              	.LVL36:
+ 390              	.L30:
+  57:src/_Sleep.cpp ****     while (cur && cur->thread != thread) prev = cur, cur = cur->next;
+ 391              		.loc 1 57 5 is_stmt 1 discriminator 3
+ 392              		.loc 1 57 16 discriminator 3
+ 393 022c 630C0500 		beqz	a0,.L29
+ 394              		.loc 1 57 24 is_stmt 0 discriminator 1
+ 395 0230 83370500 		ld	a5,0(a0)
+ 396              		.loc 1 57 16 discriminator 1
+ 397 0234 6388E700 		beq	a5,a4,.L29
+ 398              		.loc 1 57 42 is_stmt 1 discriminator 2
+ 399              	.LVL37:
+ 400              		.loc 1 57 47 is_stmt 0 discriminator 2
+ 401 0238 93060500 		mv	a3,a0
+ 402              		.loc 1 57 58 discriminator 2
+ 403 023c 03350501 		ld	a0,16(a0)
+ 404              	.LVL38:
+ 405              		.loc 1 57 5 discriminator 2
+ 406 0240 6FF0DFFE 		j	.L30
+ 407              	.L29:
+  58:src/_Sleep.cpp ****     if (!cur) return -1;
+ 408              		.loc 1 58 5 is_stmt 1
+GAS LISTING /tmp/ccYRWKA3.s 			page 10
+
+
+ 409 0244 63020506 		beqz	a0,.L35
+  55:src/_Sleep.cpp ****     Node* prev = nullptr, *cur = first;
+ 410              		.loc 1 55 37 is_stmt 0
+ 411 0248 130101FF 		addi	sp,sp,-16
+ 412              		.cfi_def_cfa_offset 16
+ 413 024c 23341100 		sd	ra,8(sp)
+ 414 0250 23308100 		sd	s0,0(sp)
+ 415              		.cfi_offset 1, -8
+ 416              		.cfi_offset 8, -16
+ 417 0254 13040101 		addi	s0,sp,16
+ 418              		.cfi_def_cfa 8, 0
+  59:src/_Sleep.cpp ****     if (prev) prev->next = cur->next;
+ 419              		.loc 1 59 5 is_stmt 1
+ 420 0258 63800604 		beqz	a3,.L32
+ 421              		.loc 1 59 15 discriminator 1
+ 422              		.loc 1 59 33 is_stmt 0 discriminator 1
+ 423 025c 83370501 		ld	a5,16(a0)
+ 424              		.loc 1 59 26 discriminator 1
+ 425 0260 23B8F600 		sd	a5,16(a3)
+ 426              	.LVL39:
+ 427              	.L33:
+  60:src/_Sleep.cpp ****     else first = cur->next;
+  61:src/_Sleep.cpp ****     Node* ret = cur; cur = cur->next;
+ 428              		.loc 1 61 5 is_stmt 1
+ 429              		.loc 1 61 22
+ 430              		.loc 1 61 26 is_stmt 0
+ 431 0264 83370501 		ld	a5,16(a0)
+ 432              	.LVL40:
+  62:src/_Sleep.cpp ****     if (cur) cur->left += ret->left;
+ 433              		.loc 1 62 5 is_stmt 1
+ 434 0268 638A0700 		beqz	a5,.L34
+ 435              		.loc 1 62 14 discriminator 1
+ 436              		.loc 1 62 32 is_stmt 0 discriminator 1
+ 437 026c 83368500 		ld	a3,8(a0)
+ 438              	.LVL41:
+ 439              		.loc 1 62 24 discriminator 1
+ 440 0270 03B78700 		ld	a4,8(a5)
+ 441 0274 3307D700 		add	a4,a4,a3
+ 442 0278 23B4E700 		sd	a4,8(a5)
+ 443              	.L34:
+  63:src/_Sleep.cpp ****     delete ret;
+ 444              		.loc 1 63 5 is_stmt 1
+ 445              		.loc 1 63 12 is_stmt 0
+ 446 027c 97000000 		call	_ZN6_Sleep4NodedlEPv
+ 446      E7800000 
+ 447              	.LVL42:
+  64:src/_Sleep.cpp ****     return 0;
+ 448              		.loc 1 64 5 is_stmt 1
+ 449              		.loc 1 64 12 is_stmt 0
+ 450 0284 13050000 		li	a0,0
+  65:src/_Sleep.cpp **** }...
+ 451              		.loc 1 65 1
+ 452 0288 83308100 		ld	ra,8(sp)
+ 453              		.cfi_remember_state
+ 454              		.cfi_restore 1
+ 455 028c 03340100 		ld	s0,0(sp)
+ 456              		.cfi_restore 8
+GAS LISTING /tmp/ccYRWKA3.s 			page 11
+
+
+ 457              		.cfi_def_cfa 2, 16
+ 458 0290 13010101 		addi	sp,sp,16
+ 459              		.cfi_def_cfa_offset 0
+ 460 0294 67800000 		jr	ra
+ 461              	.LVL43:
+ 462              	.L32:
+ 463              		.cfi_restore_state
+  60:src/_Sleep.cpp ****     else first = cur->next;
+ 464              		.loc 1 60 10 is_stmt 1
+  60:src/_Sleep.cpp ****     else first = cur->next;
+ 465              		.loc 1 60 23 is_stmt 0
+ 466 0298 83370501 		ld	a5,16(a0)
+  60:src/_Sleep.cpp ****     else first = cur->next;
+ 467              		.loc 1 60 16
+ 468 029c 17070000 		sd	a5,.LANCHOR0+8,a4
+ 468      2330F700 
+ 469              	.LVL44:
+ 470 02a4 6FF01FFC 		j	.L33
+ 471              	.LVL45:
+ 472              	.L35:
+ 473              		.cfi_def_cfa_register 2
+ 474              		.cfi_restore 1
+ 475              		.cfi_restore 8
+  58:src/_Sleep.cpp ****     if (!cur) return -1;
+ 476              		.loc 1 58 23
+ 477 02a8 1305F0FF 		li	a0,-1
+ 478              	.LVL46:
+ 479              		.loc 1 65 1
+ 480 02ac 67800000 		ret
+ 481              		.cfi_endproc
+ 482              	.LFE16:
+ 484              		.globl	_ZN6_Sleep5firstE
+ 485              		.globl	_ZN6_Sleep4Node5cacheE
+ 486              		.bss
+ 487              		.align	3
+ 488              		.set	.LANCHOR0,. + 0
+ 491              	_ZN6_Sleep4Node5cacheE:
+ 492 0000 00000000 		.zero	8
+ 492      00000000 
+ 495              	_ZN6_Sleep5firstE:
+ 496 0008 00000000 		.zero	8
+ 496      00000000 
+ 497              		.text
+ 498              	.Letext0:
+ 499              		.file 3 "src/../h/../lib/hw.h"
+ 500              		.file 4 "src/../h/types.h"
+ 501              		.file 5 "src/../h/_Thread.h"
+ 502              		.file 6 "src/../h/_slab.h"
+GAS LISTING /tmp/ccYRWKA3.s 			page 12
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 _Sleep.cpp
+     /tmp/ccYRWKA3.s:14     .text:0000000000000000 _ZN6_Sleep4NodenwEm
+     /tmp/ccYRWKA3.s:18     .text:0000000000000000 .L0 
+     /tmp/ccYRWKA3.s:20     .text:0000000000000000 .L0 
+     /tmp/ccYRWKA3.s:21     .text:0000000000000004 .L0 
+     /tmp/ccYRWKA3.s:24     .text:000000000000000c .L0 
+     /tmp/ccYRWKA3.s:25     .text:000000000000000c .L0 
+     /tmp/ccYRWKA3.s:27     .text:0000000000000010 .L0 
+     /tmp/ccYRWKA3.s:29     .text:0000000000000010 .L0 
+     /tmp/ccYRWKA3.s:30     .text:0000000000000010 .L0 
+     /tmp/ccYRWKA3.s:32     .text:0000000000000018 .L0 
+     /tmp/ccYRWKA3.s:36     .text:000000000000001c .L0 
+     /tmp/ccYRWKA3.s:37     .text:000000000000001c .L0 
+     /tmp/ccYRWKA3.s:41     .text:000000000000002c .L0 
+     /tmp/ccYRWKA3.s:42     .text:0000000000000030 .L0 
+     /tmp/ccYRWKA3.s:43     .text:0000000000000030 .L0 
+     /tmp/ccYRWKA3.s:45     .text:0000000000000034 .L0 
+     /tmp/ccYRWKA3.s:46     .text:0000000000000034 .L0 
+     /tmp/ccYRWKA3.s:48     .text:0000000000000038 .L0 
+     /tmp/ccYRWKA3.s:52     .text:000000000000003c .L0 
+     /tmp/ccYRWKA3.s:54     .text:000000000000003c .L0 
+     /tmp/ccYRWKA3.s:55     .text:000000000000003c .L0 
+     /tmp/ccYRWKA3.s:63     .text:0000000000000058 .L0 
+     /tmp/ccYRWKA3.s:65     .text:0000000000000064 .L0 
+     /tmp/ccYRWKA3.s:71     .text:0000000000000064 _ZN6_Sleep4NodedlEPv
+     /tmp/ccYRWKA3.s:74     .text:0000000000000064 .L0 
+     /tmp/ccYRWKA3.s:76     .text:0000000000000064 .L0 
+     /tmp/ccYRWKA3.s:77     .text:0000000000000068 .L0 
+     /tmp/ccYRWKA3.s:80     .text:0000000000000070 .L0 
+     /tmp/ccYRWKA3.s:81     .text:0000000000000070 .L0 
+     /tmp/ccYRWKA3.s:83     .text:0000000000000074 .L0 
+     /tmp/ccYRWKA3.s:86     .text:0000000000000078 .L0 
+     /tmp/ccYRWKA3.s:87     .text:0000000000000078 .L0 
+     /tmp/ccYRWKA3.s:92     .text:0000000000000088 .L0 
+     /tmp/ccYRWKA3.s:93     .text:000000000000008c .L0 
+     /tmp/ccYRWKA3.s:95     .text:0000000000000090 .L0 
+     /tmp/ccYRWKA3.s:96     .text:0000000000000090 .L0 
+     /tmp/ccYRWKA3.s:98     .text:0000000000000094 .L0 
+     /tmp/ccYRWKA3.s:100    .text:0000000000000098 .L0 
+     /tmp/ccYRWKA3.s:106    .text:0000000000000098 _ZN6_Sleep10wake_firstEv
+     /tmp/ccYRWKA3.s:109    .text:0000000000000098 .L0 
+     /tmp/ccYRWKA3.s:110    .text:0000000000000098 .L0 
+     /tmp/ccYRWKA3.s:111    .text:000000000000009c .L0 
+     /tmp/ccYRWKA3.s:115    .text:00000000000000a8 .L0 
+     /tmp/ccYRWKA3.s:116    .text:00000000000000a8 .L0 
+     /tmp/ccYRWKA3.s:117    .text:00000000000000a8 .L0 
+     /tmp/ccYRWKA3.s:119    .text:00000000000000ac .L0 
+     /tmp/ccYRWKA3.s:121    .text:00000000000000ac .L0 
+     /tmp/ccYRWKA3.s:123    .text:00000000000000ac .L0 
+     /tmp/ccYRWKA3.s:124    .text:00000000000000ac .L0 
+     /tmp/ccYRWKA3.s:126    .text:00000000000000b4 .L0 
+     /tmp/ccYRWKA3.s:128    .text:00000000000000b8 .L0 
+     /tmp/ccYRWKA3.s:130    .text:00000000000000bc .L0 
+     /tmp/ccYRWKA3.s:133    .text:00000000000000c0 .L0 
+     /tmp/ccYRWKA3.s:136    .text:00000000000000c4 .L0 
+     /tmp/ccYRWKA3.s:138    .text:00000000000000cc .L0 
+GAS LISTING /tmp/ccYRWKA3.s 			page 13
+
+
+     /tmp/ccYRWKA3.s:139    .text:00000000000000cc .L0 
+     /tmp/ccYRWKA3.s:141    .text:00000000000000d0 .L0 
+     /tmp/ccYRWKA3.s:142    .text:00000000000000d0 .L0 
+     /tmp/ccYRWKA3.s:144    .text:00000000000000d4 .L0 
+     /tmp/ccYRWKA3.s:146    .text:00000000000000d8 .L0 
+     /tmp/ccYRWKA3.s:149    .text:00000000000000dc .L0 
+     /tmp/ccYRWKA3.s:153    .text:00000000000000dc .L0 
+     /tmp/ccYRWKA3.s:154    .text:00000000000000dc .L0 
+     /tmp/ccYRWKA3.s:157    .text:00000000000000e0 .L0 
+     /tmp/ccYRWKA3.s:158    .text:00000000000000e0 .L0 
+     /tmp/ccYRWKA3.s:159    .text:00000000000000e0 .L0 
+     /tmp/ccYRWKA3.s:161    .text:00000000000000e4 .L0 
+     /tmp/ccYRWKA3.s:163    .text:00000000000000ec .L0 
+     /tmp/ccYRWKA3.s:164    .text:00000000000000ec .L0 
+     /tmp/ccYRWKA3.s:167    .text:00000000000000f4 .L0 
+     /tmp/ccYRWKA3.s:168    .text:00000000000000f4 .L0 
+     /tmp/ccYRWKA3.s:174    .text:00000000000000f8 .L0 
+     /tmp/ccYRWKA3.s:176    .text:0000000000000100 .L0 
+     /tmp/ccYRWKA3.s:182    .text:0000000000000100 _ZN6_Sleep3putEP7_Threadm
+     /tmp/ccYRWKA3.s:185    .text:0000000000000100 .L0 
+     /tmp/ccYRWKA3.s:187    .text:0000000000000100 .L0 
+     /tmp/ccYRWKA3.s:188    .text:0000000000000104 .L0 
+     /tmp/ccYRWKA3.s:195    .text:000000000000011c .L0 
+     /tmp/ccYRWKA3.s:196    .text:000000000000011c .L0 
+     /tmp/ccYRWKA3.s:197    .text:000000000000011c .L0 
+     /tmp/ccYRWKA3.s:198    .text:000000000000011c .L0 
+     /tmp/ccYRWKA3.s:199    .text:000000000000011c .L0 
+     /tmp/ccYRWKA3.s:200    .text:000000000000011c .L0 
+     /tmp/ccYRWKA3.s:202    .text:0000000000000120 .L0 
+     /tmp/ccYRWKA3.s:206    .text:0000000000000128 .L0 
+     /tmp/ccYRWKA3.s:207    .text:0000000000000128 .L0 
+     /tmp/ccYRWKA3.s:210    .text:0000000000000130 .L0 
+     /tmp/ccYRWKA3.s:211    .text:0000000000000130 .L0 
+     /tmp/ccYRWKA3.s:215    .text:0000000000000134 .L0 
+     /tmp/ccYRWKA3.s:216    .text:0000000000000134 .L0 
+     /tmp/ccYRWKA3.s:218    .text:0000000000000138 .L0 
+     /tmp/ccYRWKA3.s:220    .text:000000000000013c .L0 
+     /tmp/ccYRWKA3.s:222    .text:0000000000000140 .L0 
+     /tmp/ccYRWKA3.s:223    .text:0000000000000140 .L0 
+     /tmp/ccYRWKA3.s:226    .text:0000000000000144 .L0 
+     /tmp/ccYRWKA3.s:227    .text:0000000000000144 .L0 
+     /tmp/ccYRWKA3.s:229    .text:0000000000000148 .L0 
+     /tmp/ccYRWKA3.s:232    .text:000000000000014c .L0 
+     /tmp/ccYRWKA3.s:235    .text:0000000000000150 .L0 
+     /tmp/ccYRWKA3.s:236    .text:0000000000000150 .L0 
+     /tmp/ccYRWKA3.s:246    .text:0000000000000160 .L0 
+     /tmp/ccYRWKA3.s:254    .text:000000000000016c .L0 
+     /tmp/ccYRWKA3.s:256    .text:0000000000000170 .L0 
+     /tmp/ccYRWKA3.s:257    .text:0000000000000170 .L0 
+     /tmp/ccYRWKA3.s:259    .text:0000000000000174 .L0 
+     /tmp/ccYRWKA3.s:261    .text:0000000000000178 .L0 
+     /tmp/ccYRWKA3.s:262    .text:0000000000000178 .L0 
+     /tmp/ccYRWKA3.s:265    .text:000000000000017c .L0 
+     /tmp/ccYRWKA3.s:267    .text:0000000000000180 .L0 
+     /tmp/ccYRWKA3.s:268    .text:0000000000000180 .L0 
+     /tmp/ccYRWKA3.s:273    .text:000000000000018c .L0 
+     /tmp/ccYRWKA3.s:277    .text:0000000000000190 .L0 
+GAS LISTING /tmp/ccYRWKA3.s 			page 14
+
+
+     /tmp/ccYRWKA3.s:278    .text:0000000000000194 .L0 
+     /tmp/ccYRWKA3.s:279    .text:0000000000000194 .L0 
+     /tmp/ccYRWKA3.s:281    .text:0000000000000198 .L0 
+     /tmp/ccYRWKA3.s:282    .text:0000000000000198 .L0 
+     /tmp/ccYRWKA3.s:284    .text:000000000000019c .L0 
+     /tmp/ccYRWKA3.s:287    .text:00000000000001a0 .L0 
+     /tmp/ccYRWKA3.s:289    .text:00000000000001a4 .L0 
+     /tmp/ccYRWKA3.s:292    .text:00000000000001a8 .L0 
+     /tmp/ccYRWKA3.s:295    .text:00000000000001ac .L0 
+     /tmp/ccYRWKA3.s:299    .text:00000000000001b0 .L0 
+     /tmp/ccYRWKA3.s:301    .text:00000000000001b0 .L0 
+     /tmp/ccYRWKA3.s:302    .text:00000000000001b0 .L0 
+     /tmp/ccYRWKA3.s:306    .text:00000000000001bc .L0 
+     /tmp/ccYRWKA3.s:312    .text:00000000000001c4 .L0 
+     /tmp/ccYRWKA3.s:315    .text:00000000000001cc .L0 
+     /tmp/ccYRWKA3.s:321    .text:00000000000001cc _ZN6_Sleep4tickEv
+     /tmp/ccYRWKA3.s:324    .text:00000000000001cc .L0 
+     /tmp/ccYRWKA3.s:325    .text:00000000000001cc .L0 
+     /tmp/ccYRWKA3.s:326    .text:00000000000001d0 .L0 
+     /tmp/ccYRWKA3.s:329    .text:00000000000001d8 .L0 
+     /tmp/ccYRWKA3.s:330    .text:00000000000001d8 .L0 
+     /tmp/ccYRWKA3.s:332    .text:00000000000001dc .L0 
+     /tmp/ccYRWKA3.s:334    .text:00000000000001dc .L0 
+     /tmp/ccYRWKA3.s:335    .text:00000000000001dc .L0 
+     /tmp/ccYRWKA3.s:337    .text:00000000000001e4 .L0 
+     /tmp/ccYRWKA3.s:339    .text:00000000000001e8 .L0 
+     /tmp/ccYRWKA3.s:340    .text:00000000000001e8 .L0 
+     /tmp/ccYRWKA3.s:342    .text:00000000000001ec .L0 
+     /tmp/ccYRWKA3.s:346    .text:00000000000001f4 .L0 
+     /tmp/ccYRWKA3.s:347    .text:00000000000001f4 .L0 
+     /tmp/ccYRWKA3.s:348    .text:00000000000001f4 .L0 
+     /tmp/ccYRWKA3.s:349    .text:00000000000001f4 .L0 
+     /tmp/ccYRWKA3.s:352    .text:00000000000001fc .L0 
+     /tmp/ccYRWKA3.s:354    .text:0000000000000200 .L0 
+     /tmp/ccYRWKA3.s:355    .text:0000000000000200 .L0 
+     /tmp/ccYRWKA3.s:358    .text:0000000000000208 .L0 
+     /tmp/ccYRWKA3.s:362    .text:000000000000020c .L0 
+     /tmp/ccYRWKA3.s:363    .text:0000000000000210 .L0 
+     /tmp/ccYRWKA3.s:365    .text:0000000000000214 .L0 
+     /tmp/ccYRWKA3.s:366    .text:0000000000000214 .L0 
+     /tmp/ccYRWKA3.s:368    .text:0000000000000218 .L0 
+     /tmp/ccYRWKA3.s:370    .text:000000000000021c .L0 
+     /tmp/ccYRWKA3.s:376    .text:000000000000021c _ZN6_Sleep6removeEP7_Thread
+     /tmp/ccYRWKA3.s:379    .text:000000000000021c .L0 
+     /tmp/ccYRWKA3.s:381    .text:000000000000021c .L0 
+     /tmp/ccYRWKA3.s:384    .text:0000000000000220 .L0 
+     /tmp/ccYRWKA3.s:385    .text:0000000000000220 .L0 
+     /tmp/ccYRWKA3.s:388    .text:0000000000000228 .L0 
+     /tmp/ccYRWKA3.s:392    .text:000000000000022c .L0 
+     /tmp/ccYRWKA3.s:393    .text:000000000000022c .L0 
+     /tmp/ccYRWKA3.s:395    .text:0000000000000230 .L0 
+     /tmp/ccYRWKA3.s:397    .text:0000000000000234 .L0 
+     /tmp/ccYRWKA3.s:400    .text:0000000000000238 .L0 
+     /tmp/ccYRWKA3.s:401    .text:0000000000000238 .L0 
+     /tmp/ccYRWKA3.s:403    .text:000000000000023c .L0 
+     /tmp/ccYRWKA3.s:406    .text:0000000000000240 .L0 
+     /tmp/ccYRWKA3.s:409    .text:0000000000000244 .L0 
+GAS LISTING /tmp/ccYRWKA3.s 			page 15
+
+
+     /tmp/ccYRWKA3.s:411    .text:0000000000000248 .L0 
+     /tmp/ccYRWKA3.s:412    .text:000000000000024c .L0 
+     /tmp/ccYRWKA3.s:415    .text:0000000000000254 .L0 
+     /tmp/ccYRWKA3.s:416    .text:0000000000000254 .L0 
+     /tmp/ccYRWKA3.s:418    .text:0000000000000258 .L0 
+     /tmp/ccYRWKA3.s:420    .text:0000000000000258 .L0 
+     /tmp/ccYRWKA3.s:422    .text:000000000000025c .L0 
+     /tmp/ccYRWKA3.s:423    .text:000000000000025c .L0 
+     /tmp/ccYRWKA3.s:425    .text:0000000000000260 .L0 
+     /tmp/ccYRWKA3.s:429    .text:0000000000000264 .L0 
+     /tmp/ccYRWKA3.s:430    .text:0000000000000264 .L0 
+     /tmp/ccYRWKA3.s:431    .text:0000000000000264 .L0 
+     /tmp/ccYRWKA3.s:434    .text:0000000000000268 .L0 
+     /tmp/ccYRWKA3.s:436    .text:000000000000026c .L0 
+     /tmp/ccYRWKA3.s:437    .text:000000000000026c .L0 
+     /tmp/ccYRWKA3.s:440    .text:0000000000000270 .L0 
+     /tmp/ccYRWKA3.s:445    .text:000000000000027c .L0 
+     /tmp/ccYRWKA3.s:446    .text:000000000000027c .L0 
+     /tmp/ccYRWKA3.s:449    .text:0000000000000284 .L0 
+     /tmp/ccYRWKA3.s:450    .text:0000000000000284 .L0 
+     /tmp/ccYRWKA3.s:452    .text:0000000000000288 .L0 
+     /tmp/ccYRWKA3.s:453    .text:000000000000028c .L0 
+     /tmp/ccYRWKA3.s:454    .text:000000000000028c .L0 
+     /tmp/ccYRWKA3.s:456    .text:0000000000000290 .L0 
+     /tmp/ccYRWKA3.s:457    .text:0000000000000290 .L0 
+     /tmp/ccYRWKA3.s:459    .text:0000000000000294 .L0 
+     /tmp/ccYRWKA3.s:463    .text:0000000000000298 .L0 
+     /tmp/ccYRWKA3.s:465    .text:0000000000000298 .L0 
+     /tmp/ccYRWKA3.s:466    .text:0000000000000298 .L0 
+     /tmp/ccYRWKA3.s:468    .text:000000000000029c .L0 
+     /tmp/ccYRWKA3.s:473    .text:00000000000002a8 .L0 
+     /tmp/ccYRWKA3.s:474    .text:00000000000002a8 .L0 
+     /tmp/ccYRWKA3.s:475    .text:00000000000002a8 .L0 
+     /tmp/ccYRWKA3.s:477    .text:00000000000002a8 .L0 
+     /tmp/ccYRWKA3.s:480    .text:00000000000002ac .L0 
+     /tmp/ccYRWKA3.s:481    .text:00000000000002b0 .L0 
+     /tmp/ccYRWKA3.s:495    .bss:0000000000000008 _ZN6_Sleep5firstE
+     /tmp/ccYRWKA3.s:491    .bss:0000000000000000 _ZN6_Sleep4Node5cacheE
+     /tmp/ccYRWKA3.s:488    .bss:0000000000000000 .LANCHOR0
+     /tmp/ccYRWKA3.s:503    .text:00000000000002b0 .L0 
+     /tmp/ccYRWKA3.s:30     .text:0000000000000010 .L0 
+     /tmp/ccYRWKA3.s:37     .text:000000000000001c .L0 
+     /tmp/ccYRWKA3.s:8      .rodata.str1.8:0000000000000000 .LC0
+     /tmp/ccYRWKA3.s:58     .text:0000000000000048 .L0 
+     /tmp/ccYRWKA3.s:63     .text:0000000000000058 .L0 
+     /tmp/ccYRWKA3.s:87     .text:0000000000000078 .L0 
+     /tmp/ccYRWKA3.s:124    .text:00000000000000ac .L0 
+     /tmp/ccYRWKA3.s:161    .text:00000000000000e4 .L0 
+     /tmp/ccYRWKA3.s:207    .text:0000000000000128 .L0 
+     /tmp/ccYRWKA3.s:302    .text:00000000000001b0 .L0 
+     /tmp/ccYRWKA3.s:335    .text:00000000000001dc .L0 
+     /tmp/ccYRWKA3.s:385    .text:0000000000000220 .L0 
+     /tmp/ccYRWKA3.s:468    .text:000000000000029c .L0 
+     /tmp/ccYRWKA3.s:51     .text:000000000000003c .L4
+     /tmp/ccYRWKA3.s:34     .text:000000000000001c .L2
+     /tmp/ccYRWKA3.s:170    .text:00000000000000f8 .L9
+     /tmp/ccYRWKA3.s:148    .text:00000000000000dc .L12
+GAS LISTING /tmp/ccYRWKA3.s 			page 16
+
+
+     /tmp/ccYRWKA3.s:134    .text:00000000000000c4 .L7
+     /tmp/ccYRWKA3.s:233    .text:0000000000000150 .L14
+     /tmp/ccYRWKA3.s:213    .text:0000000000000134 .L15
+     /tmp/ccYRWKA3.s:250    .text:000000000000016c .L16
+     /tmp/ccYRWKA3.s:304    .text:00000000000001bc .L20
+     /tmp/ccYRWKA3.s:298    .text:00000000000001b0 .L18
+     /tmp/ccYRWKA3.s:310    .text:00000000000001c4 .L21
+     /tmp/ccYRWKA3.s:263    .text:000000000000017c .L19
+     /tmp/ccYRWKA3.s:275    .text:0000000000000190 .L17
+     /tmp/ccYRWKA3.s:344    .text:00000000000001f4 .L26
+     /tmp/ccYRWKA3.s:360    .text:000000000000020c .L23
+     /tmp/ccYRWKA3.s:407    .text:0000000000000244 .L29
+     /tmp/ccYRWKA3.s:390    .text:000000000000022c .L30
+     /tmp/ccYRWKA3.s:472    .text:00000000000002a8 .L35
+     /tmp/ccYRWKA3.s:462    .text:0000000000000298 .L32
+     /tmp/ccYRWKA3.s:443    .text:000000000000027c .L34
+     /tmp/ccYRWKA3.s:427    .text:0000000000000264 .L33
+     /tmp/ccYRWKA3.s:2126   .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+     /tmp/ccYRWKA3.s:3671   .debug_str:000000000000095c .LASF165
+     /tmp/ccYRWKA3.s:3415   .debug_str:00000000000000f0 .LASF166
+     /tmp/ccYRWKA3.s:3591   .debug_str:0000000000000708 .LASF167
+     /tmp/ccYRWKA3.s:5      .text:0000000000000000 .Ltext0
+     /tmp/ccYRWKA3.s:498    .text:00000000000002b0 .Letext0
+     /tmp/ccYRWKA3.s:3389   .debug_line:0000000000000000 .Ldebug_line0
+     /tmp/ccYRWKA3.s:3523   .debug_str:00000000000004c7 .LASF0
+     /tmp/ccYRWKA3.s:3535   .debug_str:0000000000000528 .LASF1
+     /tmp/ccYRWKA3.s:3611   .debug_str:000000000000079f .LASF2
+     /tmp/ccYRWKA3.s:3619   .debug_str:00000000000007eb .LASF4
+     /tmp/ccYRWKA3.s:3525   .debug_str:00000000000004d4 .LASF3
+     /tmp/ccYRWKA3.s:3401   .debug_str:0000000000000063 .LASF5
+     /tmp/ccYRWKA3.s:3595   .debug_str:0000000000000734 .LASF6
+     /tmp/ccYRWKA3.s:3583   .debug_str:00000000000006cc .LASF7
+     /tmp/ccYRWKA3.s:3527   .debug_str:00000000000004e6 .LASF8
+     /tmp/ccYRWKA3.s:3505   .debug_str:0000000000000410 .LASF9
+     /tmp/ccYRWKA3.s:3511   .debug_str:000000000000043c .LASF10
+     /tmp/ccYRWKA3.s:3441   .debug_str:00000000000001da .LASF11
+     /tmp/ccYRWKA3.s:3491   .debug_str:0000000000000397 .LASF12
+     /tmp/ccYRWKA3.s:3455   .debug_str:0000000000000262 .LASF13
+     /tmp/ccYRWKA3.s:3439   .debug_str:00000000000001ca .LASF14
+     /tmp/ccYRWKA3.s:3643   .debug_str:00000000000008a9 .LASF15
+     /tmp/ccYRWKA3.s:3475   .debug_str:0000000000000301 .LASF16
+     /tmp/ccYRWKA3.s:3637   .debug_str:0000000000000876 .LASF17
+     /tmp/ccYRWKA3.s:3665   .debug_str:0000000000000946 .LASF18
+     /tmp/ccYRWKA3.s:3453   .debug_str:000000000000025a .LASF27
+     /tmp/ccYRWKA3.s:3585   .debug_str:00000000000006df .LASF19
+     /tmp/ccYRWKA3.s:3669   .debug_str:0000000000000955 .LASF20
+     /tmp/ccYRWKA3.s:3703   .debug_str:0000000000000b05 .LASF21
+     /tmp/ccYRWKA3.s:3543   .debug_str:0000000000000594 .LASF22
+     /tmp/ccYRWKA3.s:3471   .debug_str:00000000000002e0 .LASF23
+     /tmp/ccYRWKA3.s:3737   .debug_str:0000000000000c05 .LASF24
+     /tmp/ccYRWKA3.s:3711   .debug_str:0000000000000b5b .LASF25
+     /tmp/ccYRWKA3.s:3735   .debug_str:0000000000000bff .LASF115
+     /tmp/ccYRWKA3.s:3733   .debug_str:0000000000000bf2 .LASF26
+     /tmp/ccYRWKA3.s:3437   .debug_str:00000000000001ba .LASF28
+     /tmp/ccYRWKA3.s:3395   .debug_str:0000000000000023 .LASF142
+     /tmp/ccYRWKA3.s:3545   .debug_str:000000000000059d .LASF144
+     /tmp/ccYRWKA3.s:3537   .debug_str:000000000000053b .LASF29
+GAS LISTING /tmp/ccYRWKA3.s 			page 17
+
+
+     /tmp/ccYRWKA3.s:3577   .debug_str:0000000000000697 .LASF30
+     /tmp/ccYRWKA3.s:3615   .debug_str:00000000000007c7 .LASF31
+     /tmp/ccYRWKA3.s:3729   .debug_str:0000000000000bdd .LASF32
+     /tmp/ccYRWKA3.s:3677   .debug_str:0000000000000a45 .LASF33
+     /tmp/ccYRWKA3.s:3691   .debug_str:0000000000000aa8 .LASF34
+     /tmp/ccYRWKA3.s:3739   .debug_str:0000000000000c11 .LASF35
+     /tmp/ccYRWKA3.s:3607   .debug_str:000000000000076f .LASF36
+     /tmp/ccYRWKA3.s:3487   .debug_str:0000000000000364 .LASF37
+     /tmp/ccYRWKA3.s:3405   .debug_str:0000000000000087 .LASF38
+     /tmp/ccYRWKA3.s:3465   .debug_str:000000000000029e .LASF39
+     /tmp/ccYRWKA3.s:3449   .debug_str:000000000000022d .LASF40
+     /tmp/ccYRWKA3.s:3655   .debug_str:00000000000008f5 .LASF41
+     /tmp/ccYRWKA3.s:3445   .debug_str:00000000000001ee .LASF42
+     /tmp/ccYRWKA3.s:3477   .debug_str:0000000000000317 .LASF43
+     /tmp/ccYRWKA3.s:3435   .debug_str:000000000000019b .LASF44
+     /tmp/ccYRWKA3.s:3633   .debug_str:0000000000000868 .LASF45
+     /tmp/ccYRWKA3.s:3715   .debug_str:0000000000000b75 .LASF46
+     /tmp/ccYRWKA3.s:3667   .debug_str:000000000000094f .LASF47
+     /tmp/ccYRWKA3.s:3685   .debug_str:0000000000000a74 .LASF49
+     /tmp/ccYRWKA3.s:3469   .debug_str:00000000000002d7 .LASF48
+     /tmp/ccYRWKA3.s:3647   .debug_str:00000000000008c5 .LASF50
+     /tmp/ccYRWKA3.s:3463   .debug_str:0000000000000291 .LASF51
+     /tmp/ccYRWKA3.s:3565   .debug_str:0000000000000635 .LASF52
+     /tmp/ccYRWKA3.s:3673   .debug_str:0000000000000a2c .LASF53
+     /tmp/ccYRWKA3.s:3423   .debug_str:0000000000000130 .LASF54
+     /tmp/ccYRWKA3.s:3481   .debug_str:000000000000033c .LASF55
+     /tmp/ccYRWKA3.s:3541   .debug_str:0000000000000579 .LASF57
+     /tmp/ccYRWKA3.s:3617   .debug_str:00000000000007e4 .LASF56
+     /tmp/ccYRWKA3.s:3529   .debug_str:00000000000004f9 .LASF58
+     /tmp/ccYRWKA3.s:3679   .debug_str:0000000000000a4e .LASF59
+     /tmp/ccYRWKA3.s:3621   .debug_str:00000000000007f2 .LASF60
+     /tmp/ccYRWKA3.s:3417   .debug_str:00000000000000ff .LASF61
+     /tmp/ccYRWKA3.s:3725   .debug_str:0000000000000bba .LASF62
+     /tmp/ccYRWKA3.s:3721   .debug_str:0000000000000bae .LASF63
+     /tmp/ccYRWKA3.s:3519   .debug_str:000000000000048f .LASF64
+     /tmp/ccYRWKA3.s:3555   .debug_str:00000000000005e2 .LASF65
+     /tmp/ccYRWKA3.s:3601   .debug_str:000000000000074e .LASF66
+     /tmp/ccYRWKA3.s:3635   .debug_str:000000000000086d .LASF67
+     /tmp/ccYRWKA3.s:3397   .debug_str:0000000000000033 .LASF68
+     /tmp/ccYRWKA3.s:3603   .debug_str:0000000000000763 .LASF69
+     /tmp/ccYRWKA3.s:3559   .debug_str:00000000000005ef .LASF70
+     /tmp/ccYRWKA3.s:3651   .debug_str:00000000000008e4 .LASF71
+     /tmp/ccYRWKA3.s:3613   .debug_str:00000000000007ad .LASF72
+     /tmp/ccYRWKA3.s:3531   .debug_str:000000000000050e .LASF73
+     /tmp/ccYRWKA3.s:3705   .debug_str:0000000000000b0b .LASF74
+     /tmp/ccYRWKA3.s:3675   .debug_str:0000000000000a36 .LASF75
+     /tmp/ccYRWKA3.s:3587   .debug_str:00000000000006e5 .LASF76
+     /tmp/ccYRWKA3.s:3433   .debug_str:0000000000000190 .LASF77
+     /tmp/ccYRWKA3.s:3627   .debug_str:0000000000000822 .LASF78
+     /tmp/ccYRWKA3.s:3551   .debug_str:00000000000005c9 .LASF79
+     /tmp/ccYRWKA3.s:3513   .debug_str:000000000000044a .LASF80
+     /tmp/ccYRWKA3.s:3503   .debug_str:0000000000000406 .LASF81
+     /tmp/ccYRWKA3.s:3411   .debug_str:00000000000000d3 .LASF82
+     /tmp/ccYRWKA3.s:3533   .debug_str:000000000000051c .LASF83
+     /tmp/ccYRWKA3.s:3425   .debug_str:0000000000000148 .LASF84
+     /tmp/ccYRWKA3.s:3695   .debug_str:0000000000000adb .LASF85
+     /tmp/ccYRWKA3.s:3403   .debug_str:000000000000006a .LASF86
+GAS LISTING /tmp/ccYRWKA3.s 			page 18
+
+
+     /tmp/ccYRWKA3.s:3641   .debug_str:0000000000000897 .LASF168
+     /tmp/ccYRWKA3.s:3659   .debug_str:0000000000000922 .LASF87
+     /tmp/ccYRWKA3.s:3509   .debug_str:0000000000000427 .LASF88
+     /tmp/ccYRWKA3.s:3657   .debug_str:0000000000000918 .LASF89
+     /tmp/ccYRWKA3.s:3629   .debug_str:000000000000083c .LASF90
+     /tmp/ccYRWKA3.s:3573   .debug_str:0000000000000683 .LASF91
+     /tmp/ccYRWKA3.s:3563   .debug_str:000000000000060d .LASF92
+     /tmp/ccYRWKA3.s:3575   .debug_str:000000000000068e .LASF93
+     /tmp/ccYRWKA3.s:3421   .debug_str:0000000000000114 .LASF94
+     /tmp/ccYRWKA3.s:3579   .debug_str:00000000000006b5 .LASF95
+     /tmp/ccYRWKA3.s:3497   .debug_str:00000000000003d5 .LASF96
+     /tmp/ccYRWKA3.s:3461   .debug_str:0000000000000288 .LASF97
+     /tmp/ccYRWKA3.s:3661   .debug_str:0000000000000927 .LASF98
+     /tmp/ccYRWKA3.s:3451   .debug_str:0000000000000251 .LASF99
+     /tmp/ccYRWKA3.s:3391   .debug_str:0000000000000000 .LASF100
+     /tmp/ccYRWKA3.s:3717   .debug_str:0000000000000b89 .LASF101
+     /tmp/ccYRWKA3.s:3473   .debug_str:00000000000002e7 .LASF102
+     /tmp/ccYRWKA3.s:3713   .debug_str:0000000000000b67 .LASF103
+     /tmp/ccYRWKA3.s:3495   .debug_str:00000000000003b8 .LASF104
+     /tmp/ccYRWKA3.s:3689   .debug_str:0000000000000aa0 .LASF169
+     /tmp/ccYRWKA3.s:3683   .debug_str:0000000000000a5e .LASF170
+     /tmp/ccYRWKA3.s:3485   .debug_str:000000000000035f .LASF105
+     /tmp/ccYRWKA3.s:3623   .debug_str:0000000000000805 .LASF106
+     /tmp/ccYRWKA3.s:3625   .debug_str:0000000000000818 .LASF107
+     /tmp/ccYRWKA3.s:3687   .debug_str:0000000000000a88 .LASF108
+     /tmp/ccYRWKA3.s:3663   .debug_str:000000000000093e .LASF109
+     /tmp/ccYRWKA3.s:3731   .debug_str:0000000000000bed .LASF110
+     /tmp/ccYRWKA3.s:3645   .debug_str:00000000000008b5 .LASF111
+     /tmp/ccYRWKA3.s:3407   .debug_str:00000000000000ac .LASF113
+     /tmp/ccYRWKA3.s:3597   .debug_str:000000000000073b .LASF112
+     /tmp/ccYRWKA3.s:3431   .debug_str:0000000000000179 .LASF114
+     /tmp/ccYRWKA3.s:3589   .debug_str:0000000000000703 .LASF116
+     /tmp/ccYRWKA3.s:3723   .debug_str:0000000000000bb4 .LASF117
+     /tmp/ccYRWKA3.s:3557   .debug_str:00000000000005e9 .LASF118
+     /tmp/ccYRWKA3.s:3605   .debug_str:000000000000076a .LASF119
+     /tmp/ccYRWKA3.s:3593   .debug_str:000000000000072c .LASF120
+     /tmp/ccYRWKA3.s:3547   .debug_str:00000000000005ae .LASF121
+     /tmp/ccYRWKA3.s:3561   .debug_str:0000000000000604 .LASF122
+     /tmp/ccYRWKA3.s:3483   .debug_str:0000000000000348 .LASF123
+     /tmp/ccYRWKA3.s:3631   .debug_str:0000000000000857 .LASF124
+     /tmp/ccYRWKA3.s:3419   .debug_str:0000000000000107 .LASF125
+     /tmp/ccYRWKA3.s:3581   .debug_str:00000000000006bf .LASF126
+     /tmp/ccYRWKA3.s:3517   .debug_str:0000000000000482 .LASF127
+     /tmp/ccYRWKA3.s:3709   .debug_str:0000000000000b4d .LASF128
+     /tmp/ccYRWKA3.s:3681   .debug_str:0000000000000a53 .LASF129
+     /tmp/ccYRWKA3.s:3599   .debug_str:0000000000000744 .LASF130
+     /tmp/ccYRWKA3.s:3427   .debug_str:0000000000000163 .LASF131
+     /tmp/ccYRWKA3.s:3479   .debug_str:0000000000000337 .LASF134
+     /tmp/ccYRWKA3.s:3553   .debug_str:00000000000005d6 .LASF132
+     /tmp/ccYRWKA3.s:3409   .debug_str:00000000000000cb .LASF133
+     /tmp/ccYRWKA3.s:3727   .debug_str:0000000000000bd0 .LASF135
+     /tmp/ccYRWKA3.s:3489   .debug_str:000000000000038a .LASF136
+     /tmp/ccYRWKA3.s:3549   .debug_str:00000000000005c4 .LASF137
+     /tmp/ccYRWKA3.s:3507   .debug_str:0000000000000420 .LASF138
+     /tmp/ccYRWKA3.s:3697   .debug_str:0000000000000ae9 .LASF143
+     /tmp/ccYRWKA3.s:3609   .debug_str:0000000000000798 .LASF139
+     /tmp/ccYRWKA3.s:3413   .debug_str:00000000000000eb .LASF140
+GAS LISTING /tmp/ccYRWKA3.s 			page 19
+
+
+     /tmp/ccYRWKA3.s:3443   .debug_str:00000000000001e9 .LASF141
+     /tmp/ccYRWKA3.s:3447   .debug_str:0000000000000210 .LASF145
+     /tmp/ccYRWKA3.s:3501   .debug_str:00000000000003f2 .LASF146
+     /tmp/ccYRWKA3.s:3571   .debug_str:000000000000066e .LASF171
+     /tmp/ccYRWKA3.s:3653   .debug_str:00000000000008ef .LASF147
+     /tmp/ccYRWKA3.s:3639   .debug_str:000000000000088c .LASF148
+     /tmp/ccYRWKA3.s:3399   .debug_str:000000000000004a .LASF149
+     /tmp/ccYRWKA3.s:3719   .debug_str:0000000000000b94 .LASF172
+     /tmp/ccYRWKA3.s:3699   .debug_str:0000000000000aee .LASF150
+     /tmp/ccYRWKA3.s:3393   .debug_str:000000000000001c .LASF151
+     /tmp/ccYRWKA3.s:3515   .debug_str:0000000000000466 .LASF152
+     /tmp/ccYRWKA3.s:3567   .debug_str:0000000000000651 .LASF153
+     /tmp/ccYRWKA3.s:3467   .debug_str:00000000000002c5 .LASF154
+     /tmp/ccYRWKA3.s:377    .text:000000000000021c .LFB16
+     /tmp/ccYRWKA3.s:482    .text:00000000000002b0 .LFE16
+     /tmp/ccYRWKA3.s:3089   .debug_loc:0000000000000000 .LLST14
+     /tmp/ccYRWKA3.s:3701   .debug_str:0000000000000b00 .LASF155
+     /tmp/ccYRWKA3.s:3122   .debug_loc:0000000000000088 .LLST15
+     /tmp/ccYRWKA3.s:3146   .debug_loc:00000000000000f8 .LLST16
+     /tmp/ccYRWKA3.s:3170   .debug_loc:0000000000000168 .LLST17
+     /tmp/ccYRWKA3.s:447    .text:0000000000000284 .LVL42
+     /tmp/ccYRWKA3.s:322    .text:00000000000001cc .LFB15
+     /tmp/ccYRWKA3.s:371    .text:000000000000021c .LFE15
+     /tmp/ccYRWKA3.s:3569   .debug_str:0000000000000668 .LASF156
+     /tmp/ccYRWKA3.s:3177   .debug_loc:000000000000018b .LLST13
+     /tmp/ccYRWKA3.s:350    .text:00000000000001fc .LVL30
+     /tmp/ccYRWKA3.s:356    .text:0000000000000208 .LVL31
+     /tmp/ccYRWKA3.s:183    .text:0000000000000100 .LFB14
+     /tmp/ccYRWKA3.s:316    .text:00000000000001cc .LFE14
+     /tmp/ccYRWKA3.s:3188   .debug_loc:00000000000001c1 .LLST4
+     /tmp/ccYRWKA3.s:3210   .debug_loc:0000000000000220 .LLST5
+     /tmp/ccYRWKA3.s:3224   .debug_loc:0000000000000259 .LLST6
+     /tmp/ccYRWKA3.s:3244   .debug_loc:00000000000002b6 .LLST7
+     /tmp/ccYRWKA3.s:3268   .debug_loc:0000000000000326 .LLST8
+     /tmp/ccYRWKA3.s:3649   .debug_str:00000000000008dc .LASF157
+     /tmp/ccYRWKA3.s:3283   .debug_loc:000000000000036f .LLST9
+     /tmp/ccYRWKA3.s:242    .text:0000000000000160 .LBB8
+     /tmp/ccYRWKA3.s:252    .text:000000000000016c .LBE8
+     /tmp/ccYRWKA3.s:3298   .debug_loc:00000000000003b8 .LLST10
+     /tmp/ccYRWKA3.s:3305   .debug_loc:00000000000003db .LLST11
+     /tmp/ccYRWKA3.s:3312   .debug_loc:00000000000003fe .LLST12
+     /tmp/ccYRWKA3.s:239    .text:000000000000015c .LVL18
+     /tmp/ccYRWKA3.s:107    .text:0000000000000098 .LFB13
+     /tmp/ccYRWKA3.s:177    .text:0000000000000100 .LFE13
+     /tmp/ccYRWKA3.s:3319   .debug_loc:0000000000000421 .LLST2
+     /tmp/ccYRWKA3.s:151    .text:00000000000000dc .LBB6
+     /tmp/ccYRWKA3.s:171    .text:00000000000000f8 .LBE6
+     /tmp/ccYRWKA3.s:3326   .debug_loc:0000000000000444 .LLST3
+     /tmp/ccYRWKA3.s:165    .text:00000000000000f4 .LVL10
+     /tmp/ccYRWKA3.s:72     .text:0000000000000064 .LFB12
+     /tmp/ccYRWKA3.s:101    .text:0000000000000098 .LFE12
+     /tmp/ccYRWKA3.s:3333   .debug_loc:0000000000000467 .LLST1
+     /tmp/ccYRWKA3.s:90     .text:0000000000000088 .LVL8
+     /tmp/ccYRWKA3.s:15     .text:0000000000000000 .LFB11
+     /tmp/ccYRWKA3.s:66     .text:0000000000000064 .LFE11
+     /tmp/ccYRWKA3.s:3459   .debug_str:0000000000000283 .LASF158
+     /tmp/ccYRWKA3.s:3351   .debug_loc:00000000000004b3 .LLST0
+GAS LISTING /tmp/ccYRWKA3.s 			page 20
+
+
+     /tmp/ccYRWKA3.s:39     .text:000000000000002c .LVL2
+     /tmp/ccYRWKA3.s:61     .text:0000000000000058 .LVL5
+     /tmp/ccYRWKA3.s:3499   .debug_str:00000000000003ed .LASF173
+     /tmp/ccYRWKA3.s:3539   .debug_str:000000000000055c .LASF174
+     /tmp/ccYRWKA3.s:3707   .debug_str:0000000000000b28 .LASF159
+     /tmp/ccYRWKA3.s:3429   .debug_str:0000000000000169 .LASF161
+     /tmp/ccYRWKA3.s:3521   .debug_str:00000000000004a3 .LASF160
+     /tmp/ccYRWKA3.s:3457   .debug_str:0000000000000272 .LASF162
+     /tmp/ccYRWKA3.s:3693   .debug_str:0000000000000ab8 .LASF163
+     /tmp/ccYRWKA3.s:3493   .debug_str:00000000000003a6 .LASF164
+     /tmp/ccYRWKA3.s:380    .text:000000000000021c .LVL33
+     /tmp/ccYRWKA3.s:386    .text:0000000000000228 .LVL35
+     /tmp/ccYRWKA3.s:426    .text:0000000000000264 .LVL39
+     /tmp/ccYRWKA3.s:461    .text:0000000000000298 .LVL43
+     /tmp/ccYRWKA3.s:469    .text:00000000000002a4 .LVL44
+     /tmp/ccYRWKA3.s:471    .text:00000000000002a8 .LVL45
+     /tmp/ccYRWKA3.s:383    .text:0000000000000220 .LVL34
+     /tmp/ccYRWKA3.s:389    .text:000000000000022c .LVL36
+     /tmp/ccYRWKA3.s:399    .text:0000000000000238 .LVL37
+     /tmp/ccYRWKA3.s:404    .text:0000000000000240 .LVL38
+     /tmp/ccYRWKA3.s:438    .text:0000000000000270 .LVL41
+     /tmp/ccYRWKA3.s:432    .text:0000000000000268 .LVL40
+     /tmp/ccYRWKA3.s:478    .text:00000000000002ac .LVL46
+     /tmp/ccYRWKA3.s:359    .text:000000000000020c .LVL32
+     /tmp/ccYRWKA3.s:186    .text:0000000000000100 .LVL12
+     /tmp/ccYRWKA3.s:237    .text:0000000000000154 .LVL17
+     /tmp/ccYRWKA3.s:293    .text:00000000000001a8 .LVL25
+     /tmp/ccYRWKA3.s:297    .text:00000000000001b0 .LVL26
+     /tmp/ccYRWKA3.s:208    .text:0000000000000130 .LVL13
+     /tmp/ccYRWKA3.s:224    .text:0000000000000144 .LVL15
+     /tmp/ccYRWKA3.s:230    .text:000000000000014c .LVL16
+     /tmp/ccYRWKA3.s:285    .text:000000000000019c .LVL23
+     /tmp/ccYRWKA3.s:212    .text:0000000000000134 .LVL14
+     /tmp/ccYRWKA3.s:290    .text:00000000000001a4 .LVL24
+     /tmp/ccYRWKA3.s:270    .text:0000000000000188 .LVL21
+     /tmp/ccYRWKA3.s:249    .text:000000000000016c .LVL20
+     /tmp/ccYRWKA3.s:274    .text:0000000000000190 .LVL22
+     /tmp/ccYRWKA3.s:307    .text:00000000000001c0 .LVL27
+     /tmp/ccYRWKA3.s:309    .text:00000000000001c4 .LVL28
+     /tmp/ccYRWKA3.s:313    .text:00000000000001c8 .LVL29
+     /tmp/ccYRWKA3.s:241    .text:0000000000000160 .LVL19
+     /tmp/ccYRWKA3.s:155    .text:00000000000000e0 .LVL9
+     /tmp/ccYRWKA3.s:169    .text:00000000000000f8 .LVL11
+     /tmp/ccYRWKA3.s:75     .text:0000000000000064 .LVL6
+     /tmp/ccYRWKA3.s:88     .text:0000000000000080 .LVL7
+     /tmp/ccYRWKA3.s:19     .text:0000000000000000 .LVL0
+     /tmp/ccYRWKA3.s:33     .text:000000000000001c .LVL1
+     /tmp/ccYRWKA3.s:50     .text:000000000000003c .LVL3
+     /tmp/ccYRWKA3.s:59     .text:0000000000000050 .LVL4
+     /tmp/ccYRWKA3.s:504    .debug_info:0000000000000000 .Ldebug_info0
+
+UNDEFINED SYMBOLS
+_Z16kmem_cache_allocP12kmem_cache_t
+_Z17kmem_cache_createPKcmPFvPvES3_
+_Z15kmem_cache_freeP12kmem_cache_tPv
+_ZN7_Thread9sleepPassEv

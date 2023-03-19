@@ -1,0 +1,94 @@
+GAS LISTING /tmp/cceQXXRB.s 			page 1
+
+
+   1              		.file	"_placementNew.cpp"
+   2              		.option pic
+   3              		.option norelax
+   4              		.text
+   5              	.Ltext0:
+   6              		.align	2
+   7              		.globl	_ZnwmPv
+   9              	_ZnwmPv:
+  10              	.LFB0:
+  11              		.file 1 "src/_placementNew.cpp"
+   1:src/_placementNew.cpp **** //
+   2:src/_placementNew.cpp **** // Created by os on 11/26/22.
+   3:src/_placementNew.cpp **** //
+   4:src/_placementNew.cpp **** 
+   5:src/_placementNew.cpp **** #include "../h/_placementNew.h"
+   6:src/_placementNew.cpp **** 
+   7:src/_placementNew.cpp **** void* operator new( size_t, void* where ) {
+  12              		.loc 1 7 43
+  13              		.cfi_startproc
+  14              	.LVL0:
+  15 0000 130101FF 		addi	sp,sp,-16
+  16              		.cfi_def_cfa_offset 16
+  17 0004 23348100 		sd	s0,8(sp)
+  18              		.cfi_offset 8, -8
+  19 0008 13040101 		addi	s0,sp,16
+  20              		.cfi_def_cfa 8, 0
+   8:src/_placementNew.cpp ****     return where;
+  21              		.loc 1 8 5
+   9:src/_placementNew.cpp **** }...
+  22              		.loc 1 9 1 is_stmt 0
+  23 000c 13850500 		mv	a0,a1
+  24 0010 03348100 		ld	s0,8(sp)
+  25              		.cfi_restore 8
+  26              		.cfi_def_cfa 2, 16
+  27 0014 13010101 		addi	sp,sp,16
+  28              		.cfi_def_cfa_offset 0
+  29 0018 67800000 		jr	ra
+  30              		.cfi_endproc
+  31              	.LFE0:
+  33              	.Letext0:
+  34              		.file 2 "src/../h/../lib/hw.h"
+GAS LISTING /tmp/cceQXXRB.s 			page 2
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 _placementNew.cpp
+     /tmp/cceQXXRB.s:9      .text:0000000000000000 _ZnwmPv
+     /tmp/cceQXXRB.s:13     .text:0000000000000000 .L0 
+     /tmp/cceQXXRB.s:15     .text:0000000000000000 .L0 
+     /tmp/cceQXXRB.s:16     .text:0000000000000004 .L0 
+     /tmp/cceQXXRB.s:18     .text:0000000000000008 .L0 
+     /tmp/cceQXXRB.s:20     .text:000000000000000c .L0 
+     /tmp/cceQXXRB.s:22     .text:000000000000000c .L0 
+     /tmp/cceQXXRB.s:23     .text:000000000000000c .L0 
+     /tmp/cceQXXRB.s:25     .text:0000000000000014 .L0 
+     /tmp/cceQXXRB.s:26     .text:0000000000000014 .L0 
+     /tmp/cceQXXRB.s:28     .text:0000000000000018 .L0 
+     /tmp/cceQXXRB.s:30     .text:000000000000001c .L0 
+     /tmp/cceQXXRB.s:35     .text:000000000000001c .L0 
+     /tmp/cceQXXRB.s:186    .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+     /tmp/cceQXXRB.s:426    .debug_str:0000000000000150 .LASF17
+     /tmp/cceQXXRB.s:400    .debug_str:000000000000006d .LASF18
+     /tmp/cceQXXRB.s:422    .debug_str:000000000000011c .LASF19
+     /tmp/cceQXXRB.s:5      .text:0000000000000000 .Ltext0
+     /tmp/cceQXXRB.s:33     .text:000000000000001c .Letext0
+     /tmp/cceQXXRB.s:382    .debug_line:0000000000000000 .Ldebug_line0
+     /tmp/cceQXXRB.s:384    .debug_str:0000000000000000 .LASF0
+     /tmp/cceQXXRB.s:412    .debug_str:00000000000000dc .LASF1
+     /tmp/cceQXXRB.s:404    .debug_str:000000000000008f .LASF2
+     /tmp/cceQXXRB.s:398    .debug_str:0000000000000066 .LASF4
+     /tmp/cceQXXRB.s:394    .debug_str:0000000000000041 .LASF3
+     /tmp/cceQXXRB.s:390    .debug_str:000000000000002a .LASF5
+     /tmp/cceQXXRB.s:396    .debug_str:0000000000000053 .LASF6
+     /tmp/cceQXXRB.s:410    .debug_str:00000000000000c9 .LASF7
+     /tmp/cceQXXRB.s:424    .debug_str:0000000000000140 .LASF8
+     /tmp/cceQXXRB.s:386    .debug_str:000000000000000d .LASF9
+     /tmp/cceQXXRB.s:388    .debug_str:000000000000001b .LASF10
+     /tmp/cceQXXRB.s:416    .debug_str:00000000000000ff .LASF11
+     /tmp/cceQXXRB.s:392    .debug_str:0000000000000031 .LASF12
+     /tmp/cceQXXRB.s:414    .debug_str:00000000000000ef .LASF13
+     /tmp/cceQXXRB.s:402    .debug_str:0000000000000083 .LASF14
+     /tmp/cceQXXRB.s:408    .debug_str:00000000000000b3 .LASF15
+     /tmp/cceQXXRB.s:406    .debug_str:000000000000009d .LASF16
+     /tmp/cceQXXRB.s:428    .debug_str:0000000000000220 .LASF20
+     /tmp/cceQXXRB.s:420    .debug_str:0000000000000114 .LASF21
+     /tmp/cceQXXRB.s:10     .text:0000000000000000 .LFB0
+     /tmp/cceQXXRB.s:31     .text:000000000000001c .LFE0
+     /tmp/cceQXXRB.s:418    .debug_str:000000000000010e .LASF22
+     /tmp/cceQXXRB.s:36     .debug_info:0000000000000000 .Ldebug_info0
+
+NO UNDEFINED SYMBOLS
